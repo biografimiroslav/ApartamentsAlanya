@@ -1,0 +1,57 @@
+/* ========== ANIMATIONS & MICRO-INTERACTIONS ========== */
+
+/* floating badge */
+@keyframes floatY { 0% { transform: translateY(0); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
+.float { animation: floatY 5s ease-in-out infinite; }
+
+/* shimmer animation */
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+.shimmer { background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.05) 100%); background-size: 200% 100%; animation: shimmer 1.8s linear infinite; }
+
+/* gradient text glow */
+.glow-text { background: linear-gradient(90deg,var(--accent),#ffd66b,var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; background-size: 200% 100%; animation: shimmer 3.6s linear infinite; }
+
+/* tilt effect on hover */
+.tiltable { transform-style: preserve-3d; transition: transform 360ms var(--ease); }
+
+/* reveal animations */
+.animate-side { opacity: 0; transform: translateY(18px); transition: transform 620ms var(--ease), opacity 540ms var(--ease); }
+.animate-side.visible { opacity: 1; transform: translateY(0); }
+
+.animate-child { opacity: 0; transform: translateY(10px); transition: transform 480ms var(--ease), opacity 380ms var(--ease); }
+.animate-child.visible { opacity: 1; transform: translateY(0); }
+
+/* heading underline */
+.underline-anim { position: relative; }
+.underline-anim::after { content: ''; position: absolute; left: 0; bottom: -6px; height: 4px; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 999px; transition: width 520ms var(--ease); }
+.underline-anim:hover::after { width: 50%; }
+
+/* button hover micro-animation */
+.btn { transition: transform 220ms var(--ease), box-shadow 220ms var(--ease); }
+.btn:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(255,107,107,0.25); }
+
+/* apartment button hover */
+.apartamentButton:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(255,107,107,0.12); }
+
+/* float-badge pulse */
+@keyframes pulseBadge { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.float-badge { animation: floatY 5s ease-in-out infinite, pulseBadge 6s ease-in-out infinite; }
+
+/* shimmer headings */
+h1, h2, h3 { transition: color 0.3s ease; }
+h1.shimmer, h2.shimmer, h3.shimmer { background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.05) 100%); background-size: 200% 100%; animation: shimmer 2.4s linear infinite; }
+
+/* tilt cards (JS adds transform) */
+.apartamentSlider, .aboutIMG, .reviewsItem { transition: transform 350ms var(--ease); }
+
+/* small screens adjustments for animation triggers */
+@media (max-width:900px){
+  .animate-side, .animate-child { transition: transform 480ms var(--ease), opacity 380ms var(--ease); }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .float, .shimmer, .glow-text, .tiltable, .reviewsList, .slides, .btn, .apartamentButton { animation: none !important; transition: none !important; }
+}
+
+

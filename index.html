@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Rent comfortable apartments in the heart of Alanya.">
+  <link rel="stylesheet" href="style.css">
+  <title>Apartaments Alanya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="./animations.css">
+  
+
+  <!-- ===== Анімації (вбудовані, можна винести в animations.css) ===== -->
+  <style>
+    /* ----------------------------
+       Загальні: чергові анімації з боків
+       ---------------------------- */
+    .animate-side {
+      opacity: 0;
+      transition: transform 400ms cubic-bezier(.2,.9,.3,1), opacity 600ms ease;
+      will-change: transform, opacity;
+    }
+
+    /* стартові позиції (зададуться динамічно через класи) */
+    .animate-side.from-right { transform: translateX(50px); }
+    .animate-side.from-left { transform: translateX(-50px); }
+
+    /* visible */
+    .animate-side.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Дочірні елементи — теж входять трохи зі сторони (налаштовуються data-direction) */
+    .animate-child {
+      opacity: 0;
+      transition: transform 480ms cubic-bezier(.2,.9,.3,1), opacity 480ms ease;
+      will-change: transform, opacity;
+    }
+
+    .animate-child[data-direction="right"] { transform: translateX(30px); }
+    .animate-child[data-direction="left"] { transform: translateX(-30px); }
+
+    .animate-child.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* швидші/повільні модифікатори за потреби */
+    .animate-fast { transition-duration: 480ms !important; }
+    .animate-slow { transition-duration: 900ms !important; }
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .animate-side, .animate-child {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ====== HEADER ====== -->
+  <header class="header" id="hero" data-animate>
+    <!-- відео фон: підстав свій файл -->
+    <video class="background-video" autoplay muted loop playsinline>
+      <source src="./img/headerBG.mp4" type="video/mp4">
+      <!-- fallback: користувачеві без відео покаже картинку (JS включає клас) -->
+    </video>
+
+    <!-- затемнення -->
+    <div class="overlay" aria-hidden="true"></div>
+
+    <!-- фолбек картинка (за потреби) -->
+    <div class="video-fallback" aria-hidden="true"></div>
+
+    <!-- Контент поверх відео -->
+    <div class="header-content" data-animate>
+      <ul class="location" aria-hidden="false">
+        <li><img src="./img/location.svg" alt="Локація"></li>
+        <li>
+          <p>Alanya</p>
+        </li>
+      </ul>
+
+      <h1 class="headerMainText">
+        ОБЕРІТЬ ОДНУ З ТРЬОХ НАШИХ <br>
+        <span class="word" aria-live="polite"></span> КВАРТИР
+      </h1>
+
+      <h2 class="headerSubText">Квартири в самому серці узбережжя Аланії</h2>
+
+      <div class="headerButtons">
+        <button class="btn" onclick="location.href='#contact'">Зв’язатися з нами</button>
+        <button class="btn" onclick="location.href='#booking'">Швидке бронювання</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====== ABOUT ====== -->
+  <section class="about" data-animate>
+    <h2 class="aboutText">
+      ПРО НАС
+    </h2>
+    <div class="aboutContent">
+      <img class="aboutIMG" src="./img/aboutApartament.png" alt="">
+      <div class="aboutDiscrubtionContent">
+        <h2 class="aboutSubText">
+          Ми живемо поруч, і із задоволенням
+          ділимося з вами всім найкращим.
+        </h2>
+        <ul class="aboutDiscrubtionList">
+          <p class="aboutDiscrubtion">Ми — місцева сім’я, яка з любов’ю доглядає три сучасні та затишні квартири. </p>
+          <p class="aboutDiscrubtion">
+            Жодних посередників чи прихованих платежів — лише прозорі умови та турбота про кожного гостя.
+          </p>
+          <p class="aboutDiscrubtion">
+            Ми супроводжуємо вас на кожному етапі: від першого повідомлення до комфортного заселення, щоб ваш відпочинок чи відрядження пройшли без зайвих клопотів.
+          </p>
+        </ul>
+        <button class="aboutButton">
+          Зв’язатися з нами
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== APARTMENT (1) ====== -->
+  <section class="apartament" data-animate>
+    <div class="apartamentSlider">
+      <button class="sliderBtn prev">&#10094;</button>
+      <div class="slides">
+        <img class="apartamentIMG active" src="./img/apartament.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament.png" alt="">
+      </div>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+
+    <div class="apartamentContent">
+      <h2 class="apartamentText">Loft на Печерську</h2>
+      <p class="apartamentSubText">62 м² • 2 кімнати • вул. Басейна</p>
+      <p class="apartamentTex">
+        Спокійні тони, багато світла, натуральне дерево. Окрема спальня та
+        вітальня, ергономічна кухня, балкон із видом на місто. Підійде для
+        відрядження чи довгих прогулянок центром.
+      </p>
+      <h2 class="apartamentPrice"><span>—</span> ₴/ніч</h2>
+      <ul class="apartamentAdvantages">
+        <li class="apartamentAdvantagesItem">Wi-Fi</li>
+        <li class="apartamentAdvantagesItem">Пральна машина</li>
+        <li class="apartamentAdvantagesItem">Кондиціонер</li>
+        <li class="apartamentAdvantagesItem">Паркінг поруч</li>
+      </ul>
+      <div class="map">MAP</div>
+      <button class="apartamentButton">Швидке бронювання</button>
+    </div>
+  </section>
+
+  <!-- ====== APARTMENT (mobile/variants preserved) ====== -->
+  <section class="apartament1" data-animate>
+    <div class="apartamentSlider slidesPHONE">
+      <div class="slides">
+        <img class="apartamentIMG active" src="./img/apartament.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament.png" alt="">
+      </div>
+      <button class="sliderBtn prev">&#10094;</button>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+    <div class="apartamentContent1">
+      <h2 class="apartamentText1">Loft на Печерську</h2>
+      <p class="apartamentSubText1">62 м² • 2 кімнати • вул. Басейна</p>
+      <p class="apartamentTex1">Спокійні тони, багато світла, натуральне дерево. Окрема спальня та вітальня, ергономічна
+        кухня, балкон із видом на місто. Підійде для відрядження чи довгих прогулянок центром.</p>
+      <h2 class="apartamentPrice1"><span>—</span> ₴/ніч</h2>
+      <ul class="apartamentAdvantages1">
+        <li class="apartamentAdvantagesItem1">Wi-Fi</li>
+        <li class="apartamentAdvantagesItem1">Пральна машина</li>
+        <li class="apartamentAdvantagesItem1">Кондиціонер</li>
+        <li class="apartamentAdvantagesItem1">Паркінг поруч</li>
+      </ul>
+      <div class="map1">MAP</div>
+      <button class="apartamentButton1">Швидке бронювання</button>
+    </div>
+    <div class="apartamentSlider slidesDESKT">
+      <div class="slides" >
+        <img class="apartamentIMG active" src="./img/apartament.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament.png" alt="">
+      </div>
+      <button class="sliderBtn prev">&#10094;</button>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+  </section>
+
+  <!-- ====== APARTMENT (duplicate kept) ====== -->
+  <section class="apartament" data-animate>
+    <div class="apartamentSlider">
+      <button class="sliderBtn prev">&#10094;</button>
+      <div class="slides">
+        <img class="apartamentIMG active" src="./img/apartament.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament.png" alt="">
+      </div>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+
+    <div class="apartamentContent">
+      <h2 class="apartamentText">Loft на Печерську</h2>
+      <p class="apartamentSubText">62 м² • 2 кімнати • вул. Басейна</p>
+      <p class="apartamentTex">
+        Спокійні тони, багато світла, натуральне дерево. Окрема спальня та
+        вітальня, ергономічна кухня, балкон із видом на місто. Підійде для
+        відрядження чи довгих прогулянок центром.
+      </p>
+      <h2 class="apartamentPrice"><span>—</span> ₴/ніч</h2>
+      <ul class="apartamentAdvantages">
+        <li class="apartamentAdvantagesItem">Wi-Fi</li>
+        <li class="apartamentAdvantagesItem">Пральна машина</li>
+        <li class="apartamentAdvantagesItem">Кондиціонер</li>
+        <li class="apartamentAdvantagesItem">Паркінг поруч</li>
+      </ul>
+      <div class="map">MAP</div>
+      <button class="apartamentButton">Швидке бронювання</button>
+    </div>
+  </section>
+
+  <!-- ====== REVIEWS ====== -->
+  <section class="reviews" data-animate>
+    <h2 class="reviewsText">ВІДГУКИ</h2>
+    <div class="reviewsContent">
+      <div class="reviewsWrapper">
+        <ul class="reviewsList">
+          <li class="reviewsItem">Дуже сподобалось! Все швидко і якісно.</li>
+          <li class="reviewsItem">Гарний сервіс, буду звертатись ще.</li>
+          <li class="reviewsItem">Все супер! Рекомендую всім.</li>
+          <li class="reviewsItem">Обслуговування на високому рівні!</li>
+          <li class="reviewsItem">Ціни приємно здивували, рекомендую!</li>
+          <li class="reviewsItem">Користуюсь вже не вперше, все чудово!</li>
+        </ul>
+      </div>
+      <div class="reviewsButtons">
+        <button id="prevBtn">НАЗАД</button>
+        <button id="nextBtn">ВПЕРЕД</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== QUICK BOOKING ====== -->
+  <section id="quick-booking" class="quick-booking" aria-labelledby="qb-title" data-animate>
+    <div class="qb-container">
+      <h2 id="qb-title">ШВИДКЕ БРОНЮВАННЯ</h2>
+
+      <form id="qb-form" class="qb-form" method="POST" action="/book" novalidate>
+        <div class="qb-row">
+          <label class="qb-field">
+            <span class="qb-label">Апартаменти</span>
+            <select name="apartment" id="qb-apartment" title="Оберіть тип апартаментів" required>
+              <option value="sea" data-price="85">Sea View — €85 / ніч</option>
+              <option value="cozy" data-price="70">Cozy Studio — €70 / ніч</option>
+              <option value="family" data-price="120">Family Suite — €120 / ніч</option>
+            </select>
+          </label>
+          <label class="qb-field">
+            <span class="qb-label">Заїзд</span>
+            <input type="date" name="checkin" id="qb-checkin" title="Оберіть дату заїзду" required placeholder="Дата заїзду" />
+          </label>
+          <label class="qb-field">
+            <span class="qb-label">Виїзд</span>
+            <input type="date" name="checkout" id="qb-checkout" title="Оберіть дату виїзду" required placeholder="Дата виїзду" />
+          </label>
+        </div>
+
+        <div class="qb-row">
+          <label class="qb-field qb-small">
+            <span class="qb-label">Дорослі</span>
+            <input type="number" name="adults" id="qb-adults" value="2" min="1" max="8" title="Введіть кількість дорослих" required placeholder="Кількість дорослих" />
+          </label>
+
+          <label class="qb-field qb-small">
+            <span class="qb-label">Діти</span>
+            <input type="number" name="kids" id="qb-kids" value="0" min="0" max="8" title="Введіть кількість дітей" />
+          </label>
+        </div>
+
+        <div class="qb-summary">
+          <div class="qb-price">
+            <div>Ціна / ніч: <strong id="qb-price">—</strong></div>
+            <div>Ночей: <strong id="qb-nights">—</strong></div>
+            <div>Разом (сервер обчислює): <strong id="qb-total">—</strong></div>
+          </div>
+
+          <div class="qb-actions">
+            <button type="submit" class="qb-primary">Забронювати</button>
+          </div>
+        </div>
+
+        <input type="hidden" name="price_per_night" id="qb-price-hidden" value="" />
+      </form>
+
+    </div>
+  </section>
+
+  <!-- ====== CONTACT ====== -->
+  <section id="contact-callback" class="contact-callback" aria-labelledby="contact-title" data-animate>
+    <div class="contact-wrap">
+      <div class="contact-card">
+        <h2 id="contact-title">Є питання? Залиште контакти</h2>
+        <p class="contact-sub">Якщо залишилися питання щодо квартири або бронювання — залиште ім'я та телефон, і власник зв'яжеться з вами. Це просто запит і не є підтвердженням бронювання.</p>
+
+        <form id="contact-form" class="contact-form" method="POST" action="/contact" novalidate>
+          <input type="text" name="_honey" class="honey" tabindex="-1" autocomplete="off" />
+
+          <div class="cf-row">
+            <label class="cf-field">
+              <span class="cf-label">Ім'я</span>
+              <input type="text" name="name" id="cf-name" placeholder="Ім'я" title="Введіть ваше ім'я" required />
+            </label>
+
+            <label class="cf-field">
+              <span class="cf-label">Телефон</span>
+              <input type="tel" name="phone" id="cf-phone" placeholder="+380XXXXXXXXX" title="Введіть ваш номер телефону" pattern="\+?380\d{9}" inputmode="tel" required />
+            </label>
+          </div>
+
+          <div class="cf-row">
+            <label class="cf-field cf-full">
+              <span class="cf-label">Питання (опціонально)</span>
+              <textarea name="message" id="cf-message" rows="3" placeholder="Коротко: ваше питання" title="Введіть ваше питання"></textarea>
+            </label>
+          </div>
+
+          <label class="cf-consent">
+            <input type="checkbox" name="consent" required />
+            Я погоджуюсь з <a href="/privacy" target="_blank" rel="noopener">Політикою конфіденційності</a> і дозволяю використовувати мої контактні дані для зв'язку.
+          </label>
+
+          <div class="cf-actions">
+            <button type="submit" class="cf-primary">Надіслати</button>
+          </div>
+
+          <p class="cf-note">Після відправки власник зателефонує, щоб відповісти на питання. Це не означає автоматичне підтвердження бронювання.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer" data-animate>
+    <div class="footer-container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Apartaments Alanya</h3>
+          <p>Комфортні квартири в самому серці узбережжя Аланії</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 Apartaments Alanya. Усі права захищені.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====== Анімаційний JS (IntersectionObserver + чергування ліво/право + менші затримки) ====== -->
+  <script>
+    (function () {
+      const elements = Array.from(document.querySelectorAll('[data-animate]'));
+      if (!elements.length) return;
+
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -10% 0px',
+        threshold: 0.06
+      };
+
+      // Базова затримка між секціями (менша — швидший каскад)
+      const baseDelay = 30; // ms
+
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const idx = elements.indexOf(el);
+          // чергування: парні індекси (0,2,4...) справа, непарні — зліва
+          const direction = (idx % 2 === 0) ? 'right' : 'left';
+
+          // Додаємо стартовий клас для позиції
+          el.classList.add('animate-side', `from-${direction}`);
+
+          // Додаємо data-direction для дочірніх елементів, щоб синхронізувати напрям
+          const children = el.querySelectorAll('h1,h2,h3,p,img,button,li,select,input,textarea,.slides,.apartamentContent > * , .qb-container > * , .contact-card > *');
+          children.forEach(child => {
+            child.classList.add('animate-child');
+            child.setAttribute('data-direction', direction);
+          });
+
+          // видимість секції з невеликою затримкою, залежно від індексу
+          const delay = idx * baseDelay;
+          setTimeout(() => {
+            el.classList.add('visible');
+          }, delay);
+
+          // каскад для дітей (коротші інтервали)
+          children.forEach((child, cIdx) => {
+            const childDelay = delay + 60 + (cIdx * 45); // менші значення для швидшої появи
+            setTimeout(() => {
+              child.classList.add('visible');
+            }, childDelay);
+          });
+
+          // більше не спостерігаємо після показу
+          obs.unobserve(el);
+        });
+      }, observerOptions);
+
+      // Прикріплюємо observer до елементів, та відразу задаємо початкові класи (щоб не було "стрибка")
+      elements.forEach((el, i) => {
+        // встановимо клас anim-side відразу (щоб розмітка не зміщувалась пізніше)
+        // direction вирішимо в observer при появі (але на випадок FOUC — присвоїмо відповідно індексу)
+        const dir = (i % 2 === 0) ? 'right' : 'left';
+        if (!el.classList.contains('animate-side')) {
+          el.classList.add('animate-side', `from-${dir}`);
+        }
+        io.observe(el);
+      });
+
+      // обробка випадків, коли елементи вже в зоні видимості на load
+      window.addEventListener('load', () => {
+        elements.forEach((el, idx) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight - 100) {
+            const dir = (idx % 2 === 0) ? 'right' : 'left';
+            el.classList.add('animate-side', `from-${dir}`);
+            const children = el.querySelectorAll('h1,h2,h3,p,img,button,li,select,input,textarea,.slides,.apartamentContent > * , .qb-container > * , .contact-card > *');
+            children.forEach(child => {
+              child.classList.add('animate-child');
+              child.setAttribute('data-direction', dir);
+            });
+            const delay = idx * baseDelay;
+            setTimeout(() => el.classList.add('visible'), delay);
+            children.forEach((child, cIdx) => {
+              setTimeout(() => child.classList.add('visible'), delay + 60 + (cIdx * 45));
+            });
+          }
+        });
+      });
+    })();
+  </script>
+
+  <!-- зберігаю підключення до твого зовнішнього script.js -->
+  <script src="./script.js"></script>
+</body>
+
+</html>
