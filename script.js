@@ -230,7 +230,7 @@ _Відправлено з сайту Apartaments Alanya_
 
     // Send to Telegram bot
     const botToken = '8253586903:AAFJGQehaFg1Rm7m1k7VO7vLEB57R6T0fi4';
-    const chatId = '6895594698';
+    const chatId = '5993122611';
     const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
     try {
@@ -276,3 +276,4 @@ _Відправлено з сайту Apartaments Alanya_
 
 // Call enhanced hover effects
 enhanceHoverEffects();
+
