@@ -768,12 +768,24 @@ textarea:focus {
   font-size: 14px;
   color: #4a5568;
   margin: 10px 0;
+  transition: color 0.3s ease;
 }
 
 .cf-consent input {
   transform: translateY(2px);
   min-width: 18px;
   min-height: 18px;
+  accent-color: #007bff;
+  transition: accent-color 0.3s ease, border-color 0.3s ease;
+}
+
+.cf-consent.required {
+  color: #dc3545;
+}
+
+.cf-consent.required input {
+  accent-color: #dc3545;
+  border-color: #dc3545;
 }
 
 .cf-consent a {

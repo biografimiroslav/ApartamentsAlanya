@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
   initTypewriter();
   initSliders();
   initReviewsSlider();
+  
+  // Initialize Telegram form handler
+  initTelegramForm();
 });
 
 // Animation functions
@@ -166,6 +169,107 @@ function initReviewsSlider() {
     if (currentIndex > 0) {
       currentIndex -= 1;
       updateSlider();
+    }
+  });
+}
+
+// Telegram form handler
+function initTelegramForm() {
+  const contactForm = document.getElementById('contact-form');
+  if (!contactForm) return;
+
+  // Honeypot field removed as requested
+
+  // Disable submit button until consent is checked
+  const submitButton = contactForm.querySelector('button[type="submit"]');
+  const consentCheckbox = contactForm.querySelector('input[name="consent"]');
+  const consentLabel = contactForm.querySelector('.cf-consent');
+  
+  if (submitButton && consentCheckbox && consentLabel) {
+    submitButton.disabled = true;
+    
+    consentCheckbox.addEventListener('change', function() {
+      submitButton.disabled = !this.checked;
+      
+      // Remove required class logic
+    });
+  }
+
+  contactForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Honeypot check removed as requested
+
+    // Get form data
+    const formData = new FormData(this);
+    const name = formData.get('name');
+    const phone = formData.get('phone');
+    const message = formData.get('message') || 'Питання не вказано';
+    const consent = formData.get('consent');
+
+    // Validate required fields
+    if (!name || !phone || !consent) {
+      alert('Будь ласка, заповніть обов\'язкові поля: Ім\'я, Телефон та погодьтеся з Політикою конфіденційності');
+    }
+
+    if (!consent) {
+      alert('Будь ласка, погодьтеся з Політикою конфіденційності');
+      ;
+    }
+
+    // Create Telegram message
+    const telegramMessage = `
+📞 *НОВЕ ПОВІДОМЛЕННЯ З САЙТУ*
+    
+👤 *Ім'я:* ${name}
+📱 *Телефон:* ${phone}
+💬 *Питання:* ${message}
+    
+_Відправлено з сайту Apartaments Alanya_
+    `;
+
+    // Send to Telegram bot
+    const botToken = '8253586903:AAFJGQehaFg1Rm7m1k7VO7vLEB57R6T0fi4';
+    const chatId = '6895594698';
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+    try {
+      const submitButton = this.querySelector('button[type="submit"]');
+      const originalText = submitButton.textContent;
+      submitButton.textContent = 'Відправляємо...';
+      submitButton.disabled = true;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: telegramMessage,
+          parse_mode: 'Markdown'
+        })
+      });
+
+      if (response.ok) {
+        alert('Повідомлення успішно відправлено! Ми зв\'яжемося з вами найближчим часом.');
+        this.reset();
+        // Reset consent checkbox state
+        if (consentCheckbox) {
+          consentCheckbox.checked = false;
+          submitButton.disabled = true;
+        }
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.description || 'Помилка відправки');
+      }
+    } catch (error) {
+      console.error('Error sending to Telegram:', error);
+      alert('Сталася помилка при відправці. Будь ласка, спробуйте ще раз або зателефонуйте нам безпосередньо.');
+    } finally {
+      const submitButton = this.querySelector('button[type="submit"]');
+      submitButton.textContent = 'Надіслати';
+      submitButton.disabled = !consentCheckbox.checked;
     }
   });
 }

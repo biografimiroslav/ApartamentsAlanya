@@ -100,8 +100,9 @@
       <h2 class="headerSubText">Квартири в самому серці узбережжя Аланії</h2>
 
       <div class="headerButtons">
-        <button class="btn" onclick="location.href='#contact'">Зв’язатися з нами</button>
-        <button class="btn" onclick="location.href='#booking'">Швидке бронювання</button>
+        <!-- оновлено: викликаємо scrollToSection -->
+        <button class="btn" onclick="scrollToSection('contact-callback')">Зв’язатися з нами</button>
+        <button class="btn" onclick="scrollToSection('quick-booking')">Швидке бронювання</button>
       </div>
     </div>
   </header>
@@ -115,7 +116,7 @@
       <img class="aboutIMG" src="./img/aboutApartament.png" alt="">
       <div class="aboutDiscrubtionContent">
         <h2 class="aboutSubText">
-          Ми живемо поруч, та із задоволенням
+          Ми живемо поруч, і із задоволенням
           ділимося з вами всім найкращим.
         </h2>
         <ul class="aboutDiscrubtionList">
@@ -127,7 +128,8 @@
             Ми супроводжуємо вас на кожному етапі: від першого повідомлення до комфортного заселення, щоб ваш відпочинок чи відрядження пройшли без зайвих клопотів.
           </p>
         </ul>
-        <button class="aboutButton">
+        <!-- оновлено: веде до секції контакту -->
+        <button class="aboutButton" onclick="scrollToSection('contact-callback')">
           Зв’язатися з нами
         </button>
       </div>
@@ -140,7 +142,7 @@
       <button class="sliderBtn prev">&#10094;</button>
       <div class="slides">
         <img class="apartamentIMG active" src="./img/apartament.png" alt="">
-        <img class="apartamentIMG" src="./img/apartament.png" alt="">
+        <img class="apartamentIMG" src="./img/aboutApartament.png" alt="">
         <img class="apartamentIMG" src="./img/apartament.png" alt="">
       </div>
       <button class="sliderBtn next">&#10095;</button>
@@ -162,7 +164,8 @@
         <li class="apartamentAdvantagesItem">Паркінг поруч</li>
       </ul>
       <div class="map">MAP</div>
-      <button class="apartamentButton">Швидке бронювання</button>
+      <!-- оновлено: веде до швидкого бронювання -->
+      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Швидке бронювання</button>
     </div>
   </section>
 
@@ -190,7 +193,8 @@
         <li class="apartamentAdvantagesItem1">Паркінг поруч</li>
       </ul>
       <div class="map1">MAP</div>
-      <button class="apartamentButton1">Швидке бронювання</button>
+      <!-- оновлено: веде до швидкого бронювання -->
+      <button class="apartamentButton1" onclick="scrollToSection('quick-booking')">Швидке бронювання</button>
     </div>
     <div class="apartamentSlider slidesDESKT">
       <div class="slides" >
@@ -231,7 +235,8 @@
         <li class="apartamentAdvantagesItem">Паркінг поруч</li>
       </ul>
       <div class="map">MAP</div>
-      <button class="apartamentButton">Швидке бронювання</button>
+      <!-- оновлено: веде до швидкого бронювання -->
+      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Швидке бронювання</button>
     </div>
   </section>
 
@@ -318,8 +323,8 @@
         <h2 id="contact-title">Є питання? Залиште контакти</h2>
         <p class="contact-sub">Якщо залишилися питання щодо квартири або бронювання — залиште ім'я та телефон, і власник зв'яжеться з вами. Це просто запит і не є підтвердженням бронювання.</p>
 
-        <form id="contact-form" class="contact-form" method="POST" action="/contact" novalidate>
-          <input type="text" name="_honey" class="honey" tabindex="-1" autocomplete="off" />
+        <form id="contact-form" class="contact-form" novalidate>
+          <!-- Removed honeypot field for spam detection -->
 
           <div class="cf-row">
             <label class="cf-field">
@@ -336,7 +341,7 @@
           <div class="cf-row">
             <label class="cf-field cf-full">
               <span class="cf-label">Питання (опціонально)</span>
-              <textarea name="message" id="cf-message" rows="3" placeholder="Коротко: ваше питання" title="Введіть ваше питання"></textarea>
+              <textarea name="message" id="cf-message" rows="3" placeholder="Коротко: вашe питання" title="Введіть ваше питання"></textarea>
             </label>
           </div>
 
@@ -349,7 +354,7 @@
             <button type="submit" class="cf-primary">Надіслати</button>
           </div>
 
-          <p class="cf-note">Після відправки власник зателефонує, щоб відповісти на питання. Це не означає автоматичне підтвердження бронювання.</p>
+          <p class="cf-note">Після відправки власник зателефонує, щоб відповісти на питання.</p>
         </form>
       </div>
     </div>
@@ -457,9 +462,25 @@
     })();
   </script>
 
+  <!-- Простий універсальний скрипт для плавного скролу по секціях -->
+  <script>
+    function scrollToSection(id) {
+      try {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          // якщо секція не знайдена — fallback на зміну location (працює як #anchor)
+          location.href = '#' + id;
+        }
+      } catch (e) {
+        location.href = '#' + id;
+      }
+    }
+  </script>
+
   <!-- зберігаю підключення до твого зовнішнього script.js -->
   <script src="./script.js"></script>
 </body>
 
 </html>
-
