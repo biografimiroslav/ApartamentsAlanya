@@ -276,4 +276,3 @@ _Відправлено з сайту Apartaments Alanya_
 
 // Call enhanced hover effects
 enhanceHoverEffects();
-
