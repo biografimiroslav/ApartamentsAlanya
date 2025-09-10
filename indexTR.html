@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Alanya'nın kalbinde konforlu daire kiralama.">
+  <link rel="stylesheet" href="style.css">
+  <title>Apartaments Alanya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="./animations.css">
+
+
+  <!-- ===== Animasyonlar (gömülü, animations.css'e taşıyabilirsiniz) ===== -->
+  <style>
+    /* ----------------------------
+       Genel: kenardan giren animasyonlar
+       ---------------------------- */
+    .animate-side {
+      opacity: 0;
+      transition: transform 400ms cubic-bezier(.2,.9,.3,1), opacity 600ms ease;
+      will-change: transform, opacity;
+    }
+
+    /* başlangıç pozisyonları (dinamik sınıflarla verilecek) */
+    .animate-side.from-right { transform: translateX(50px); }
+    .animate-side.from-left { transform: translateX(-50px); }
+
+    /* görünür */
+    .animate-side.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Çocuk öğeler de biraz yandan girer (data-direction ile ayarlanır) */
+    .animate-child {
+      opacity: 0;
+      transition: transform 480ms cubic-bezier(.2,.9,.3,1), opacity 480ms ease;
+      will-change: transform, opacity;
+    }
+
+    .animate-child[data-direction="right"] { transform: translateX(30px); }
+    .animate-child[data-direction="left"] { transform: translateX(-30px); }
+
+    .animate-child.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* hızlı/yavaş modifikasyonlar */
+    .animate-fast { transition-duration: 480ms !important; }
+    .animate-slow { transition-duration: 900ms !important; }
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .animate-side, .animate-child {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+      }
+    }
+
+    /* Rezervasyon bölümü stilleri */
+    .quick-booking {
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      border-radius: 10px;
+      margin: 40px 20px;
+
+    }
+
+    .qb-container {
+      width: 100%;
+      max-width: 800px;
+      text-align: center;
+      
+    }
+
+    .qb-container h2 {
+      color: #ffffff;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 30px;
+    }
+
+    .booking-contact {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 30px 20px;
+      border: 2px solid #bee3f8;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .booking-text {
+      color: #2d3748;
+      font-size: 18px;
+      font-weight: 400;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .booking-phone {
+      color: #2b6cb0;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 20px;
+      transition: color 0.3s ease;
+    }
+
+    .booking-phone:hover {
+      color: #2c5282;
+    }
+
+    .booking-note {
+      color: #4a5568;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    /* Mobil uyumluluk */
+    @media (max-width: 768px) {
+      .quick-booking {
+        margin: 20px 10px;
+        padding: 20px 10px;
+      }
+
+      .qb-container h2 {
+        font-size: 24px;
+      }
+
+      .booking-text {
+        font-size: 16px;
+      }
+
+      .booking-phone {
+        font-size: 20px;
+      }
+
+      .booking-note {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+    <script>
+        // Typewriter effect
+function initTypewriter() {
+  const words = ["ÇEKİCİ", "MODERN", "KONFORLU", "ŞIK", "KULLANIŞLI", "FERAH", "ZARİF"];
+  const wordSpan = document.querySelector(".word");
+
+  let wordIndex = 0;
+  let charIndex = 0;
+  let deleting = false;
+  let delay = 100;
+
+  function type() {
+    const currentWord = words[wordIndex];
+
+    if (!deleting) {
+      wordSpan.textContent = currentWord.slice(0, charIndex + 1);
+      charIndex++;
+
+      if (charIndex === currentWord.length) {
+        deleting = true;
+        setTimeout(type, 1000);
+        return;
+      }
+    } else {
+      wordSpan.textContent = currentWord.slice(0, charIndex - 1);
+      charIndex--;
+
+      if (charIndex === 0) {
+        deleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+      }
+    }
+
+    setTimeout(type, deleting ? 50 : delay);
+  }
+
+  type();
+}
+    </script>
+
+  <!-- ====== HEADER ====== -->
+  <header class="header" id="hero" data-animate>
+    <!-- video arkaplan: kendi dosyanızı koyun -->
+    <video class="background-video" autoplay muted loop playsinline>
+      <source src="./img/headerBG.mp4" type="video/mp4">
+      <!-- fallback: video olmayan kullanıcılara resim gösterilecek (JS sınıf ekler) -->
+    </video>
+
+    <!-- karartma -->
+    <div class="overlay" aria-hidden="true"></div>
+
+    <!-- fallback resim (gerekirse) -->
+    <div class="video-fallback" aria-hidden="true"></div>
+
+    <!-- Video üstündeki içerik -->
+    <div class="headerLang">
+      <div class="selectedLang">
+        <img src="./img/tr.svg" alt="Bayrak">
+        <p>TR</p>
+      </div>
+      <ul class="langDropdown">
+        <li>
+          <a href="./index.html">
+            <img src="./img/gb.svg" alt="English flag">
+            <p>EN</p>
+          </a>
+        </li>
+        <li>
+          <a href="./indexUA.html">
+            <img src="./img/ua.svg" alt="Ukrayna bayrağı">
+            <p>UA</p>
+          </a>
+        </li>
+        <li>
+          <a href="">
+          <img src="./img/tr.svg" alt="Türkiye bayrağı">
+          <p>TR</p>
+          </a>
+        </li>
+          <li>
+            <a href="">
+              <img src="./img/cz.svg" alt="Çekya bayrağı">
+              <p>CZ</p>
+            </a>
+        </li>
+          <li>
+            <a href="./indexRU.html">
+              <img src="./img/ru.svg" alt="Rusya bayrağı">
+              <p>RU</p>
+            </a>
+        </li>
+      </ul>
+    </div>
+    <div class="header-content" data-animate>
+
+      <ul class="location" aria-hidden="false">
+        <li><img src="./img/location.svg" alt="Konum"></li>
+        <li>
+          <p>Alanya</p>
+        </li>
+      </ul>
+
+      <h1 class="headerMainText">
+        ÜÇ DAİREMİZDEN BİRİNİ <br>
+        <span class="word" aria-live="polite"></span> SEÇİN
+      </h1>
+
+      <h2 class="headerSubText">Alanya kıyısının tam kalbinde daireler</h2>
+
+      <div class="headerButtons">
+        <!-- güncellendi: scrollToSection çağrısı -->
+        <button class="btn" onclick="scrollToSection('contact-callback')">Bizimle iletişime geçin</button>
+        <button class="btn" onclick="scrollToSection('quick-booking')">Rezervasyon</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====== ABOUT ====== -->
+  <section class="about" data-animate>
+    <h2 class="aboutText">
+      HAKKIMIZDA
+    </h2>
+    <div class="aboutContent">
+      <img class="aboutIMG" src="./img/aboutApartament.png" alt="">
+      <div class="aboutDiscrubtionContent">
+        <h2 class="aboutSubText">
+          Biz yakın yaşıyoruz ve sizlerle
+          en iyilerini paylaşmaktan memnuniyet duyarız.
+        </h2>
+        <ul class="aboutDiscrubtionList">
+          <p class="aboutDiscrubtion">Biz — üç modern ve konforlu daireye sevgiyle bakan yerel bir aileyiz.</p>
+          <p class="aboutDiscrubtion">
+            Aracı yok, gizli ücret yok — sadece şeffaf koşullar ve her misafir için özen.
+          </p>
+          <p class="aboutDiscrubtion">
+            İlk mesajdan konforlu girişinize kadar her adımda yanınızdayız; tatiliniz veya iş seyahatiniz sorunsuz geçsin diye.
+          </p>
+        </ul>
+        <!-- güncellendi: iletişim bölümüne gider -->
+        <button class="aboutButton" onclick="scrollToSection('contact-callback')">
+          Bizimle iletişime geçin
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== APARTMENT (1) ====== -->
+  <section class="apartament" data-animate>
+    <div class="apartamentSlider">
+      <button class="sliderBtn prev">&#10094;</button>
+      <div class="slides">
+        <img class="apartamentIMG active" src="./img/apartament.png" alt="">
+        <img class="apartamentIMG" src="./img/aboutApartament.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament.png" alt="">
+      </div>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+
+    <div class="apartamentContent">
+      <h2 class="apartamentText">Serenity Royal Beach'te Daire</h2>
+      <p class="apartamentSubText">62 m² • 2 oda • Denize 50 metre</p>
+      <p class="apartamentTex">
+        Sakin tonlar, bol ışık, doğal ahşap. Ayrı yatak odası ve
+        oturma odası, ergonomik mutfak, şehir manzaralı balkon. İş seyahatleri veya
+        şehirde uzun yürüyüşler için uygun.
+      </p>
+      <h2 class="apartamentPrice" data-apartment="1"><span>—</span> ₺/gece</h2>
+      <ul class="apartamentAdvantages">
+        <li class="apartamentAdvantagesItem">Wi‑Fi</li>
+        <li class="apartamentAdvantagesItem">Barbekü alanı</li>
+        <li class="apartamentAdvantagesItem">Klima</li>
+        <li class="apartamentAdvantagesItem">Park yeri yakınında</li>
+        <li class="apartamentAdvantagesItem">Sinema</li>
+                <li class="apartamentAdvantagesItem">SPA alanı</li>
+                        <li class="apartamentAdvantagesItem">Güvenlik</li>
+                        <li class="apartamentAdvantagesItem">Spor salonu</li>
+                        <li class="apartamentAdvantagesItem">Çalışma odası</li>
+      </ul>
+      <div class="map">MAP</div>
+      <!-- güncellendi: rezervasyona gider -->
+      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Rezerve Et</button>
+    </div>
+  </section>
+
+  <!-- ====== APARTMENT (mobile/variants preserved) ====== -->
+  <section class="apartament1" data-animate>
+    <div class="apartamentSlider slidesPHONE">
+      <div class="slides">
+        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="">
+      </div>
+      <button class="sliderBtn prev">&#10094;</button>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+    <div class="apartamentContent1">
+      <h2 class="apartamentText1">Nordic Sky'da Daire</h2>
+      <p class="apartamentSubText1">62 m² • 3 oda • Denize 350 metre</p>
+      <p class="apartamentTex1">Aydınlık ve ferah daireler, modern iç mekan ve doğal malzemelerle. Ayrı yatak odası ve oturma odası dahil üç oda, tam donanımlı mutfak, güzel manzaralı balkon. Plaja sadece 350 metre, yakınında uygun park yeri. Aile tatili veya romantik geziler için ideal.</p>
+      <h2 class="apartamentPrice1" data-apartment="2"><span>—</span> ₺/gece</h2>
+      <ul class="apartamentAdvantages1">
+        <li class="apartamentAdvantagesItem1">Wi‑Fi</li>
+        <li class="apartamentAdvantagesItem1">Barbekü alanı</li>
+        <li class="apartamentAdvantagesItem1">Klima</li>
+        <li class="apartamentAdvantagesItem1">Park yeri yakınında</li>
+        <li class="apartamentAdvantagesItem1">Sinema</li>
+                <li class="apartamentAdvantagesItem1">SPA alanı</li>
+                        <li class="apartamentAdvantagesItem1">Güvenlik</li>
+                        <li class="apartamentAdvantagesItem1">Spor salonu</li>
+                        <li class="apartamentAdvantagesItem1">Çalışma odası</li>
+      </ul>
+      <a href="https://maps.app.goo.gl/3CUWNciZda2v4NtN6" target="_blank" rel="noopener noreferrer">
+        <img class="map"src="./img/image.png" alt="">
+      </a>
+      <!-- güncellendi: rezervasyona gider -->
+      <button class="apartamentButton1" onclick="scrollToSection('quick-booking')">Rezerve Et</button>
+    </div>
+    <div class="apartamentSlider slidesDESKT">
+      <div class="slides">
+        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="">
+      </div>
+      <button class="sliderBtn prev">&#10094;</button>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+  </section>
+
+  <!-- ====== APARTMENT (duplicate kept) ====== -->
+  <section class="apartament" data-animate>
+    <div class="apartamentSlider">
+      <button class="sliderBtn prev">&#10094;</button>
+      <div class="slides">
+
+        <img class="apartamentIMG active" src="./img/apartament3_1.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_2.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_3.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_4.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_5.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_6.png" alt="">
+                <img class="apartamentIMG" src="./img/apartament3_7.png" alt="">
+      </div>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+
+    <div class="apartamentContent">
+      <h2 class="apartamentText">Nordic Sky'da Daire</h2>
+      <p class="apartamentSubText">62 m² • 2 oda • Denize 350 metre</p>
+      <p class="apartamentTex">
+Aydınlık ve konforlu daireler, modern tasarım ve doğal malzemelerle. Geniş yatak odası ve oturma odası, tam donanımlı mutfak, deniz manzaralı balkon. Kompleks barbekü alanı, sinema, SPA ve spor salonu sunar. Rahat bir tatil veya verimli bir çalışma için ideal.
+      </p>
+      <h2 class="apartamentPrice" data-apartment="3"><span>—</span> ₺/gece</h2>
+      <ul class="apartamentAdvantages">
+        <li class="apartamentAdvantagesItem">Wi‑Fi</li>
+        <li class="apartamentAdvantagesItem">Barbekü alanı</li>
+        <li class="apartamentAdvantagesItem">Klima</li>
+        <li class="apartamentAdvantagesItem">Park yeri yakınında</li>
+        <li class="apartamentAdvantagesItem">Sinema</li>
+                <li class="apartamentAdvantagesItem">SPA alanı</li>
+                        <li class="apartamentAdvantagesItem">Güvenlik</li>
+                        <li class="apartamentAdvantagesItem">Spor salonu</li>
+                        <li class="apartamentAdvantagesItem">Çalışma odası</li>
+      </ul>
+      <a href="https://maps.app.goo.gl/3CUWNciZda2v4NtN6" target="_blank" rel="noopener noreferrer">
+        <img class="map"src="./img/image.png" alt="">
+      </a>
+      <!-- güncellendi: rezervasyona gider -->
+      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Rezerve Et</button>
+    </div>
+  </section>
+
+  <!-- ====== REVIEWS ====== -->
+  <section class="reviews" data-animate>
+    <h2 class="reviewsText">YORUMLAR</h2>
+    <div class="reviewsContent">
+      <div class="reviewsWrapper">
+        <ul class="reviewsList">
+          <li class="reviewsItem">Çok beğendik! Her şey hızlı ve kaliteliydi.</li>
+          <li class="reviewsItem">Güzel hizmet, tekrar başvuracağım.</li>
+          <li class="reviewsItem">Her şey harika! Herkese tavsiye ederim.</li>
+          <li class="reviewsItem">Hizmet yüksek seviyede!</li>
+          <li class="reviewsItem">Fiyatlar hoş bir sürpriz oldu, tavsiye ederim!</li>
+          <li class="reviewsItem">İlk defa değil, her şey mükemmel!</li>
+        </ul>
+      </div>
+      <div class="reviewsButtons">
+        <button id="prevBtn">GERİ</button>
+        <button id="nextBtn">İLERİ</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== CONTACT FOR BOOKING ====== -->
+  <section id="quick-booking" class="quick-booking" aria-labelledby="qb-title" data-animate>
+    <div class="qb-container">
+      <h2 id="qb-title">REZERVASYON</h2>
+
+      <div class="booking-contact">
+        <p class="booking-text">Daire rezervasyonu için bizimle telefonla iletişime geçin:</p>
+        <a href="tel:+380123456789" class="booking-phone">+38 (012) 345-67-89</a>
+        <p class="booking-note">Size en uygun seçeneği bulmanıza yardımcı oluruz ve tüm sorularınızı yanıtlarız</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ====== FAQ ====== -->
+  <section id="faq" class="faq" aria-labelledby="faq-title" data-animate>
+    <div class="faq-wrap">
+      <h2 id="faq-title" class="faq-title">Sıkça Sorulan Sorular</h2>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq1-answer" id="faq1">
+          Ödeme nasıl yapılır? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq1-answer" role="region" aria-labelledby="faq1" >
+          Rezervasyon onaylandıktan sonra size birkaç uygun ödeme yöntemi sunacağız. Ayrıca giriş sırasında temsilcimize nakit ödeme yapma imkânı da vardır. Her durumda 500 € depozito gereklidir; çıkışta tamamı iade edilir.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq2-answer" id="faq2">
+          Konut ve kompleks içinde hangi olanaklar vardır? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq2-answer" role="region" aria-labelledby="faq2" >
+          Her daire konforlu yaşam için gereken her şeyle donatılmıştır: televizyon, buzdolabı, ütü, bulaşık makinesi, çamaşır makinesi, tam yemek takımı, her odada klima ve banyolarda yerden ısıtma (Daire No.1'de tüm alanda yerden ısıtma). Kompleks genelinde internet mevcuttur. Kapalı ve açık havuzlar, sauna, hamam, Roma banyosu, sinema ve spor salonu dinlenmeniz için hazır.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq3-answer" id="faq3">
+          Kompleksin altyapısını kullanabilir miyim? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq3-answer" role="region" aria-labelledby="faq3">
+          Evet, kompleks içindeki tüm altyapı misafirler için kullanılabilir. Kullanım kuralları, dairelerin bulunduğu B blok girişindeki bilgilendirme panosunda yer almaktadır.
+<br>
+<br>
+A blokta masa tenisi ve PlayStation bulunmaktadır.
+<br>
+<br>
+C blokta saunalar ve dinlenme alanı vardır.
+<br>
+<br>
+Açık alanda kort, barbekü alanı ve su kaydıraklı havuz bulunmaktadır.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq4-answer" id="faq4">
+          Dairelerin yakınında park yeri var mı? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq4-answer" role="region" aria-labelledby="faq4">
+          Evet, dairelerin yakınında misafirler için park yeri bulunmaktadır.
+        </div>
+      </div>
+            <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq5-answer" id="faq5">
+          Deniz dışında yakın çevrede neler var? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq5-answer" role="region" aria-labelledby="faq5">
+          Kompleksin yakınından Dim-Çay nehri akar ve güzel bir yürüyüş yoluna sahiptir. Yürüyüş mesafesinde restoranlar, mağazalar ve turistik merkezler vardır. Pazartesi ve Perşembe günleri yakın pazarlar açıktır. Plajdan merkeze kadar uzanan modern 4 km'lik bir sahil yolu bulunmakta; yürüyerek veya otobüsle kolayca gidilebilir.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer" data-animate>
+    <div class="footer-container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Apartaments Alanya</h3>
+          <p>Alanya kıyısının tam kalbinde konforlu daireler</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 Apartaments Alanya. Tüm hakları saklıdır.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====== Animasyon JS (IntersectionObserver + sağ/sol dönüşümlü + kısa gecikmeler) ====== -->
+  <script>
+    (function () {
+      const elements = Array.from(document.querySelectorAll('[data-animate]'));
+      if (!elements.length) return;
+
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -10% 0px',
+        threshold: 0.06
+      };
+
+      // Bölümler arası temel gecikme (küçük => daha hızlı kademeleme)
+      const baseDelay = 30; // ms
+
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const idx = elements.indexOf(el);
+          // dönüşüm: çift indeksler (0,2,4...) sağdan, tekler soldan
+          const direction = (idx % 2 === 0) ? 'right' : 'left';
+
+          // başlangıç sınıfını ekle
+          el.classList.add('animate-side', `from-${direction}`);
+
+          // çocuklara data-direction ekle
+          const children = el.querySelectorAll('h1,h2,h3,p,img,button,li,select,input,textarea,.slides,.apartamentContent > * , .qb-container > * , .contact-card > *');
+          children.forEach(child => {
+            child.classList.add('animate-child');
+            child.setAttribute('data-direction', direction);
+          });
+
+          // görünürlük gecikmesi
+          const delay = idx * baseDelay;
+          setTimeout(() => {
+            el.classList.add('visible');
+          }, delay);
+
+          // çocukların kademeli görünürlüğü
+          children.forEach((child, cIdx) => {
+            const childDelay = delay + 60 + (cIdx * 45);
+            setTimeout(() => {
+              child.classList.add('visible');
+            }, childDelay);
+          });
+
+          obs.unobserve(el);
+        });
+      }, observerOptions);
+
+      elements.forEach((el, i) => {
+        const dir = (i % 2 === 0) ? 'right' : 'left';
+        if (!el.classList.contains('animate-side')) {
+          el.classList.add('animate-side', `from-${dir}`);
+        }
+        io.observe(el);
+      });
+
+      window.addEventListener('load', () => {
+        elements.forEach((el, idx) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight - 100) {
+            const dir = (idx % 2 === 0) ? 'right' : 'left';
+            el.classList.add('animate-side', `from-${dir}`);
+            const children = el.querySelectorAll('h1,h2,h3,p,img,button,li,select,input,textarea,.slides,.apartamentContent > * , .qb-container > * , .contact-card > *');
+            children.forEach(child => {
+              child.classList.add('animate-child');
+              child.setAttribute('data-direction', dir);
+            });
+            const delay = idx * baseDelay;
+            setTimeout(() => el.classList.add('visible'), delay);
+            children.forEach((child, cIdx) => {
+              setTimeout(() => child.classList.add('visible'), delay + 60 + (cIdx * 45));
+            });
+          }
+        });
+      });
+    })();
+  </script>
+
+  <!-- Bölümlere yumuşak kaydırma için basit yardımcı fonksiyon -->
+  <script>
+    function scrollToSection(id) {
+      try {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          location.href = '#' + id;
+        }
+      } catch (e) {
+        location.href = '#' + id;
+      }
+    }
+  </script>
+
+  <!-- dış script.js bağlantısı korunuyor -->
+  <script src="./script.js"></script>
+</body>
+
+</html>

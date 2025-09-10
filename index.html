@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Rent comfortable apartments in the heart of Alanya.">
+  <link rel="stylesheet" href="style.css">
+  <title>Apartaments Alanya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="./animations.css">
+
+
+  <!-- ===== Animations (inline; can be moved to animations.css) ===== -->
+  <style>
+    /* ----------------------------
+       General: side entrance animations
+       ---------------------------- */
+    .animate-side {
+      opacity: 0;
+      transition: transform 400ms cubic-bezier(.2,.9,.3,1), opacity 600ms ease;
+      will-change: transform, opacity;
+    }
+
+    /* starting positions (set dynamically via classes) */
+    .animate-side.from-right { transform: translateX(50px); }
+    .animate-side.from-left { transform: translateX(-50px); }
+
+    /* visible */
+    .animate-side.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Child elements also slide a bit from the side (configured via data-direction) */
+    .animate-child {
+      opacity: 0;
+      transition: transform 480ms cubic-bezier(.2,.9,.3,1), opacity 480ms ease;
+      will-change: transform, opacity;
+    }
+
+    .animate-child[data-direction="right"] { transform: translateX(30px); }
+    .animate-child[data-direction="left"] { transform: translateX(-30px); }
+
+    .animate-child.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* faster/slower modifiers if needed */
+    .animate-fast { transition-duration: 480ms !important; }
+    .animate-slow { transition-duration: 900ms !important; }
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .animate-side, .animate-child {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+      }
+    }
+
+    /* Styles for quick-booking section */
+    .quick-booking {
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      border-radius: 10px;
+      margin: 40px 20px;
+    }
+
+    .qb-container {
+      width: 100%;
+      max-width: 800px;
+      text-align: center;
+    }
+
+    .qb-container h2 {
+      color: #ffffff;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 30px;
+    }
+
+    .booking-contact {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 30px 20px;
+      border: 2px solid #bee3f8;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .booking-text {
+      color: #2d3748;
+      font-size: 18px;
+      font-weight: 400;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .booking-phone {
+      color: #2b6cb0;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 20px;
+      transition: color 0.3s ease;
+    }
+
+    .booking-phone:hover {
+      color: #2c5282;
+    }
+
+    .booking-note {
+      color: #4a5568;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    /* Responsive for booking section */
+    @media (max-width: 768px) {
+      .quick-booking {
+        margin: 20px 10px;
+        padding: 20px 10px;
+      }
+
+      .qb-container h2 {
+        font-size: 24px;
+      }
+
+      .booking-text {
+        font-size: 16px;
+      }
+
+      .booking-phone {
+        font-size: 20px;
+      }
+
+      .booking-note {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <script>
+    // Typewriter effect
+function initTypewriter() {
+  const words = ["ATTRACTIVE", "MODERN", "COMFORTABLE", "STYLISH", "CONVENIENT", "SPACIOUS", "ELEGANT"];
+
+  const wordSpan = document.querySelector(".word");
+
+  let wordIndex = 0;
+  let charIndex = 0;
+  let deleting = false;
+  let delay = 100;
+
+  function type() {
+    const currentWord = words[wordIndex];
+
+    if (!deleting) {
+      wordSpan.textContent = currentWord.slice(0, charIndex + 1);
+      charIndex++;
+
+      if (charIndex === currentWord.length) {
+        deleting = true;
+        setTimeout(type, 1000);
+        return;
+      }
+    } else {
+      wordSpan.textContent = currentWord.slice(0, charIndex - 1);
+      charIndex--;
+
+      if (charIndex === 0) {
+        deleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+      }
+    }
+
+    setTimeout(type, deleting ? 50 : delay);
+  }
+
+  type();
+}
+  </script>
+
+  <!-- ====== HEADER ====== -->
+  <header class="header" id="hero" data-animate>
+    <!-- video background: replace with your file -->
+    <video class="background-video" autoplay muted loop playsinline>
+      <source src="./img/headerBG.mp4" type="video/mp4">
+      <!-- fallback: users without video will see an image (JS adds class) -->
+    </video>
+
+    <!-- overlay -->
+    <div class="overlay" aria-hidden="true"></div>
+
+    <!-- fallback image (if needed) -->
+    <div class="video-fallback" aria-hidden="true"></div>
+
+    <!-- Content over the video -->
+    <div class="headerLang">
+      <div class="selectedLang">
+        <img src="./img/gb.svg" alt="Flag">
+        <p>EN</p>
+      </div>
+      <ul class="langDropdown">
+        <li>
+          <a href="./index.html">
+            <img src="./img/gb.svg" alt="English flag">
+            <p>EN</p>
+          </a>
+        </li>
+        <li>
+          <a href="./indexUA.html">
+            <img src="./img/ua.svg" alt="Ukrainian flag">
+            <p>UA</p>
+          </a>
+        </li>
+        <li>
+          <a href="./indexTR.html">
+          <img src="./img/tr.svg" alt="Turkish flag">
+          <p>TR</p>
+          </a>
+        </li>
+          <li>
+            <a href="./indexCZ.html">
+              <img src="./img/cz.svg" alt="Czech flag">
+              <p>CZ</p>
+            </a>
+        </li>
+          <li>
+            <a href="./indexRU.html">
+              <img src="./img/ru.svg" alt="Russian flag">
+              <p>RU</p>
+            </a>
+        </li>
+      </ul>
+    </div>
+    <div class="header-content" data-animate>
+
+      <ul class="location" aria-hidden="false">
+        <li><img src="./img/location.svg" alt="Location"></li>
+        <li>
+          <p>Alanya</p>
+        </li>
+      </ul>
+
+      <h1 class="headerMainText">
+        CHOOSE ONE OF OUR <br>
+        <span class="word" aria-live="polite"></span> APARTMENTS
+      </h1>
+
+      <h2 class="headerSubText">Apartments in the very heart of Alanya's coastline</h2>
+
+      <div class="headerButtons">
+        <!-- updated: calls scrollToSection -->
+        <button class="btn" onclick="scrollToSection('contact-callback')">Contact us</button>
+        <button class="btn" onclick="scrollToSection('quick-booking')">Booking</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====== ABOUT ====== -->
+  <section class="about" data-animate>
+    <h2 class="aboutText">
+      ABOUT US
+    </h2>
+    <div class="aboutContent">
+      <img class="aboutIMG" src="./img/aboutApartament.png" alt="">
+      <div class="aboutDiscrubtionContent">
+        <h2 class="aboutSubText">
+          We live nearby and are happy to share the best with you.
+        </h2>
+        <ul class="aboutDiscrubtionList">
+          <p class="aboutDiscrubtion">We are a local family who lovingly maintains three modern and cozy apartments.</p>
+          <p class="aboutDiscrubtion">
+            No intermediaries or hidden fees — only transparent terms and care for every guest.
+          </p>
+          <p class="aboutDiscrubtion">
+            We support you at every step: from the first message to comfortable check-in, so your vacation or business trip goes without unnecessary hassle.
+          </p>
+        </ul>
+        <!-- updated: leads to contact section -->
+        <button class="aboutButton" onclick="scrollToSection('contact-callback')">
+          Contact us
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== APARTMENT (1) ====== -->
+  <section class="apartament" data-animate>
+    <div class="apartamentSlider">
+      <button class="sliderBtn prev">&#10094;</button>
+      <div class="slides">
+        <img class="apartamentIMG active" src="./img/apartament.png" alt="">
+        <img class="apartamentIMG" src="./img/aboutApartament.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament.png" alt="">
+      </div>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+
+    <div class="apartamentContent">
+      <h2 class="apartamentText">Apartment in Serenity Royal Beach</h2>
+      <p class="apartamentSubText">62 m² • 2 rooms • 50 meters to the sea</p>
+      <p class="apartamentTex">
+        Calm tones, lots of light, natural wood. Separate bedroom and living room, ergonomic kitchen, balcony with a city view. Suitable for business trips or long walks in the center.
+      </p>
+      <h2 class="apartamentPrice" data-apartment="1"><span>—</span> ₴/night</h2>
+      <ul class="apartamentAdvantages">
+        <li class="apartamentAdvantagesItem">Wi-Fi</li>
+        <li class="apartamentAdvantagesItem">BBQ area</li>
+        <li class="apartamentAdvantagesItem">Air conditioning</li>
+        <li class="apartamentAdvantagesItem">Parking nearby</li>
+        <li class="apartamentAdvantagesItem">Cinema</li>
+        <li class="apartamentAdvantagesItem">SPA area</li>
+        <li class="apartamentAdvantagesItem">Security</li>
+        <li class="apartamentAdvantagesItem">Gym</li>
+        <li class="apartamentAdvantagesItem">Workspace</li>
+      </ul>
+      <div class="map">MAP</div>
+      <!-- updated: leads to booking -->
+      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Book now</button>
+    </div>
+  </section>
+
+  <!-- ====== APARTMENT (mobile/variants preserved) ====== -->
+  <section class="apartament1" data-animate>
+    <div class="apartamentSlider slidesPHONE">
+      <div class="slides">
+        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="">
+      </div>
+      <button class="sliderBtn prev">&#10094;</button>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+    <div class="apartamentContent1">
+      <h2 class="apartamentText1">Apartment in Nordic Sky</h2>
+      <p class="apartamentSubText1">62 m² • 3 rooms • 350 meters to the sea</p>
+      <p class="apartamentTex1">Bright and spacious apartments with a modern interior and natural materials. Three rooms including a separate bedroom and living room, fully equipped kitchen, balcony with a beautiful view. Only 350 meters to the beach, convenient parking nearby. Perfect for family vacations or romantic trips.</p>
+      <h2 class="apartamentPrice1" data-apartment="2"><span>—</span> ₴/night</h2>
+      <ul class="apartamentAdvantages1">
+        <li class="apartamentAdvantagesItem1">Wi-Fi</li>
+        <li class="apartamentAdvantagesItem1">BBQ area</li>
+        <li class="apartamentAdvantagesItem1">Air conditioning</li>
+        <li class="apartamentAdvantagesItem1">Parking nearby</li>
+        <li class="apartamentAdvantagesItem1">Cinema</li>
+        <li class="apartamentAdvantagesItem1">SPA area</li>
+        <li class="apartamentAdvantagesItem1">Security</li>
+        <li class="apartamentAdvantagesItem1">Gym</li>
+        <li class="apartamentAdvantagesItem1">Workspace</li>
+      </ul>
+      <a href="https://maps.app.goo.gl/3CUWNciZda2v4NtN6" target="_blank" rel="noopener noreferrer">
+        <img class="map" src="./img/image.png" alt="">
+      </a>
+      <!-- updated: leads to booking -->
+      <button class="apartamentButton1" onclick="scrollToSection('quick-booking')">Book now</button>
+    </div>
+    <div class="apartamentSlider slidesDESKT">
+      <div class="slides">
+        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="">
+      </div>
+      <button class="sliderBtn prev">&#10094;</button>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+  </section>
+
+  <!-- ====== APARTMENT (duplicate kept) ====== -->
+  <section class="apartament" data-animate>
+    <div class="apartamentSlider">
+      <button class="sliderBtn prev">&#10094;</button>
+      <div class="slides">
+
+        <img class="apartamentIMG active" src="./img/apartament3_1.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_2.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_3.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_4.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_5.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_6.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_7.png" alt="">
+      </div>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+
+    <div class="apartamentContent">
+      <h2 class="apartamentText">Apartment in Nordic Sky</h2>
+      <p class="apartamentSubText">62 m² • 2 rooms • 350 meters to the sea</p>
+      <p class="apartamentTex">
+        Bright and cozy apartments with a modern design and natural materials. Spacious bedroom and living room, fully equipped kitchen, balcony with sea view. The complex offers a BBQ area, cinema, SPA and gym. Perfect for a comfortable vacation or productive work.
+      </p>
+      <h2 class="apartamentPrice" data-apartment="3"><span>—</span> ₴/night</h2>
+      <ul class="apartamentAdvantages">
+        <li class="apartamentAdvantagesItem">Wi-Fi</li>
+        <li class="apartamentAdvantagesItem">BBQ area</li>
+        <li class="apartamentAdvantagesItem">Air conditioning</li>
+        <li class="apartamentAdvantagesItem">Parking nearby</li>
+        <li class="apartamentAdvantagesItem">Cinema</li>
+        <li class="apartamentAdvantagesItem">SPA area</li>
+        <li class="apartamentAdvantagesItem">Security</li>
+        <li class="apartamentAdvantagesItem">Gym</li>
+        <li class="apartamentAdvantagesItem">Workspace</li>
+      </ul>
+      <a href="https://maps.app.goo.gl/3CUWNciZda2v4NtN6" target="_blank" rel="noopener noreferrer">
+        <img class="map" src="./img/image.png" alt="">
+      </a>
+      <!-- updated: leads to booking -->
+      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Book now</button>
+    </div>
+  </section>
+
+  <!-- ====== REVIEWS ====== -->
+  <section class="reviews" data-animate>
+    <h2 class="reviewsText">REVIEWS</h2>
+    <div class="reviewsContent">
+      <div class="reviewsWrapper">
+        <ul class="reviewsList">
+          <li class="reviewsItem">Really liked it! Everything fast and high quality.</li>
+          <li class="reviewsItem">Great service, I'll contact again.</li>
+          <li class="reviewsItem">Everything is great! I recommend to everyone.</li>
+          <li class="reviewsItem">Service at a high level!</li>
+          <li class="reviewsItem">Prices pleasantly surprised, recommend!</li>
+          <li class="reviewsItem">I'm not a first-time guest, everything is excellent!</li>
+        </ul>
+      </div>
+      <div class="reviewsButtons">
+        <button id="prevBtn">BACK</button>
+        <button id="nextBtn">NEXT</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== CONTACT FOR BOOKING ====== -->
+  <section id="quick-booking" class="quick-booking" aria-labelledby="qb-title" data-animate>
+    <div class="qb-container">
+      <h2 id="qb-title">BOOKING</h2>
+
+      <div class="booking-contact">
+        <p class="booking-text">To book an apartment, contact us by phone:</p>
+        <a href="tel:+380123456789" class="booking-phone">+38 (012) 345-67-89</a>
+        <p class="booking-note">We will help you choose the best option and answer all your questions</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ====== FAQ ====== -->
+  <section id="faq" class="faq" aria-labelledby="faq-title" data-animate>
+    <div class="faq-wrap">
+      <h2 id="faq-title" class="faq-title">Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq1-answer" id="faq1">
+          How to make a payment? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq1-answer" role="region" aria-labelledby="faq1" >
+          After confirming the booking we will provide you with several convenient payment methods. Cash payment to our representative upon check-in is also possible. In any case a refundable deposit of €500 is required, which will be fully returned upon departure.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq2-answer" id="faq2">
+          What amenities are provided in the apartment and the complex? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq2-answer" role="region" aria-labelledby="faq2" >
+          Each apartment is fully equipped with everything necessary for comfortable living: TV, refrigerator, iron, dishwasher, washing machine, a full set of dishes, air conditioners in every room, and underfloor heating in the bathrooms (apartment #1 — underfloor heating throughout). Shared internet is available across the complex. For your leisure there are indoor and outdoor pools, sauna, hammam, Roman bath, cinema, and fitness center.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq3-answer" id="faq3">
+          Can I use the complex infrastructure? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq3-answer" role="region" aria-labelledby="faq3">
+          Yes, all infrastructure objects within the complex are available to residents. Rules are posted on the information board at the entrance to block B, where the apartments are located.
+<br>
+<br>
+Block A houses a table tennis and PlayStation.
+<br>
+<br>
+Block C — saunas and relaxation area.
+<br>
+<br>
+On the open territory of the complex — a court, BBQ zone and a pool with slides.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq4-answer" id="faq4">
+          Is there parking near the apartments? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq4-answer" role="region" aria-labelledby="faq4">
+          Yes, parking is available near the apartments.
+        </div>
+      </div>
+            <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq5-answer" id="faq5">
+          What is nearby, besides the sea? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq5-answer" role="region" aria-labelledby="faq5">
+          Nearby the complex flows the Dim River with a picturesque promenade. Restaurants, shops and tourist hubs are within walking distance. Local markets operate on Mondays and Thursdays. From the beach to the center there is a modern 4-km promenade, perfect for a walk or accessible by bus.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer" data-animate>
+    <div class="footer-container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Apartaments Alanya</h3>
+          <p>Comfortable apartments in the very heart of Alanya's coastline</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 Apartaments Alanya. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====== Animation JS (IntersectionObserver + left/right alternation + tight delays) ====== -->
+  <script>
+    (function () {
+      const elements = Array.from(document.querySelectorAll('[data-animate]'));
+      if (!elements.length) return;
+
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -10% 0px',
+        threshold: 0.06
+      };
+
+      // Base delay between sections (smaller = faster cascade)
+      const baseDelay = 30; // ms
+
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const idx = elements.indexOf(el);
+          // alternate: even indices (0,2,4...) from right, odd — from left
+          const direction = (idx % 2 === 0) ? 'right' : 'left';
+
+          // add starting class for position
+          el.classList.add('animate-side', `from-${direction}`);
+
+          // add data-direction for child elements to synchronize direction
+          const children = el.querySelectorAll('h1,h2,h3,p,img,button,li,select,input,textarea,.slides,.apartamentContent > * , .qb-container > * , .contact-card > *');
+          children.forEach(child => {
+            child.classList.add('animate-child');
+            child.setAttribute('data-direction', direction);
+          });
+
+          // show section with small delay depending on index
+          const delay = idx * baseDelay;
+          setTimeout(() => {
+            el.classList.add('visible');
+          }, delay);
+
+          // cascade for children (shorter intervals)
+          children.forEach((child, cIdx) => {
+            const childDelay = delay + 60 + (cIdx * 45); // smaller values for faster appearance
+            setTimeout(() => {
+              child.classList.add('visible');
+            }, childDelay);
+          });
+
+          // stop observing after show
+          obs.unobserve(el);
+        });
+      }, observerOptions);
+
+      // attach observer to elements, and set initial classes immediately (to avoid jump)
+      elements.forEach((el, i) => {
+        // set animate-side immediately (to avoid FOUC)
+        const dir = (i % 2 === 0) ? 'right' : 'left';
+        if (!el.classList.contains('animate-side')) {
+          el.classList.add('animate-side', `from-${dir}`);
+        }
+        io.observe(el);
+      });
+
+      // handle elements already in view on load
+      window.addEventListener('load', () => {
+        elements.forEach((el, idx) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight - 100) {
+            const dir = (idx % 2 === 0) ? 'right' : 'left';
+            el.classList.add('animate-side', `from-${dir}`);
+            const children = el.querySelectorAll('h1,h2,h3,p,img,button,li,select,input,textarea,.slides,.apartamentContent > * , .qb-container > * , .contact-card > *');
+            children.forEach(child => {
+              child.classList.add('animate-child');
+              child.setAttribute('data-direction', dir);
+            });
+            const delay = idx * baseDelay;
+            setTimeout(() => el.classList.add('visible'), delay);
+            children.forEach((child, cIdx) => {
+              setTimeout(() => child.classList.add('visible'), delay + 60 + (cIdx * 45));
+            });
+          }
+        });
+      });
+    })();
+  </script>
+
+  <!-- Simple smooth scroll helper -->
+  <script>
+    function scrollToSection(id) {
+      try {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          // if section not found — fallback to location hash
+          location.href = '#' + id;
+        }
+      } catch (e) {
+        location.href = '#' + id;
+      }
+    }
+  </script>
+
+  <!-- keep external script connection -->
+  <script src="./script.js"></script>
+</body>
+
+</html>

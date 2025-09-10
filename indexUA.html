@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Rent comfortable apartments in the heart of Alanya.">
+  <link rel="stylesheet" href="style.css">
+  <title>Apartaments Alanya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="./animations.css">
+
+
+  <!-- ===== Анімації (вбудовані, можна винести в animations.css) ===== -->
+  <style>
+    /* ----------------------------
+       Загальні: чергові анімації з боків
+       ---------------------------- */
+    .animate-side {
+      opacity: 0;
+      transition: transform 400ms cubic-bezier(.2,.9,.3,1), opacity 600ms ease;
+      will-change: transform, opacity;
+    }
+
+    /* стартові позиції (зададуться динамічно через класи) */
+    .animate-side.from-right { transform: translateX(50px); }
+    .animate-side.from-left { transform: translateX(-50px); }
+
+    /* visible */
+    .animate-side.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Дочірні елементи — теж входять трохи зі сторони (налаштовуються data-direction) */
+    .animate-child {
+      opacity: 0;
+      transition: transform 480ms cubic-bezier(.2,.9,.3,1), opacity 480ms ease;
+      will-change: transform, opacity;
+    }
+
+    .animate-child[data-direction="right"] { transform: translateX(30px); }
+    .animate-child[data-direction="left"] { transform: translateX(-30px); }
+
+    .animate-child.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* швидші/повільні модифікатори за потреби */
+    .animate-fast { transition-duration: 480ms !important; }
+    .animate-slow { transition-duration: 900ms !important; }
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .animate-side, .animate-child {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+      }
+    }
+
+    /* Стилі для секції бронювання */
+    .quick-booking {
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      border-radius: 10px;
+      margin: 40px 20px;
+
+    }
+
+    .qb-container {
+      width: 100%;
+      max-width: 800px;
+      text-align: center;
+      
+    }
+
+    .qb-container h2 {
+      color: #ffffff;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 30px;
+    }
+
+    .booking-contact {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 30px 20px;
+      border: 2px solid #bee3f8;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .booking-text {
+      color: #2d3748;
+      font-size: 18px;
+      font-weight: 400;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .booking-phone {
+      color: #2b6cb0;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 20px;
+      transition: color 0.3s ease;
+    }
+
+    .booking-phone:hover {
+      color: #2c5282;
+    }
+
+    .booking-note {
+      color: #4a5568;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    /* Адаптивність для секції бронювання */
+    @media (max-width: 768px) {
+      .quick-booking {
+        margin: 20px 10px;
+        padding: 20px 10px;
+      }
+
+      .qb-container h2 {
+        font-size: 24px;
+      }
+
+      .booking-text {
+        font-size: 16px;
+      }
+
+      .booking-phone {
+        font-size: 20px;
+      }
+
+      .booking-note {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+    <script>
+        // Typewriter effect
+function initTypewriter() {
+  const words = ["ПРИВАБЛИВИХ", "СУЧАСНИХ", "КОМФОРТНИХ", "СТИЛЬНИХ", "ЗРУЧНИХ", "ПРОСТОРИХ", "ЕЛЕГАНТНИХ"];
+  const wordSpan = document.querySelector(".word");
+
+  let wordIndex = 0;
+  let charIndex = 0;
+  let deleting = false;
+  let delay = 100;
+
+  function type() {
+    const currentWord = words[wordIndex];
+
+    if (!deleting) {
+      wordSpan.textContent = currentWord.slice(0, charIndex + 1);
+      charIndex++;
+
+      if (charIndex === currentWord.length) {
+        deleting = true;
+        setTimeout(type, 1000);
+        return;
+      }
+    } else {
+      wordSpan.textContent = currentWord.slice(0, charIndex - 1);
+      charIndex--;
+
+      if (charIndex === 0) {
+        deleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+      }
+    }
+
+    setTimeout(type, deleting ? 50 : delay);
+  }
+
+  type();
+}
+    </script>
+
+  <!-- ====== HEADER ====== -->
+  <header class="header" id="hero" data-animate>
+    <!-- відео фон: підстав свій файл -->
+    <video class="background-video" autoplay muted loop playsinline>
+      <source src="./img/headerBG.mp4" type="video/mp4">
+      <!-- fallback: користувачеві без відео покаже картинку (JS включає клас) -->
+    </video>
+
+    <!-- затемнення -->
+    <div class="overlay" aria-hidden="true"></div>
+
+    <!-- фолбек картинка (за потреби) -->
+    <div class="video-fallback" aria-hidden="true"></div>
+
+    <!-- Контент поверх відео -->
+    <div class="headerLang">
+      <div class="selectedLang">
+        <img src="./img/ua.svg" alt="Прапор">
+        <p>UA</p>
+      </div>
+      <ul class="langDropdown">
+        <li>
+          <a href="./index.html">
+            <img src="./img/gb.svg" alt="English flag">
+            <p>EN</p>
+          </a>
+        </li>
+        <li>
+          <a href="./indexUA.html">
+            <img src="./img/ua.svg" alt="Ukrainian flag">
+            <p>UA</p>
+          </a>
+        </li>
+        <li>
+          <a href="./indexTR.html">
+          <img src="./img/tr.svg" alt="Turkish flag">
+          <p>TR</p>
+          </a>
+        </li>
+          <li>
+            <a href="./indexCZ.html">
+              <img src="./img/cz.svg" alt="Turkish flag">
+              <p>CZ</p>
+            </a>
+        </li>
+          <li>
+            <a href="./indexRU.html">
+              <img src="./img/ru.svg" alt="Turkish flag">
+              <p>RU</p>
+            </a>
+        </li>
+      </ul>
+    </div>
+    <div class="header-content" data-animate>
+
+      <ul class="location" aria-hidden="false">
+        <li><img src="./img/location.svg" alt="Локація"></li>
+        <li>
+          <p>Alanya</p>
+        </li>
+      </ul>
+
+      <h1 class="headerMainText">
+        ОБЕРІТЬ ОДНУ З ТРЬОХ НАШИХ <br>
+        <span class="word" aria-live="polite"></span> КВАРТИР
+      </h1>
+
+      <h2 class="headerSubText">Квартири в самому серці узбережжя Аланії</h2>
+
+      <div class="headerButtons">
+        <!-- оновлено: викликаємо scrollToSection -->
+        <button class="btn" onclick="scrollToSection('contact-callback')">Зв’язатися з нами</button>
+        <button class="btn" onclick="scrollToSection('quick-booking')">Бронювання</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====== ABOUT ====== -->
+  <section class="about" data-animate>
+    <h2 class="aboutText">
+      ПРО НАС
+    </h2>
+    <div class="aboutContent">
+      <img class="aboutIMG" src="./img/aboutApartament.png" alt="">
+      <div class="aboutDiscrubtionContent">
+        <h2 class="aboutSubText">
+          Ми живемо поруч, і із задоволенням
+          ділимося з вами всім найкращим.
+        </h2>
+        <ul class="aboutDiscrubtionList">
+          <p class="aboutDiscrubtion">Ми — місцева сім'я, яка з любов'ю доглядає три сучасні та затишні квартири. </p>
+          <p class="aboutDiscrubtion">
+            Жодних посередників чи прихованих платежів — лише прозорі умови та турбота про кожного гостя.
+          </p>
+          <p class="aboutDiscrubtion">
+            Ми супроводжуємо вас на кожному етапі: від першого повідомлення до комфортного заселення, щоб ваш відпочинок чи відрядження пройшли без зайвих клопотів.
+          </p>
+        </ul>
+        <!-- оновлено: веде до секції контакту -->
+        <button class="aboutButton" onclick="scrollToSection('contact-callback')">
+          Зв'язатися з нами
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== APARTMENT (1) ====== -->
+  <section class="apartament" data-animate>
+    <div class="apartamentSlider">
+      <button class="sliderBtn prev">&#10094;</button>
+      <div class="slides">
+        <img class="apartamentIMG active" src="./img/apartament.png" alt="">
+        <img class="apartamentIMG" src="./img/aboutApartament.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament.png" alt="">
+      </div>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+
+    <div class="apartamentContent">
+      <h2 class="apartamentText">Квартира у Serenity Royal Beach</h2>
+      <p class="apartamentSubText">62 м² • 2 кімнати • 50 метрів до моря</p>
+      <p class="apartamentTex">
+        Спокійні тони, багато світла, натуральне дерево. Окрема спальня та
+        вітальня, ергономічна кухня, балкон із видом на місто. Підійде для
+        відрядження чи довгих прогулянок центром.
+      </p>
+      <h2 class="apartamentPrice" data-apartment="1"><span>—</span> ₴/ніч</h2>
+      <ul class="apartamentAdvantages">
+        <li class="apartamentAdvantagesItem">Wi-Fi</li>
+        <li class="apartamentAdvantagesItem">Зона барбекю</li>
+        <li class="apartamentAdvantagesItem">Кондиціонер</li>
+        <li class="apartamentAdvantagesItem">Паркінг поруч</li>
+        <li class="apartamentAdvantagesItem">Кінотеатр</li>
+                <li class="apartamentAdvantagesItem">СПА зона</li>
+                        <li class="apartamentAdvantagesItem">Охорона</li>
+                        <li class="apartamentAdvantagesItem">Тренажерний зал</li>        
+                        <li class="apartamentAdvantagesItem">Робочій кабінет</li>
+      </ul>
+      <div class="map">MAP</div>
+      <!-- оновлено: веде до бронювання -->
+      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Забронювати</button>
+    </div>
+  </section>
+
+  <!-- ====== APARTMENT (mobile/variants preserved) ====== -->
+  <section class="apartament1" data-animate>
+    <div class="apartamentSlider slidesPHONE">
+      <div class="slides">
+        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="">
+      </div>
+      <button class="sliderBtn prev">&#10094;</button>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+    <div class="apartamentContent1">
+      <h2 class="apartamentText1">Квартира у Nordic Sky</h2>
+      <p class="apartamentSubText1">62 м² • 3 кімнати • 350 метрів до моря</p>
+      <p class="apartamentTex1">Світлі та просторі апартаменти з сучасним інтер'єром і натуральними матеріалами. Три кімнати, включаючи окрему спальню та вітальню, повністю обладнана кухня, балкон із гарним видом. Лише 350 метрів до пляжу, зручний паркінг поруч. Ідеально підходить для сімейного відпочинку або романтичних подорожей.</p>
+      <h2 class="apartamentPrice1" data-apartment="2"><span>—</span> ₴/ніч</h2>
+      <ul class="apartamentAdvantages1">
+        <li class="apartamentAdvantagesItem1">Wi-Fi</li>
+        <li class="apartamentAdvantagesItem1">Зона барбекю</li>
+        <li class="apartamentAdvantagesItem1">Кондиціонер</li>
+        <li class="apartamentAdvantagesItem1">Паркінг поруч</li>
+        <li class="apartamentAdvantagesItem1">Кінотеатр</li>
+                <li class="apartamentAdvantagesItem1">СПА зона</li>
+                        <li class="apartamentAdvantagesItem1">Охорона</li>
+                        <li class="apartamentAdvantagesItem1">Тренажерний зал</li>        
+                        <li class="apartamentAdvantagesItem1">Робочій кабінет</li>
+      </ul>
+      <a href="https://maps.app.goo.gl/3CUWNciZda2v4NtN6" target="_blank" rel="noopener noreferrer">
+        <img class="map"src="./img/image.png" alt="">
+      </a>
+      <!-- оновлено: веде до бронювання -->
+      <button class="apartamentButton1" onclick="scrollToSection('quick-booking')">Забронювати</button>
+    </div>
+    <div class="apartamentSlider slidesDESKT">
+      <div class="slides">
+        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="">
+      </div>
+      <button class="sliderBtn prev">&#10094;</button>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+  </section>
+
+  <!-- ====== APARTMENT (duplicate kept) ====== -->
+  <section class="apartament" data-animate>
+    <div class="apartamentSlider">
+      <button class="sliderBtn prev">&#10094;</button>
+      <div class="slides">
+
+        <img class="apartamentIMG active" src="./img/apartament3_1.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_2.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_3.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_4.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_5.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_6.png" alt="">
+                <img class="apartamentIMG" src="./img/apartament3_7.png" alt="">
+      </div>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+
+    <div class="apartamentContent">
+      <h2 class="apartamentText">Квартира у Nordic Sky</h2>
+      <p class="apartamentSubText">62 м² • 2 кімнати • 350 метрів до моря</p>
+      <p class="apartamentTex">
+Світлі та затишні апартаменти з сучасним дизайном і натуральними матеріалами. Простора спальня та вітальня, повністю обладнана кухня, балкон із видом на море. Комплекс пропонує зону барбекю, кінотеатр, СПА та тренажерний зал. Ідеально підходить для комфортного відпочинку або продуктивної роботи.
+      </p>
+      <h2 class="apartamentPrice" data-apartment="3"><span>—</span> ₴/ніч</h2>
+      <ul class="apartamentAdvantages">
+        <li class="apartamentAdvantagesItem">Wi-Fi</li>
+        <li class="apartamentAdvantagesItem">Зона барбекю</li>
+        <li class="apartamentAdvantagesItem">Кондиціонер</li>
+        <li class="apartamentAdvantagesItem">Паркінг поруч</li>
+        <li class="apartamentAdvantagesItem">Кінотеатр</li>
+                <li class="apartamentAdvantagesItem">СПА зона</li>
+                        <li class="apartamentAdvantagesItem">Охорона</li>
+                        <li class="apartamentAdvantagesItem">Тренажерний зал</li>        
+                        <li class="apartamentAdvantagesItem">Робочій кабінет</li>
+      </ul>
+      <a href="https://maps.app.goo.gl/3CUWNciZda2v4NtN6" target="_blank" rel="noopener noreferrer">
+        <img class="map"src="./img/image.png" alt="">
+      </a>
+      <!-- оновлено: веде до бронювання -->
+      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Забронювати</button>
+    </div>
+  </section>
+
+  <!-- ====== REVIEWS ====== -->
+  <section class="reviews" data-animate>
+    <h2 class="reviewsText">ВІДГУКИ</h2>
+    <div class="reviewsContent">
+      <div class="reviewsWrapper">
+        <ul class="reviewsList">
+          <li class="reviewsItem">Дуже сподобалось! Все швидко і якісно.</li>
+          <li class="reviewsItem">Гарний сервіс, буду звертатись ще.</li>
+          <li class="reviewsItem">Все супер! Рекомендую всім.</li>
+          <li class="reviewsItem">Обслуговування на високому рівні!</li>
+          <li class="reviewsItem">Ціни приємно здивували, рекомендую!</li>
+          <li class="reviewsItem">Користуюсь вже не вперше, все чудово!</li>
+        </ul>
+      </div>
+      <div class="reviewsButtons">
+        <button id="prevBtn">НАЗАД</button>
+        <button id="nextBtn">ВПЕРЕД</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== CONTACT FOR BOOKING ====== -->
+  <section id="quick-booking" class="quick-booking" aria-labelledby="qb-title" data-animate>
+    <div class="qb-container">
+      <h2 id="qb-title">БРОНЮВАННЯ</h2>
+
+      <div class="booking-contact">
+        <p class="booking-text">Для бронювання квартири зв'яжіться з нами за телефоном:</p>
+        <a href="tel:+380123456789" class="booking-phone">+38 (012) 345-67-89</a>
+        <p class="booking-note">Ми допоможемо вам обрати найкращий варіант та відповімо на всі питання</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ====== FAQ ====== -->
+  <section id="faq" class="faq" aria-labelledby="faq-title" data-animate>
+    <div class="faq-wrap">
+      <h2 id="faq-title" class="faq-title">Часті питання</h2>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq1-answer" id="faq1">
+          Як здійснити оплату? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq1-answer" role="region" aria-labelledby="faq1" >
+          Після узгодження бронювання ми надамо вам кілька зручних способів оплати. Також можлива оплата готівкою нашому представнику під час заселення. У будь-якому випадку обов’язковою є заставна сума 500 €, яка повністю повертається при виїзді.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq2-answer" id="faq2">
+          Які зручності передбачені в житлі та комплексі? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq2-answer" role="region" aria-labelledby="faq2" >
+          Кожні апартаменти повністю укомплектовані всім необхідним для комфортного проживання: телевізор, холодильник, праска, посудомийна машина, пральна машина, повний набір посуду, кондиціонери в кожній кімнаті, а також тепла підлога у ванних кімнатах (у квартирі №1 — тепла підлога по всій площі). На території комплексу доступний загальний інтернет. Для вашого відпочинку передбачено внутрішній та відкритий басейни, сауна, хамам, римська лазня, кінотеатр та фітнес-зал.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq3-answer" id="faq3">
+          Чи можна користуватись інфраструктурою комплексу? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq3-answer" role="region" aria-labelledby="faq3">
+          Так, усі об’єкти інфраструктури на території комплексу доступні для мешканців. Правила користування розміщені на інформаційній дошці при вході в блок B, де знаходяться квартири.
+<br>
+<br>
+У блоці A розташовані тенісний стіл та PlayStation.
+<br>
+<br>
+У блоці C — сауни та зона релаксу.
+<br>
+<br>
+На відкритій території комплексу — корт, зона барбекю та басейн із гірками.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq4-answer" id="faq4">
+          Чи є паркінг поруч з квартирами? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq4-answer" role="region" aria-labelledby="faq4">
+          Так, поруч з квартирами є паркінг для гостей.
+        </div>
+      </div>
+            <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq5-answer" id="faq5">
+          Що розташоване поблизу, окрім моря? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq5-answer" role="region" aria-labelledby="faq5">
+          Неподалік комплексу протікає річка Дим-Чай з мальовничою набережною. У кроковій доступності знаходяться ресторани, магазини та туристичні осередки. Поруч також працюють ринки у понеділок та четвер. Від пляжу до центру простягається сучасна 4-кілометрова набережна, якою зручно прогулятись пішки або доїхати автобусом.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer" data-animate>
+    <div class="footer-container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Apartaments Alanya</h3>
+          <p>Комфортні квартири в самому серці узбережжя Аланії</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 Apartaments Alanya. Усі права захищені.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====== Анімаційний JS (IntersectionObserver + чергування ліво/право + менші затримки) ====== -->
+  <script>
+    (function () {
+      const elements = Array.from(document.querySelectorAll('[data-animate]'));
+      if (!elements.length) return;
+
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -10% 0px',
+        threshold: 0.06
+      };
+
+      // Базова затримка між секціями (менша — швидший каскад)
+      const baseDelay = 30; // ms
+
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const idx = elements.indexOf(el);
+          // чергування: парні індекси (0,2,4...) справа, непарні — зліва
+          const direction = (idx % 2 === 0) ? 'right' : 'left';
+
+          // Додаємо стартовий клас для позиції
+          el.classList.add('animate-side', `from-${direction}`);
+
+          // Додаємо data-direction для дочірніх елементів, щоб синхронізувати напрям
+          const children = el.querySelectorAll('h1,h2,h3,p,img,button,li,select,input,textarea,.slides,.apartamentContent > * , .qb-container > * , .contact-card > *');
+          children.forEach(child => {
+            child.classList.add('animate-child');
+            child.setAttribute('data-direction', direction);
+          });
+
+          // видимість секції з невеликою затримкою, залежно від індексу
+          const delay = idx * baseDelay;
+          setTimeout(() => {
+            el.classList.add('visible');
+          }, delay);
+
+          // каскад для дітей (коротші інтервали)
+          children.forEach((child, cIdx) => {
+            const childDelay = delay + 60 + (cIdx * 45); // менші значення для швидшої появи
+            setTimeout(() => {
+              child.classList.add('visible');
+            }, childDelay);
+          });
+
+          // більше не спостерігаємо після показу
+          obs.unobserve(el);
+        });
+      }, observerOptions);
+
+      // Прикріплюємо observer до елементів, та відразу задаємо початкові класи (щоб не було "стрибка")
+      elements.forEach((el, i) => {
+        // встановимо клас anim-side відразу (щоб розмітка не зміщувалась пізніше)
+        // direction вирішимо в observer при появі (але на випадок FOUC — присвоїмо відповідно індексу)
+        const dir = (i % 2 === 0) ? 'right' : 'left';
+        if (!el.classList.contains('animate-side')) {
+          el.classList.add('animate-side', `from-${dir}`);
+        }
+        io.observe(el);
+      });
+
+      // обробка випадків, коли елементи вже в зоні видимості на load
+      window.addEventListener('load', () => {
+        elements.forEach((el, idx) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight - 100) {
+            const dir = (idx % 2 === 0) ? 'right' : 'left';
+            el.classList.add('animate-side', `from-${dir}`);
+            const children = el.querySelectorAll('h1,h2,h3,p,img,button,li,select,input,textarea,.slides,.apartamentContent > * , .qb-container > * , .contact-card > *');
+            children.forEach(child => {
+              child.classList.add('animate-child');
+              child.setAttribute('data-direction', dir);
+            });
+            const delay = idx * baseDelay;
+            setTimeout(() => el.classList.add('visible'), delay);
+            children.forEach((child, cIdx) => {
+              setTimeout(() => child.classList.add('visible'), delay + 60 + (cIdx * 45));
+            });
+          }
+        });
+      });
+    })();
+  </script>
+
+  <!-- Простий універсальний скрипт для плавного скролу по секціях -->
+  <script>
+    function scrollToSection(id) {
+      try {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          // якщо секція не знайдена — fallback на зміну location (працює як #anchor)
+          location.href = '#' + id;
+        }
+      } catch (e) {
+        location.href = '#' + id;
+      }
+    }
+  </script>
+
+  <!-- зберігаю підключення до твого зовнішнього script.js -->
+  <script src="./script.js"></script>
+</body>
+
+</html>

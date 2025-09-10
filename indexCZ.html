@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pronájem komfortních apartmánů v srdci Alanye.">
+  <link rel="stylesheet" href="style.css">
+  <title>Apartaments Alanya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="./animations.css">
+
+
+  <!-- ===== Animace (vložené, lze přesunout do animations.css) ===== -->
+  <style>
+    /* ----------------------------
+       Obecné: vstupy animací ze stran
+       ---------------------------- */
+    .animate-side {
+      opacity: 0;
+      transition: transform 400ms cubic-bezier(.2,.9,.3,1), opacity 600ms ease;
+      will-change: transform, opacity;
+    }
+
+    /* startovní pozice (nastaví se dynamicky třídami) */
+    .animate-side.from-right { transform: translateX(50px); }
+    .animate-side.from-left { transform: translateX(-50px); }
+
+    /* visible */
+    .animate-side.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Dětské elementy — také vstupují z boku (nastavuje se data-direction) */
+    .animate-child {
+      opacity: 0;
+      transition: transform 480ms cubic-bezier(.2,.9,.3,1), opacity 480ms ease;
+      will-change: transform, opacity;
+    }
+
+    .animate-child[data-direction="right"] { transform: translateX(30px); }
+    .animate-child[data-direction="left"] { transform: translateX(-30px); }
+
+    .animate-child.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* rychlejší/pomalejší modifikátory */
+    .animate-fast { transition-duration: 480ms !important; }
+    .animate-slow { transition-duration: 900ms !important; }
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .animate-side, .animate-child {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+      }
+    }
+
+    /* Styly pro sekci rezervace */
+    .quick-booking {
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      border-radius: 10px;
+      margin: 40px 20px;
+
+    }
+
+    .qb-container {
+      width: 100%;
+      max-width: 800px;
+      text-align: center;
+      
+    }
+
+    .qb-container h2 {
+      color: #ffffff;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 30px;
+    }
+
+    .booking-contact {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 30px 20px;
+      border: 2px solid #bee3f8;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .booking-text {
+      color: #2d3748;
+      font-size: 18px;
+      font-weight: 400;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .booking-phone {
+      color: #2b6cb0;
+      font-size: 24px;
+      font-weight: 700;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 20px;
+      transition: color 0.3s ease;
+    }
+
+    .booking-phone:hover {
+      color: #2c5282;
+    }
+
+    .booking-note {
+      color: #4a5568;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    /* Responzivita pro sekci rezervace */
+    @media (max-width: 768px) {
+      .quick-booking {
+        margin: 20px 10px;
+        padding: 20px 10px;
+      }
+
+      .qb-container h2 {
+        font-size: 24px;
+      }
+
+      .booking-text {
+        font-size: 16px;
+      }
+
+      .booking-phone {
+        font-size: 20px;
+      }
+
+      .booking-note {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+    <script>
+        // Typewriter effect
+function initTypewriter() {
+  const words = ["PŘITAŽLIVÝCH", "MODERNÍCH", "POHODLNÝCH", "STYLOVÝCH", "PRAKTICKÝCH", "PROSTORNÝCH", "ELEGANTNÍCH"];
+  const wordSpan = document.querySelector(".word");
+
+  let wordIndex = 0;
+  let charIndex = 0;
+  let deleting = false;
+  let delay = 100;
+
+  function type() {
+    const currentWord = words[wordIndex];
+
+    if (!deleting) {
+      wordSpan.textContent = currentWord.slice(0, charIndex + 1);
+      charIndex++;
+
+      if (charIndex === currentWord.length) {
+        deleting = true;
+        setTimeout(type, 1000);
+        return;
+      }
+    } else {
+      wordSpan.textContent = currentWord.slice(0, charIndex - 1);
+      charIndex--;
+
+      if (charIndex === 0) {
+        deleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+      }
+    }
+
+    setTimeout(type, deleting ? 50 : delay);
+  }
+
+  type();
+}
+    </script>
+
+  <!-- ====== HEADER ====== -->
+  <header class="header" id="hero" data-animate>
+    <!-- video pozadí: vložte svůj soubor -->
+    <video class="background-video" autoplay muted loop playsinline>
+      <source src="./img/headerBG.mp4" type="video/mp4">
+      <!-- fallback: uživatelům bez videa se zobrazí obrázek (JS přidá třídu) -->
+    </video>
+
+    <!-- ztmavení -->
+    <div class="overlay" aria-hidden="true"></div>
+
+    <!-- fallback obrázek (pokud potřeba) -->
+    <div class="video-fallback" aria-hidden="true"></div>
+
+    <!-- Obsah nad videem -->
+    <div class="headerLang">
+      <div class="selectedLang">
+        <img src="./img/cz.svg" alt="Vlajka">
+        <p>CZ</p>
+      </div>
+      <ul class="langDropdown">
+        <li>
+          <a href="./index.html">
+            <img src="./img/gb.svg" alt="English flag">
+            <p>EN</p>
+          </a>
+        </li>
+        <li>
+          <a href="./indexUA.html">
+            <img src="./img/ua.svg" alt="Ukrajinská vlajka">
+            <p>UA</p>
+          </a>
+        </li>
+        <li>
+          <a href="./indexTR.html">
+          <img src="./img/tr.svg" alt="Turecká vlajka">
+          <p>TR</p>
+          </a>
+        </li>
+          <li>
+            <a href="">
+              <img src="./img/cz.svg" alt="Česká vlajka">
+              <p>CZ</p>
+            </a>
+        </li>
+          <li>
+            <a href="./indexRU.html">
+              <img src="./img/ru.svg" alt="Ruská vlajka">
+              <p>RU</p>
+            </a>
+        </li>
+      </ul>
+    </div>
+    <div class="header-content" data-animate>
+
+      <ul class="location" aria-hidden="false">
+        <li><img src="./img/location.svg" alt="Poloha"></li>
+        <li>
+          <p>Alanya</p>
+        </li>
+      </ul>
+
+      <h1 class="headerMainText">
+        VYBERTE JEDEN ZE TŘÍ NAŠICH <br>
+        <span class="word" aria-live="polite"></span> APARTMÁNŮ
+      </h1>
+
+      <h2 class="headerSubText">Apartmány v samotném srdci pobřeží Alanye</h2>
+
+      <div class="headerButtons">
+        <!-- aktualizováno: volání scrollToSection -->
+        <button class="btn" onclick="scrollToSection('contact-callback')">Kontaktujte nás</button>
+        <button class="btn" onclick="scrollToSection('quick-booking')">Rezervace</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====== ABOUT ====== -->
+  <section class="about" data-animate>
+    <h2 class="aboutText">
+      O NÁS
+    </h2>
+    <div class="aboutContent">
+      <img class="aboutIMG" src="./img/aboutApartament.png" alt="">
+      <div class="aboutDiscrubtionContent">
+        <h2 class="aboutSubText">
+          Bydlíme blízko a s radostí
+          s vámi sdílíme to nejlepší.
+        </h2>
+        <ul class="aboutDiscrubtionList">
+          <p class="aboutDiscrubtion">Jsme místní rodina, která se s láskou stará o tři moderní a útulné apartmány.</p>
+          <p class="aboutDiscrubtion">
+            Žádní zprostředkovatelé a žádné skryté poplatky — jen transparentní podmínky a péče o každého hosta.
+          </p>
+          <p class="aboutDiscrubtion">
+            Provázíme vás na každém kroku: od první zprávy po pohodlné ubytování, aby vaše dovolená nebo služební cesta proběhla bez starostí.
+          </p>
+        </ul>
+        <!-- aktualizováno: vede do kontaktní sekce -->
+        <button class="aboutButton" onclick="scrollToSection('contact-callback')">
+          Kontaktujte nás
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== APARTMENT (1) ====== -->
+  <section class="apartament" data-animate>
+    <div class="apartamentSlider">
+      <button class="sliderBtn prev">&#10094;</button>
+      <div class="slides">
+        <img class="apartamentIMG active" src="./img/apartament.png" alt="">
+        <img class="apartamentIMG" src="./img/aboutApartament.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament.png" alt="">
+      </div>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+
+    <div class="apartamentContent">
+      <h2 class="apartamentText">Apartmán v Serenity Royal Beach</h2>
+      <p class="apartamentSubText">62 m² • 2 pokoje • 50 metrů od moře</p>
+      <p class="apartamentTex">
+        Klidné tóny, hodně světla, přírodní dřevo. Samostatná ložnice a
+        obývací pokoj, ergonomická kuchyň, balkon s výhledem na město. Vhodné pro
+        služební cestu nebo dlouhé procházky centrem.
+      </p>
+      <h2 class="apartamentPrice" data-apartment="1"><span>—</span> ₴/noc</h2>
+      <ul class="apartamentAdvantages">
+        <li class="apartamentAdvantagesItem">Wi‑Fi</li>
+        <li class="apartamentAdvantagesItem">Grilovací zóna</li>
+        <li class="apartamentAdvantagesItem">Klimatizace</li>
+        <li class="apartamentAdvantagesItem">Parkování v blízkosti</li>
+        <li class="apartamentAdvantagesItem">Kino</li>
+                <li class="apartamentAdvantagesItem">SPA zóna</li>
+                        <li class="apartamentAdvantagesItem">Ostraha</li>
+                        <li class="apartamentAdvantagesItem">Posilovna</li>
+                        <li class="apartamentAdvantagesItem">Pracovna</li>
+      </ul>
+      <div class="map">MAP</div>
+      <!-- aktualizováno: vede k rezervaci -->
+      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Rezervovat</button>
+    </div>
+  </section>
+
+  <!-- ====== APARTMENT (mobile/variants preserved) ====== -->
+  <section class="apartament1" data-animate>
+    <div class="apartamentSlider slidesPHONE">
+      <div class="slides">
+        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="">
+      </div>
+      <button class="sliderBtn prev">&#10094;</button>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+    <div class="apartamentContent1">
+      <h2 class="apartamentText1">Apartmán v Nordic Sky</h2>
+      <p class="apartamentSubText1">62 m² • 3 pokoje • 350 metrů od moře</p>
+      <p class="apartamentTex1">Světle a prostorné apartmány s moderním interiérem a přírodními materiály. Tři pokoje včetně samostatné ložnice a obývacího pokoje, plně vybavená kuchyň, balkon s hezkým výhledem. Pouze 350 metrů k pláži, pohodlné parkování v blízkosti. Ideální pro rodinnou dovolenou nebo romantický výlet.</p>
+      <h2 class="apartamentPrice1" data-apartment="2"><span>—</span> ₴/noc</h2>
+      <ul class="apartamentAdvantages1">
+        <li class="apartamentAdvantagesItem1">Wi‑Fi</li>
+        <li class="apartamentAdvantagesItem1">Grilovací zóna</li>
+        <li class="apartamentAdvantagesItem1">Klimatizace</li>
+        <li class="apartamentAdvantagesItem1">Parkování v blízkosti</li>
+        <li class="apartamentAdvantagesItem1">Kino</li>
+                <li class="apartamentAdvantagesItem1">SPA zóna</li>
+                        <li class="apartamentAdvantagesItem1">Ostraha</li>
+                        <li class="apartamentAdvantagesItem1">Posilovna</li>
+                        <li class="apartamentAdvantagesItem1">Pracovna</li>
+      </ul>
+      <a href="https://maps.app.goo.gl/3CUWNciZda2v4NtN6" target="_blank" rel="noopener noreferrer">
+        <img class="map"src="./img/image.png" alt="">
+      </a>
+      <!-- aktualizováno: vede k rezervaci -->
+      <button class="apartamentButton1" onclick="scrollToSection('quick-booking')">Rezervovat</button>
+    </div>
+    <div class="apartamentSlider slidesDESKT">
+      <div class="slides">
+        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="">
+        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="">
+      </div>
+      <button class="sliderBtn prev">&#10094;</button>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+  </section>
+
+  <!-- ====== APARTMENT (duplicate kept) ====== -->
+  <section class="apartament" data-animate>
+    <div class="apartamentSlider">
+      <button class="sliderBtn prev">&#10094;</button>
+      <div class="slides">
+
+        <img class="apartamentIMG active" src="./img/apartament3_1.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_2.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_3.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_4.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_5.png" alt="">
+        <img class="apartamentIMG" src="./img/apartament3_6.png" alt="">
+                <img class="apartamentIMG" src="./img/apartament3_7.png" alt="">
+      </div>
+      <button class="sliderBtn next">&#10095;</button>
+    </div>
+
+    <div class="apartamentContent">
+      <h2 class="apartamentText">Apartmán v Nordic Sky</h2>
+      <p class="apartamentSubText">62 m² • 2 pokoje • 350 metrů od moře</p>
+      <p class="apartamentTex">
+Světelné a útulné apartmány s moderním designem a přírodními materiály. Prostorná ložnice a obývací pokoj, plně vybavená kuchyň, balkon s výhledem na moře. Komplekt nabízí grilovací zónu, kino, SPA a posilovnu. Ideální pro pohodlnou dovolenou nebo produktivní práci.
+      </p>
+      <h2 class="apartamentPrice" data-apartment="3"><span>—</span> ₴/noc</h2>
+      <ul class="apartamentAdvantages">
+        <li class="apartamentAdvantagesItem">Wi‑Fi</li>
+        <li class="apartamentAdvantagesItem">Grilovací zóna</li>
+        <li class="apartamentAdvantagesItem">Klimatizace</li>
+        <li class="apartamentAdvantagesItem">Parkování v blízkosti</li>
+        <li class="apartamentAdvantagesItem">Kino</li>
+                <li class="apartamentAdvantagesItem">SPA zóna</li>
+                        <li class="apartamentAdvantagesItem">Ostraha</li>
+                        <li class="apartamentAdvantagesItem">Posilovna</li>
+                        <li class="apartamentAdvantagesItem">Pracovna</li>
+      </ul>
+      <a href="https://maps.app.goo.gl/3CUWNciZda2v4NtN6" target="_blank" rel="noopener noreferrer">
+        <img class="map"src="./img/image.png" alt="">
+      </a>
+      <!-- aktualizováno: vede k rezervaci -->
+      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Rezervovat</button>
+    </div>
+  </section>
+
+  <!-- ====== REVIEWS ====== -->
+  <section class="reviews" data-animate>
+    <h2 class="reviewsText">REFERENCE</h2>
+    <div class="reviewsContent">
+      <div class="reviewsWrapper">
+        <ul class="reviewsList">
+          <li class="reviewsItem">Moc se nám líbilo! Všechno rychlé a kvalitní.</li>
+          <li class="reviewsItem">Dobrá služba, opět se ozvu.</li>
+          <li class="reviewsItem">Vše super! Doporučuji všem.</li>
+          <li class="reviewsItem">Služby na vysoké úrovni!</li>
+          <li class="reviewsItem">Ceny příjemně překvapily, doporučuji!</li>
+          <li class="reviewsItem">Neprvní použití, vše skvělé!</li>
+        </ul>
+      </div>
+      <div class="reviewsButtons">
+        <button id="prevBtn">ZPĚT</button>
+        <button id="nextBtn">VPŘED</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== CONTACT FOR BOOKING ====== -->
+  <section id="quick-booking" class="quick-booking" aria-labelledby="qb-title" data-animate>
+    <div class="qb-container">
+      <h2 id="qb-title">REZERVACE</h2>
+
+      <div class="booking-contact">
+        <p class="booking-text">Pro rezervaci apartmánu nás kontaktujte telefonicky:</p>
+        <a href="tel:+380123456789" class="booking-phone">+38 (012) 345-67-89</a>
+        <p class="booking-note">Pomůžeme vám vybrat nejlepší možnost a zodpovíme všechny dotazy</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ====== FAQ ====== -->
+  <section id="faq" class="faq" aria-labelledby="faq-title" data-animate>
+    <div class="faq-wrap">
+      <h2 id="faq-title" class="faq-title">Často kladené dotazy</h2>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq1-answer" id="faq1">
+          Jak provést platbu? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq1-answer" role="region" aria-labelledby="faq1" >
+          Po potvrzení rezervace vám poskytneme několik pohodlných možností platby. Možná je také platba v hotovosti našemu zástupci při ubytování. V každém případě je požadován vratný depozit 500 €, který je při odjezdu plně navrácen.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq2-answer" id="faq2">
+          Jaké vybavení je k dispozici v apartmánu a v komplexu? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq2-answer" role="region" aria-labelledby="faq2" >
+          Každý apartmán je plně vybaven vším potřebným pro pohodlné bydlení: televize, lednice, žehlička, myčka, pračka, kompletní souprava nádobí, klimatizace v každém pokoji a podlahové vytápění v koupelnách (v apartmánu č.1 — podlahové vytápění po celé ploše). Na území komplexu je dostupný společný internet. Pro váš odpočinek jsou připraveny krytý a venkovní bazén, sauna, hammam, římské lázně, kino a fitness.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq3-answer" id="faq3">
+          Lze využívat infrastrukturu komplexu? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq3-answer" role="region" aria-labelledby="faq3">
+          Ano, všechny objekty infrastruktury v areálu komplexu jsou k dispozici obyvatelům. Pravidla užívání jsou umístěna na informační tabuli u vstupu do bloku B, kde se nacházejí apartmány.
+<br>
+<br>
+V bloku A se nachází stolní tenis a PlayStation.
+<br>
+<br>
+V bloku C jsou sauny a relaxační zóna.
+<br>
+<br>
+Na otevřeném prostranství komplexu je kurt, grilovací zóna a bazén s tobogány.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq4-answer" id="faq4">
+          Je poblíž apartmánů parkování? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq4-answer" role="region" aria-labelledby="faq4">
+          Ano, poblíž apartmánů je parkoviště pro hosty.
+        </div>
+      </div>
+            <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq5-answer" id="faq5">
+          Co je v okolí kromě moře? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq5-answer" role="region" aria-labelledby="faq5">
+          Nedaleko komplexu protéká řeka Dim-Çay s malebnou promenádou. V docházkové vzdálenosti jsou restaurace, obchody a turistická centra. V blízkosti také fungují trhy v pondělí a čtvrtek. Od pláže do centra vede moderní 4 km dlouhá promenáda, po které je příjemné se projít pěšky nebo jet autobusem.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer" data-animate>
+    <div class="footer-container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Apartaments Alanya</h3>
+          <p>Komfortní apartmány v samotném srdci pobřeží Alanye</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 Apartaments Alanya. Všechna práva vyhrazena.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====== Animace JS (IntersectionObserver + střídaní pravo/levý + kratší zpoždění) ====== -->
+  <script>
+    (function () {
+      const elements = Array.from(document.querySelectorAll('[data-animate]'));
+      if (!elements.length) return;
+
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -10% 0px',
+        threshold: 0.06
+      };
+
+      // Základní zpoždění mezi sekcemi (menší => rychlejší kaskáda)
+      const baseDelay = 30; // ms
+
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const idx = elements.indexOf(el);
+          // střídání: sudé indexy (0,2,4...) zprava, liché zleva
+          const direction = (idx % 2 === 0) ? 'right' : 'left';
+
+          // Přidáme startovní třídu pro pozici
+          el.classList.add('animate-side', `from-${direction}`);
+
+          // Přidáme data-direction pro dětské elementy pro synchronizaci směru
+          const children = el.querySelectorAll('h1,h2,h3,p,img,button,li,select,input,textarea,.slides,.apartamentContent > * , .qb-container > * , .contact-card > *');
+          children.forEach(child => {
+            child.classList.add('animate-child');
+            child.setAttribute('data-direction', direction);
+          });
+
+          // viditelnost sekce s malým zpožděním podle indexu
+          const delay = idx * baseDelay;
+          setTimeout(() => {
+            el.classList.add('visible');
+          }, delay);
+
+          // kaskáda pro děti (kratší intervaly)
+          children.forEach((child, cIdx) => {
+            const childDelay = delay + 60 + (cIdx * 45);
+            setTimeout(() => {
+              child.classList.add('visible');
+            }, childDelay);
+          });
+
+          obs.unobserve(el);
+        });
+      }, observerOptions);
+
+      elements.forEach((el, i) => {
+        const dir = (i % 2 === 0) ? 'right' : 'left';
+        if (!el.classList.contains('animate-side')) {
+          el.classList.add('animate-side', `from-${dir}`);
+        }
+        io.observe(el);
+      });
+
+      window.addEventListener('load', () => {
+        elements.forEach((el, idx) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight - 100) {
+            const dir = (idx % 2 === 0) ? 'right' : 'left';
+            el.classList.add('animate-side', `from-${dir}`);
+            const children = el.querySelectorAll('h1,h2,h3,p,img,button,li,select,input,textarea,.slides,.apartamentContent > * , .qb-container > * , .contact-card > *');
+            children.forEach(child => {
+              child.classList.add('animate-child');
+              child.setAttribute('data-direction', dir);
+            });
+            const delay = idx * baseDelay;
+            setTimeout(() => el.classList.add('visible'), delay);
+            children.forEach((child, cIdx) => {
+              setTimeout(() => child.classList.add('visible'), delay + 60 + (cIdx * 45));
+            });
+          }
+        });
+      });
+    })();
+  </script>
+
+  <!-- Jednoduchý pomocný skript pro plynulé skrolování do sekcí -->
+  <script>
+    function scrollToSection(id) {
+      try {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          // pokud sekce není nalezena — fallback změnou location (funguje jako #anchor)
+          location.href = '#' + id;
+        }
+      } catch (e) {
+        location.href = '#' + id;
+      }
+    }
+  </script>
+
+  <!-- Zachováváme připojení k vašemu externímu script.js -->
+  <script src="./script.js"></script>
+</body>
+
+</html>
