@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Rent comfortable apartments in the heart of Alanya.">
+  <meta name="description" content="Аренда комфортных апартаментов в самом сердце Алании.">
   <link rel="stylesheet" href="style.css">
   <title>Apartaments Alanya</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,10 +16,10 @@
   <link rel="stylesheet" href="./animations.css">
 
 
-  <!-- ===== Animations (inline; can be moved to animations.css) ===== -->
+  <!-- ===== Анимации (встроенные, можно вынести в animations.css) ===== -->
   <style>
     /* ----------------------------
-       General: side entrance animations
+       Общие: очередные анимации сбоку
        ---------------------------- */
     .animate-side {
       opacity: 0;
@@ -27,7 +27,7 @@
       will-change: transform, opacity;
     }
 
-    /* starting positions (set dynamically via classes) */
+    /* стартовые позиции (зададутся динамически через классы) */
     .animate-side.from-right { transform: translateX(50px); }
     .animate-side.from-left { transform: translateX(-50px); }
 
@@ -37,7 +37,7 @@
       transform: translateX(0);
     }
 
-    /* Child elements also slide a bit from the side (configured via data-direction) */
+    /* Дочерние элементы — тоже входят немного сбоку (настраиваются data-direction) */
     .animate-child {
       opacity: 0;
       transition: transform 480ms cubic-bezier(.2,.9,.3,1), opacity 480ms ease;
@@ -52,7 +52,7 @@
       transform: translateX(0);
     }
 
-    /* faster/slower modifiers if needed */
+    /* быстрые/медленные модификаторы при необходимости */
     .animate-fast { transition-duration: 480ms !important; }
     .animate-slow { transition-duration: 900ms !important; }
 
@@ -65,19 +65,21 @@
       }
     }
 
-    /* Styles for quick-booking section */
+    /* Стили для секции бронирования */
     .quick-booking {
       padding: 40px 20px;
       display: flex;
       justify-content: center;
       border-radius: 10px;
       margin: 40px 20px;
+
     }
 
     .qb-container {
       width: 100%;
       max-width: 800px;
       text-align: center;
+      
     }
 
     .qb-container h2 {
@@ -124,7 +126,7 @@
       line-height: 1.5;
     }
 
-    /* Responsive for booking section */
+    /* Адаптивность для секции бронирования */
     @media (max-width: 768px) {
       .quick-booking {
         margin: 20px 10px;
@@ -152,11 +154,10 @@
 
 <body>
 
-  <script>
-    // Typewriter effect
+    <script>
+        // Typewriter effect
 function initTypewriter() {
-  const words = ["ATTRACTIVE", "MODERN", "COMFORTABLE", "STYLISH", "CONVENIENT", "SPACIOUS", "ELEGANT"];
-
+  const words = ["ПРИВЛЕКАТЕЛЬНЫХ", "СОВРЕМЕННЫХ", "КОМФОРТНЫХ", "СТИЛЬНЫХ", "УДОБНЫХ", "ПРОСТОРНЫХ", "ЭЛЕГАНТНЫХ"];
   const wordSpan = document.querySelector(".word");
 
   let wordIndex = 0;
@@ -191,27 +192,27 @@ function initTypewriter() {
 
   type();
 }
-  </script>
+    </script>
 
   <!-- ====== HEADER ====== -->
   <header class="header" id="hero" data-animate>
-    <!-- video background: replace with your file -->
+    <!-- видеофон: подставьте свой файл -->
     <video class="background-video" autoplay muted loop playsinline>
       <source src="./img/headerBG.mp4" type="video/mp4">
-      <!-- fallback: users without video will see an image (JS adds class) -->
+      <!-- fallback: пользователю без видео покажет картинку (JS включает класс) -->
     </video>
 
-    <!-- overlay -->
+    <!-- затемнение -->
     <div class="overlay" aria-hidden="true"></div>
 
-    <!-- fallback image (if needed) -->
+    <!-- фолбек картинка (при необходимости) -->
     <div class="video-fallback" aria-hidden="true"></div>
 
-    <!-- Content over the video -->
+    <!-- Контент поверх видео -->
     <div class="headerLang">
       <div class="selectedLang">
-        <img src="./img/gb.svg" alt="Flag">
-        <p>EN</p>
+        <img src="./img/ru.svg" alt="Флаг">
+        <p>RU</p>
       </div>
       <ul class="langDropdown">
         <li>
@@ -249,23 +250,23 @@ function initTypewriter() {
     <div class="header-content" data-animate>
 
       <ul class="location" aria-hidden="false">
-        <li><img src="./img/location.svg" alt="Location"></li>
+        <li><img src="./img/location.svg" alt="Локация"></li>
         <li>
           <p>Alanya</p>
         </li>
       </ul>
 
       <h1 class="headerMainText">
-        CHOOSE ONE OF OUR <br>
-        <span class="word" aria-live="polite"></span> APARTMENTS
+        ВЫБЕРИТЕ ОДНУ ИЗ ТРЕХ НАШИХ <br>
+        <span class="word" aria-live="polite"></span> КВАРТИР
       </h1>
 
-      <h2 class="headerSubText">Apartments in the very heart of Alanya's coastline</h2>
+      <h2 class="headerSubText">Квартиры в самом сердце побережья Алании</h2>
 
       <div class="headerButtons">
-        <!-- updated: calls scrollToSection -->
-        <button class="btn" onclick="scrollToSection('contact-callback')">Contact us</button>
-        <button class="btn" onclick="scrollToSection('quick-booking')">Booking</button>
+        <!-- обновлено: вызываем scrollToSection -->
+        <button class="btn" onclick="scrollToSection('contact-callback')">Связаться с нами</button>
+        <button class="btn" onclick="scrollToSection('quick-booking')">Бронирование</button>
       </div>
     </div>
   </header>
@@ -273,26 +274,27 @@ function initTypewriter() {
   <!-- ====== ABOUT ====== -->
   <section class="about" data-animate>
     <h2 class="aboutText">
-      ABOUT US
+      О НАС
     </h2>
     <div class="aboutContent">
       <img class="aboutIMG" src="./img/aboutApartament.png" alt="">
       <div class="aboutDiscrubtionContent">
         <h2 class="aboutSubText">
-          We live nearby and are happy to share the best with you.
+          Мы живём рядом и с удовольствием
+          делимся с вами всем лучшим.
         </h2>
         <ul class="aboutDiscrubtionList">
-          <p class="aboutDiscrubtion">We are a local family who lovingly maintains three modern and cozy apartments.</p>
+          <p class="aboutDiscrubtion">Мы — местная семья, которая с любовью заботится о трёх современных и уютных апартаментах.</p>
           <p class="aboutDiscrubtion">
-            No intermediaries or hidden fees — only transparent terms and care for every guest.
+            Никаких посредников и скрытых платежей — только прозрачные условия и забота о каждом госте.
           </p>
           <p class="aboutDiscrubtion">
-            We support you at every step: from the first message to comfortable check-in, so your vacation or business trip goes without unnecessary hassle.
+            Мы сопровождаем вас на каждом этапе: от первого сообщения до комфортного заселения, чтобы ваш отдых или командировка прошли без лишних хлопот.
           </p>
         </ul>
-        <!-- updated: leads to contact section -->
+        <!-- обновлено: ведёт в секцию контакта -->
         <button class="aboutButton" onclick="scrollToSection('contact-callback')">
-          Contact us
+          Связаться с нами
         </button>
       </div>
     </div>
@@ -311,26 +313,28 @@ function initTypewriter() {
     </div>
 
     <div class="apartamentContent">
-      <h2 class="apartamentText">Apartment in Serenity Royal Beach</h2>
-      <p class="apartamentSubText">62 m² • 2 rooms • 50 meters to the sea</p>
+      <h2 class="apartamentText">Квартира в Serenity Royal Beach</h2>
+      <p class="apartamentSubText">62 м² • 2 комнаты • 50 метров до моря</p>
       <p class="apartamentTex">
-        Calm tones, lots of light, natural wood. Separate bedroom and living room, ergonomic kitchen, balcony with a city view. Suitable for business trips or long walks in the center.
+        Спокойные тона, много света, натуральное дерево. Отдельная спальня и
+        гостиная, эргономичная кухня, балкон с видом на город. Подойдёт для
+        командировки или длительных прогулок по центру.
       </p>
-      <h2 class="apartamentPrice" data-apartment="1"><span>—</span> ₴/night</h2>
+      <h2 class="apartamentPrice" data-apartment="1"><span>—</span> ₴/ночь</h2>
       <ul class="apartamentAdvantages">
-        <li class="apartamentAdvantagesItem">Wi-Fi</li>
-        <li class="apartamentAdvantagesItem">BBQ area</li>
-        <li class="apartamentAdvantagesItem">Air conditioning</li>
-        <li class="apartamentAdvantagesItem">Parking nearby</li>
-        <li class="apartamentAdvantagesItem">Cinema</li>
-        <li class="apartamentAdvantagesItem">SPA area</li>
-        <li class="apartamentAdvantagesItem">Security</li>
-        <li class="apartamentAdvantagesItem">Gym</li>
-        <li class="apartamentAdvantagesItem">Workspace</li>
+        <li class="apartamentAdvantagesItem">Wi‑Fi</li>
+        <li class="apartamentAdvantagesItem">Зона барбекю</li>
+        <li class="apartamentAdvantagesItem">Кондиционер</li>
+        <li class="apartamentAdvantagesItem">Парковка рядом</li>
+        <li class="apartamentAdvantagesItem">Кинотеатр</li>
+                <li class="apartamentAdvantagesItem">СПА зона</li>
+                        <li class="apartamentAdvantagesItem">Охрана</li>
+                        <li class="apartamentAdvantagesItem">Тренажёрный зал</li>
+                        <li class="apartamentAdvantagesItem">Рабочий кабинет</li>
       </ul>
       <div class="map">MAP</div>
-      <!-- updated: leads to booking -->
-      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Book now</button>
+      <!-- обновлено: ведёт к бронированию -->
+      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Забронировать</button>
     </div>
   </section>
 
@@ -353,26 +357,26 @@ function initTypewriter() {
       <button class="sliderBtn next">&#10095;</button>
     </div>
     <div class="apartamentContent1">
-      <h2 class="apartamentText1">Apartment in Nordic Sky</h2>
-      <p class="apartamentSubText1">62 m² • 3 rooms • 350 meters to the sea</p>
-      <p class="apartamentTex1">Bright and spacious apartments with a modern interior and natural materials. Three rooms including a separate bedroom and living room, fully equipped kitchen, balcony with a beautiful view. Only 350 meters to the beach, convenient parking nearby. Perfect for family vacations or romantic trips.</p>
-      <h2 class="apartamentPrice1" data-apartment="2"><span>—</span> ₴/night</h2>
+      <h2 class="apartamentText1">Квартира в Nordic Sky</h2>
+      <p class="apartamentSubText1">62 м² • 3 комнаты • 350 метров до моря</p>
+      <p class="apartamentTex1">Светлые и просторные апартаменты с современным интерьером и натуральными материалами. Три комнаты, включая отдельную спальню и гостиную, полностью оборудованная кухня, балкон с красивым видом. Всего 350 метров до пляжа, удобная парковка рядом. Идеально подходит для семейного отдыха или романтических путешествий.</p>
+      <h2 class="apartamentPrice1" data-apartment="2"><span>—</span> ₴/ночь</h2>
       <ul class="apartamentAdvantages1">
-        <li class="apartamentAdvantagesItem1">Wi-Fi</li>
-        <li class="apartamentAdvantagesItem1">BBQ area</li>
-        <li class="apartamentAdvantagesItem1">Air conditioning</li>
-        <li class="apartamentAdvantagesItem1">Parking nearby</li>
-        <li class="apartamentAdvantagesItem1">Cinema</li>
-        <li class="apartamentAdvantagesItem1">SPA area</li>
-        <li class="apartamentAdvantagesItem1">Security</li>
-        <li class="apartamentAdvantagesItem1">Gym</li>
-        <li class="apartamentAdvantagesItem1">Workspace</li>
+        <li class="apartamentAdvantagesItem1">Wi‑Fi</li>
+        <li class="apartamentAdvantagesItem1">Зона барбекю</li>
+        <li class="apartamentAdvantagesItem1">Кондиционер</li>
+        <li class="apartamentAdvantagesItem1">Парковка рядом</li>
+        <li class="apartamentAdvantagesItem1">Кинотеатр</li>
+                <li class="apartamentAdvantagesItem1">СПА зона</li>
+                        <li class="apartamentAdvantagesItem1">Охрана</li>
+                        <li class="apartamentAdvantagesItem1">Тренажёрный зал</li>
+                        <li class="apartamentAdvantagesItem1">Рабочий кабинет</li>
       </ul>
       <a href="https://maps.app.goo.gl/3CUWNciZda2v4NtN6" target="_blank" rel="noopener noreferrer">
-        <img class="map" src="./img/image.png" alt="">
+        <img class="map"src="./img/image.png" alt="">
       </a>
-      <!-- updated: leads to booking -->
-      <button class="apartamentButton1" onclick="scrollToSection('quick-booking')">Book now</button>
+      <!-- обновлено: ведёт к бронированию -->
+      <button class="apartamentButton1" onclick="scrollToSection('quick-booking')">Забронировать</button>
     </div>
     <div class="apartamentSlider slidesDESKT">
       <div class="slides">
@@ -404,54 +408,54 @@ function initTypewriter() {
         <img class="apartamentIMG" src="./img/apartament3_4.png" alt="">
         <img class="apartamentIMG" src="./img/apartament3_5.png" alt="">
         <img class="apartamentIMG" src="./img/apartament3_6.png" alt="">
-        <img class="apartamentIMG" src="./img/apartament3_7.png" alt="">
+                <img class="apartamentIMG" src="./img/apartament3_7.png" alt="">
       </div>
       <button class="sliderBtn next">&#10095;</button>
     </div>
 
     <div class="apartamentContent">
-      <h2 class="apartamentText">Apartment in Nordic Sky</h2>
-      <p class="apartamentSubText">62 m² • 2 rooms • 350 meters to the sea</p>
+      <h2 class="apartamentText">Квартира в Nordic Sky</h2>
+      <p class="apartamentSubText">62 м² • 2 комнаты • 350 метров до моря</p>
       <p class="apartamentTex">
-        Bright and cozy apartments with a modern design and natural materials. Spacious bedroom and living room, fully equipped kitchen, balcony with sea view. The complex offers a BBQ area, cinema, SPA and gym. Perfect for a comfortable vacation or productive work.
+Светлые и уютные апартаменты с современным дизайном и натуральными материалами. Просторная спальня и гостиная, полностью оборудованная кухня, балкон с видом на море. Комплекс предлагает зону барбекю, кинотеатр, СПА и тренажёрный зал. Идеально подходит для комфортного отдыха или продуктивной работы.
       </p>
-      <h2 class="apartamentPrice" data-apartment="3"><span>—</span> ₴/night</h2>
+      <h2 class="apartamentPrice" data-apartment="3"><span>—</span> ₴/ночь</h2>
       <ul class="apartamentAdvantages">
-        <li class="apartamentAdvantagesItem">Wi-Fi</li>
-        <li class="apartamentAdvantagesItem">BBQ area</li>
-        <li class="apartamentAdvantagesItem">Air conditioning</li>
-        <li class="apartamentAdvantagesItem">Parking nearby</li>
-        <li class="apartamentAdvantagesItem">Cinema</li>
-        <li class="apartamentAdvantagesItem">SPA area</li>
-        <li class="apartamentAdvantagesItem">Security</li>
-        <li class="apartamentAdvantagesItem">Gym</li>
-        <li class="apartamentAdvantagesItem">Workspace</li>
+        <li class="apartamentAdvantagesItem">Wi‑Fi</li>
+        <li class="apartamentAdvantagesItem">Зона барбекю</li>
+        <li class="apartamentAdvantagesItem">Кондиционер</li>
+        <li class="apartamentAdvantagesItem">Парковка рядом</li>
+        <li class="apartamentAdvantagesItem">Кинотеатр</li>
+                <li class="apartamentAdvantagesItem">СПА зона</li>
+                        <li class="apartamentAdvantagesItem">Охрана</li>
+                        <li class="apartamentAdvantagesItem">Тренажёрный зал</li>
+                        <li class="apartamentAdvantagesItem">Рабочий кабинет</li>
       </ul>
       <a href="https://maps.app.goo.gl/3CUWNciZda2v4NtN6" target="_blank" rel="noopener noreferrer">
-        <img class="map" src="./img/image.png" alt="">
+        <img class="map"src="./img/image.png" alt="">
       </a>
-      <!-- updated: leads to booking -->
-      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Book now</button>
+      <!-- обновлено: ведёт к бронированию -->
+      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Забронировать</button>
     </div>
   </section>
 
   <!-- ====== REVIEWS ====== -->
   <section class="reviews" data-animate>
-    <h2 class="reviewsText">REVIEWS</h2>
+    <h2 class="reviewsText">ОТЗЫВЫ</h2>
     <div class="reviewsContent">
       <div class="reviewsWrapper">
         <ul class="reviewsList">
-          <li class="reviewsItem">Really liked it! Everything fast and high quality.</li>
-          <li class="reviewsItem">Great service, I'll contact again.</li>
-          <li class="reviewsItem">Everything is great! I recommend to everyone.</li>
-          <li class="reviewsItem">Service at a high level!</li>
-          <li class="reviewsItem">Prices pleasantly surprised, recommend!</li>
-          <li class="reviewsItem">I'm not a first-time guest, everything is excellent!</li>
+          <li class="reviewsItem">Очень понравилось! Всё быстро и качественно.</li>
+          <li class="reviewsItem">Хороший сервис, буду обращаться ещё.</li>
+          <li class="reviewsItem">Всё супер! Рекомендую всем.</li>
+          <li class="reviewsItem">Обслуживание на высоком уровне!</li>
+          <li class="reviewsItem">Цены приятно удивили, рекомендую!</li>
+          <li class="reviewsItem">Пользуюсь уже не в первый раз, всё отлично!</li>
         </ul>
       </div>
       <div class="reviewsButtons">
-        <button id="prevBtn">BACK</button>
-        <button id="nextBtn">NEXT</button>
+        <button id="prevBtn">НАЗАД</button>
+        <button id="nextBtn">ВПЕРЁД</button>
       </div>
     </div>
   </section>
@@ -459,12 +463,12 @@ function initTypewriter() {
   <!-- ====== CONTACT FOR BOOKING ====== -->
   <section id="quick-booking" class="quick-booking" aria-labelledby="qb-title" data-animate>
     <div class="qb-container">
-      <h2 id="qb-title">BOOKING</h2>
+      <h2 id="qb-title">БРОНИРОВАНИЕ</h2>
 
       <div class="booking-contact">
-        <p class="booking-text">To book an apartment, contact us by phone:</p>
+        <p class="booking-text">Для бронирования квартиры свяжитесь с нами по телефону:</p>
         <a href="tel:+380123456789" class="booking-phone">+38 (012) 345-67-89</a>
-        <p class="booking-note">We will help you choose the best option and answer all your questions</p>
+        <p class="booking-note">Мы поможем вам выбрать лучший вариант и ответим на все вопросы</p>
       </div>
 
     </div>
@@ -473,54 +477,54 @@ function initTypewriter() {
   <!-- ====== FAQ ====== -->
   <section id="faq" class="faq" aria-labelledby="faq-title" data-animate>
     <div class="faq-wrap">
-      <h2 id="faq-title" class="faq-title">Frequently Asked Questions</h2>
+      <h2 id="faq-title" class="faq-title">Часто задаваемые вопросы</h2>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq1-answer" id="faq1">
-          How to make a payment? <span class="faq-toggle">+</span>
+          Как осуществить оплату? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq1-answer" role="region" aria-labelledby="faq1" >
-          After confirming the booking we will provide you with several convenient payment methods. Cash payment to our representative upon check-in is also possible. In any case a refundable deposit of €500 is required, which will be fully returned upon departure.
+          После согласования бронирования мы предоставим вам несколько удобных способов оплаты. Также возможна оплата наличными нашему представителю при заселении. В любом случае обязательным является залог в размере 500 €, который полностью возвращается при выезде.
         </div>
       </div>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq2-answer" id="faq2">
-          What amenities are provided in the apartment and the complex? <span class="faq-toggle">+</span>
+          Какие удобства предусмотрены в жилье и комплексе? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq2-answer" role="region" aria-labelledby="faq2" >
-          Each apartment is fully equipped with everything necessary for comfortable living: TV, refrigerator, iron, dishwasher, washing machine, a full set of dishes, air conditioners in every room, and underfloor heating in the bathrooms (apartment #1 — underfloor heating throughout). Shared internet is available across the complex. For your leisure there are indoor and outdoor pools, sauna, hammam, Roman bath, cinema, and fitness center.
+          Каждые апартаменты полностью укомплектованы всем необходимым для комфортного проживания: телевизор, холодильник, утюг, посудомоечная машина, стиральная машина, полный набор посуды, кондиционеры в каждой комнате, а также тёплый пол в ванных комнатах (в квартире №1 — тёплый пол по всей площади). На территории комплекса доступен общий интернет. Для вашего отдыха предусмотрены крытый и открытый бассейны, сауна, хамам, римская баня, кинотеатр и фитнес‑зал.
         </div>
       </div>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq3-answer" id="faq3">
-          Can I use the complex infrastructure? <span class="faq-toggle">+</span>
+          Можно ли пользоваться инфраструктурой комплекса? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq3-answer" role="region" aria-labelledby="faq3">
-          Yes, all infrastructure objects within the complex are available to residents. Rules are posted on the information board at the entrance to block B, where the apartments are located.
+          Да, все объекты инфраструктуры на территории комплекса доступны для гостей. Правила пользования размещены на информационной доске при входе в блок B, где находятся апартаменты.
 <br>
 <br>
-Block A houses a table tennis and PlayStation.
+В блоке A расположены теннисный стол и PlayStation.
 <br>
 <br>
-Block C — saunas and relaxation area.
+В блоке C — сауны и зона релакса.
 <br>
 <br>
-On the open territory of the complex — a court, BBQ zone and a pool with slides.
+На открытой территории комплекса — корт, зона барбекю и бассейн с горками.
         </div>
       </div>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq4-answer" id="faq4">
-          Is there parking near the apartments? <span class="faq-toggle">+</span>
+          Есть ли парковка рядом с апартаментами? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq4-answer" role="region" aria-labelledby="faq4">
-          Yes, parking is available near the apartments.
+          Да, рядом с апартаментами есть парковка для гостей.
         </div>
       </div>
             <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq5-answer" id="faq5">
-          What is nearby, besides the sea? <span class="faq-toggle">+</span>
+          Что расположено поблизости, кроме моря? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq5-answer" role="region" aria-labelledby="faq5">
-          Nearby the complex flows the Dim River with a picturesque promenade. Restaurants, shops and tourist hubs are within walking distance. Local markets operate on Mondays and Thursdays. From the beach to the center there is a modern 4-km promenade, perfect for a walk or accessible by bus.
+          Недалеко от комплекса протекает река Дим‑Чай с живописной набережной. В шаговой доступности находятся рестораны, магазины и туристические центры. Рядом также работают рынки в понедельник и четверг. От пляжа до центра простирается современная 4‑километровая набережная, по которой удобно прогуляться пешком или доехать на автобусе.
         </div>
       </div>
     </div>
@@ -532,17 +536,17 @@ On the open territory of the complex — a court, BBQ zone and a pool with slide
       <div class="footer-content">
         <div class="footer-section">
           <h3>Apartaments Alanya</h3>
-          <p>Comfortable apartments in the very heart of Alanya's coastline</p>
+          <p>Комфортные апартаменты в самом сердце побережья Алании</p>
         </div>
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2025 Apartaments Alanya. All rights reserved.</p>
+        <p>&copy; 2025 Apartaments Alanya. Все права защищены.</p>
       </div>
     </div>
   </footer>
 
-  <!-- ====== Animation JS (IntersectionObserver + left/right alternation + tight delays) ====== -->
+  <!-- ====== Анимационный JS (IntersectionObserver + чередование лево/право + меньшие задержки) ====== -->
   <script>
     (function () {
       const elements = Array.from(document.querySelectorAll('[data-animate]'));
@@ -554,7 +558,7 @@ On the open territory of the complex — a court, BBQ zone and a pool with slide
         threshold: 0.06
       };
 
-      // Base delay between sections (smaller = faster cascade)
+      // Базовая задержка между секциями (меньше — быстрее каскад)
       const baseDelay = 30; // ms
 
       const io = new IntersectionObserver((entries, obs) => {
@@ -562,41 +566,41 @@ On the open territory of the complex — a court, BBQ zone and a pool with slide
           if (!entry.isIntersecting) return;
           const el = entry.target;
           const idx = elements.indexOf(el);
-          // alternate: even indices (0,2,4...) from right, odd — from left
+          // чередование: чётные индексы (0,2,4...) справа, нечётные — слева
           const direction = (idx % 2 === 0) ? 'right' : 'left';
 
-          // add starting class for position
+          // Добавляем стартовый класс для позиции
           el.classList.add('animate-side', `from-${direction}`);
 
-          // add data-direction for child elements to synchronize direction
+          // Добавляем data-direction для дочерних элементов, чтобы синхронизировать направление
           const children = el.querySelectorAll('h1,h2,h3,p,img,button,li,select,input,textarea,.slides,.apartamentContent > * , .qb-container > * , .contact-card > *');
           children.forEach(child => {
             child.classList.add('animate-child');
             child.setAttribute('data-direction', direction);
           });
 
-          // show section with small delay depending on index
+          // видимость секции с небольшой задержкой, в зависимости от индекса
           const delay = idx * baseDelay;
           setTimeout(() => {
             el.classList.add('visible');
           }, delay);
 
-          // cascade for children (shorter intervals)
+          // каскад для детей (короткие интервалы)
           children.forEach((child, cIdx) => {
-            const childDelay = delay + 60 + (cIdx * 45); // smaller values for faster appearance
+            const childDelay = delay + 60 + (cIdx * 45); // меньшие значения для более быстрой появления
             setTimeout(() => {
               child.classList.add('visible');
             }, childDelay);
           });
 
-          // stop observing after show
+          // больше не наблюдаем после показа
           obs.unobserve(el);
         });
       }, observerOptions);
 
-      // attach observer to elements, and set initial classes immediately (to avoid jump)
+      // Прикрепляем observer к элементам, и сразу задаём начальные классы (чтобы не было "прыжка")
       elements.forEach((el, i) => {
-        // set animate-side immediately (to avoid FOUC)
+        // установим класс anim-side сразу (direction решим в observer при появлении)
         const dir = (i % 2 === 0) ? 'right' : 'left';
         if (!el.classList.contains('animate-side')) {
           el.classList.add('animate-side', `from-${dir}`);
@@ -604,7 +608,7 @@ On the open territory of the complex — a court, BBQ zone and a pool with slide
         io.observe(el);
       });
 
-      // handle elements already in view on load
+      // обработка случаев, когда элементы уже в зоне видимости на load
       window.addEventListener('load', () => {
         elements.forEach((el, idx) => {
           const rect = el.getBoundingClientRect();
@@ -627,7 +631,7 @@ On the open territory of the complex — a court, BBQ zone and a pool with slide
     })();
   </script>
 
-  <!-- Simple smooth scroll helper -->
+  <!-- Простой универсальный скрипт для плавного скролла по секциям -->
   <script>
     function scrollToSection(id) {
       try {
@@ -635,7 +639,7 @@ On the open territory of the complex — a court, BBQ zone and a pool with slide
         if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
-          // if section not found — fallback to location hash
+          // если секция не найдена — fallback на изменение location (работает как #anchor)
           location.href = '#' + id;
         }
       } catch (e) {
@@ -644,7 +648,7 @@ On the open territory of the complex — a court, BBQ zone and a pool with slide
     }
   </script>
 
-  <!-- keep external script connection -->
+  <!-- сохраняю подключение к вашему внешнему script.js -->
   <script src="./script.js"></script>
 </body>
 

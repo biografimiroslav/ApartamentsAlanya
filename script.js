@@ -17,9 +17,12 @@ document.addEventListener('DOMContentLoaded', function() {
   initTypewriter();
   initSliders();
   initReviewsSlider();
-  
+
   // Initialize Telegram form handler
-  initTelegramForm();
+  // initTelegramForm(); // Disabled because function is not defined
+
+  // Load prices from database
+  loadPricesFromDatabase();
 });
 
 // Animation functions
@@ -81,66 +84,103 @@ function enhanceHoverEffects() {
   });
 }
 
-// Typewriter effect
-function initTypewriter() {
-  const words = ["ПРИВАБЛИВИХ", "СУЧАСНИХ", "КОМФОРТНИХ", "СТИЛЬНИХ", "ЗРУЧНИХ", "ПРОСТОРИХ", "ЕЛЕГАНТНИХ"];
-  const wordSpan = document.querySelector(".word");
 
-  let wordIndex = 0;
-  let charIndex = 0;
-  let deleting = false;
-  let delay = 100;
-
-  function type() {
-    const currentWord = words[wordIndex];
-
-    if (!deleting) {
-      wordSpan.textContent = currentWord.slice(0, charIndex + 1);
-      charIndex++;
-
-      if (charIndex === currentWord.length) {
-        deleting = true;
-        setTimeout(type, 1000);
-        return;
-      }
-    } else {
-      wordSpan.textContent = currentWord.slice(0, charIndex - 1);
-      charIndex--;
-
-      if (charIndex === 0) {
-        deleting = false;
-        wordIndex = (wordIndex + 1) % words.length;
-      }
-    }
-
-    setTimeout(type, deleting ? 50 : delay);
-  }
-
-  type();
-}
 
 // Apartment sliders
 function initSliders() {
-  document.querySelectorAll('.apartamentSlider').forEach(slider => {
-    const slides = slider.querySelectorAll('.apartamentIMG');
-    let current = 0;
+  console.log('Initializing sliders...');
 
-    function showSlide(index) {
-      slides.forEach((img, i) => {
-        img.classList.toggle('active', i === index);
-      });
+  document.querySelectorAll('.apartamentSlider').forEach((slider, sliderIndex) => {
+    const slides = slider.querySelectorAll('.apartamentIMG');
+    const prevBtn = slider.querySelector('.prev');
+    const nextBtn = slider.querySelector('.next');
+
+    console.log(`Slider ${sliderIndex + 1}: Found ${slides.length} slides`);
+
+    if (slides.length === 0) {
+      console.warn(`Slider ${sliderIndex + 1}: No slides found`);
+      return; 
     }
 
-    slider.querySelector('.prev').addEventListener('click', () => {
-      current = (current - 1 + slides.length) % slides.length;
-      showSlide(current);
-    });
+    let current = 0;
 
-    slider.querySelector('.next').addEventListener('click', () => {
+    // Initialize first slide as active
+    showSlide(current);
+
+    function showSlide(index) {
+      // Find current active slide
+      const currentActive = slider.querySelector('.apartamentIMG.active');
+
+      if (currentActive) {
+        // Add fade-out class to current active slide
+        currentActive.classList.add('fade-out');
+
+        // Wait for fade-out animation to complete, then switch slides
+        setTimeout(() => {
+          // Remove active and fade-out classes from all slides
+          slides.forEach((img) => {
+            img.classList.remove('active', 'fade-out');
+          });
+
+          // Add active class to new slide
+          slides[index].classList.add('active');
+          console.log(`Slider ${sliderIndex + 1}: Showing slide ${index + 1}/${slides.length}`);
+        }, 1); // Match the fade-out animation duration (0.8s)
+      } else {
+        // No current active slide, just activate the new one
+        slides.forEach((img, i) => {
+          if (i === index) {
+            img.classList.add('active');
+          } else {
+            img.classList.remove('active');
+          }
+        });
+        console.log(`Slider ${sliderIndex + 1}: Showing slide ${index + 1}/${slides.length}`);
+      }
+    }
+
+    // Add event listeners with null checks
+    if (prevBtn) {
+      prevBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        current = (current - 1 + slides.length) % slides.length;
+        showSlide(current);
+      });
+    } else {
+      console.warn(`Slider ${sliderIndex + 1}: Previous button not found`);
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        current = (current + 1) % slides.length;
+        showSlide(current);
+      });
+    } else {
+      console.warn(`Slider ${sliderIndex + 1}: Next button not found`);
+    }
+
+    // Auto-play functionality (optional)
+    let autoPlayInterval = setInterval(() => {
       current = (current + 1) % slides.length;
       showSlide(current);
+    }, 5000); // Change slide every 5 seconds
+
+    // Pause auto-play on hover
+    slider.addEventListener('mouseenter', () => {
+      clearInterval(autoPlayInterval);
+    });
+
+    // Resume auto-play when mouse leaves
+    slider.addEventListener('mouseleave', () => {
+      autoPlayInterval = setInterval(() => {
+        current = (current + 1) % slides.length;
+        showSlide(current);
+      }, 5000);
     });
   });
+
+  console.log('Sliders initialization complete');
 }
 
 // Reviews slider
@@ -173,106 +213,140 @@ function initReviewsSlider() {
   });
 }
 
-// Telegram form handler
-function initTelegramForm() {
-  const contactForm = document.getElementById('contact-form');
-  if (!contactForm) return;
 
-  // Honeypot field removed as requested
+// Function to detect current language
+function getCurrentLanguage() {
+  const path = window.location.pathname;
+  if (path.includes('indexUA.html')) return 'ua';
+  if (path.includes('indexCZ.html')) return 'cz';
+  if (path.includes('indexTR.html')) return 'tr';
+  if (path.includes('indexRU.html')) return 'ru';
+  return 'en'; // default to English
+}
 
-  // Disable submit button until consent is checked
-  const submitButton = contactForm.querySelector('button[type="submit"]');
-  const consentCheckbox = contactForm.querySelector('input[name="consent"]');
-  const consentLabel = contactForm.querySelector('.cf-consent');
-  
-  if (submitButton && consentCheckbox && consentLabel) {
-    submitButton.disabled = true;
-    
-    consentCheckbox.addEventListener('change', function() {
-      submitButton.disabled = !this.checked;
-      
-      // Remove required class logic
+// Function to load prices from database
+function loadPricesFromDatabase() {
+  const lang = getCurrentLanguage();
+  fetch('/api/prices?lang=' + lang)
+    .then(response => response.json())
+    .then(data => {
+      // Update apartment prices on the page
+      updateApartmentPrices(data);
+    })
+    .catch(error => {
+      console.error('Error loading prices:', error);
+      // Prices will remain as default values if API fails
     });
-  }
+}
 
-  contactForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    // Honeypot check removed as requested
-
-    // Get form data
-    const formData = new FormData(this);
-    const name = formData.get('name');
-    const phone = formData.get('phone');
-    const message = formData.get('message') || 'Питання не вказано';
-    const consent = formData.get('consent');
-
-    // Validate required fields
-    if (!name || !phone || !consent) {
-      alert('Будь ласка, заповніть обов\'язкові поля: Ім\'я, Телефон та погодьтеся з Політикою конфіденційності');
-    }
-
-    if (!consent) {
-      alert('Будь ласка, погодьтеся з Політикою конфіденційності');
-      ;
-    }
-
-    // Create Telegram message
-    const telegramMessage = `
-📞 *НОВЕ ПОВІДОМЛЕННЯ З САЙТУ*
-    
-👤 *Ім'я:* ${name}
-📱 *Телефон:* ${phone}
-💬 *Питання:* ${message}
-    
-_Відправлено з сайту Apartaments Alanya_
-    `;
-
-    // Send to Telegram bot
-    const botToken = '8253586903:AAFJGQehaFg1Rm7m1k7VO7vLEB57R6T0fi4';
-    const chatId = '5993122611';
-    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
-    try {
-      const submitButton = this.querySelector('button[type="submit"]');
-      const originalText = submitButton.textContent;
-      submitButton.textContent = 'Відправляємо...';
-      submitButton.disabled = true;
-
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: telegramMessage,
-          parse_mode: 'Markdown'
-        })
-      });
-
-      if (response.ok) {
-        alert('Повідомлення успішно відправлено! Ми зв\'яжемося з вами найближчим часом.');
-        this.reset();
-        // Reset consent checkbox state
-        if (consentCheckbox) {
-          consentCheckbox.checked = false;
-          submitButton.disabled = true;
-        }
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.description || 'Помилка відправки');
-      }
-    } catch (error) {
-      console.error('Error sending to Telegram:', error);
-      alert('Сталася помилка при відправці. Будь ласка, спробуйте ще раз або зателефонуйте нам безпосередньо.');
-    } finally {
-      const submitButton = this.querySelector('button[type="submit"]');
-      submitButton.textContent = 'Надіслати';
-      submitButton.disabled = !consentCheckbox.checked;
+// Function to update apartment prices in HTML
+function updateApartmentPrices(prices) {
+  // Update apartment prices by data attribute
+  const priceElements = document.querySelectorAll('.apartamentPrice, .apartamentPrice1');
+  priceElements.forEach((element) => {
+    const apartmentNumber = element.getAttribute('data-apartment');
+    if (apartmentNumber === '1') {
+      element.textContent = prices.apartament1;
+    } else if (apartmentNumber === '2') {
+      element.textContent = prices.apartament2;
+    } else if (apartmentNumber === '3') {
+      element.textContent = prices.apartament3;
+    } else {
+      // fallback if no data attribute
+      element.textContent = prices.apartament1;
     }
   });
+
+  // Also update prices in the quick booking select options
+  const apartmentSelect = document.getElementById('qb-apartment');
+  if (apartmentSelect) {
+    for (let option of apartmentSelect.options) {
+      if (option.value === 'apartment1') {
+        option.text = `Квартира 1 — ${prices.apartament1}`;
+        // Extract numeric price for data-price attribute
+        const price1 = prices.apartament1.replace(/[^\d]/g, '');
+        option.setAttribute('data-price', price1);
+      } else if (option.value === 'apartment2') {
+        option.text = `Квартира 2 — ${prices.apartament2}`;
+        // Extract numeric price for data-price attribute
+        const price2 = prices.apartament2.replace(/[^\d]/g, '');
+        option.setAttribute('data-price', price2);
+      } else if (option.value === 'apartment3') {
+        option.text = `Квартира 3 — ${prices.apartament3}`;
+        // Extract numeric price for data-price attribute
+        const price3 = prices.apartament3.replace(/[^\d]/g, '');
+        option.setAttribute('data-price', price3);
+      }
+    }
+  }
 }
 
 // Call enhanced hover effects
 enhanceHoverEffects();
+
+
+// Language dropdown functionality
+document.addEventListener('DOMContentLoaded', () => {
+  const selectedLang = document.querySelector('.selectedLang');
+  const langDropdown = document.querySelector('.langDropdown');
+
+  if (selectedLang && langDropdown) {
+    selectedLang.addEventListener('click', (e) => {
+      e.preventDefault();
+      langDropdown.classList.toggle('open');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!selectedLang.contains(e.target) && !langDropdown.contains(e.target)) {
+        langDropdown.classList.remove('open');
+      }
+    });
+
+    // Handle language selection
+    const langItems = langDropdown.querySelectorAll('li');
+    langItems.forEach(item => {
+      item.addEventListener('click', () => {
+        // Update selected language display
+        const selectedImg = selectedLang.querySelector('img');
+        const selectedText = selectedLang.querySelector('p');
+        const itemImg = item.querySelector('img');
+        const itemText = item.querySelector('p').textContent.trim();
+
+        if (selectedImg && itemImg) {
+          selectedImg.src = itemImg.src;
+        }
+        if (selectedText) {
+          selectedText.textContent = itemText;
+        }
+
+        // Close dropdown
+        langDropdown.classList.remove('open');
+      });
+    });
+  }
+});
+
+// FAQ toggle functionality with smooth animations
+document.addEventListener('DOMContentLoaded', () => {
+  const faqButtons = document.querySelectorAll('.faq-question');
+  faqButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const expanded = button.getAttribute('aria-expanded') === 'true';
+      button.setAttribute('aria-expanded', !expanded);
+
+      const answerId = button.getAttribute('aria-controls');
+      const answer = document.getElementById(answerId);
+
+      if (answer) {
+        if (expanded) {
+          // Collapse
+          answer.classList.remove('faq-answer-expanded');
+        } else {
+          // Expand
+          answer.classList.add('faq-answer-expanded');
+        }
+      }
+    });
+  });
+});
