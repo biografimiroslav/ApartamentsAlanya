@@ -88,100 +88,93 @@ function enhanceHoverEffects() {
 
 // Apartment sliders
 function initSliders() {
-  console.log('Initializing sliders...');
+  const sliders = document.querySelectorAll('.apartamentSlider');
+  if (!sliders.length) return;
 
-  document.querySelectorAll('.apartamentSlider').forEach((slider, sliderIndex) => {
-    const slides = slider.querySelectorAll('.apartamentIMG');
+  sliders.forEach((slider, sliderIndex) => {
+    const slides = Array.from(slider.querySelectorAll('.apartamentIMG'));
     const prevBtn = slider.querySelector('.prev');
     const nextBtn = slider.querySelector('.next');
 
-    console.log(`Slider ${sliderIndex + 1}: Found ${slides.length} slides`);
+    if (!slides.length) return;
 
-    if (slides.length === 0) {
-      console.warn(`Slider ${sliderIndex + 1}: No slides found`);
-      return; 
-    }
+    // знайти початковий активний слайд або 0
+    let current = slides.findIndex(s => s.classList.contains('active'));
+    if (current < 0) current = 0;
+    slides.forEach((s, i) => s.dataset.idx = i); // мінімізує подальші запити
 
-    let current = 0;
+    const showSlide = (index) => {
+      index = (index + slides.length) % slides.length;
+      if (index === current) return; // нічого не міняємо якщо той самий
+      const prev = slides[current];
+      const next = slides[index];
 
-    // Initialize first slide as active
-    showSlide(current);
-
-    function showSlide(index) {
-      // Find current active slide
-      const currentActive = slider.querySelector('.apartamentIMG.active');
-
-      if (currentActive) {
-        // Add fade-out class to current active slide
-        currentActive.classList.add('fade-out');
-
-        // Wait for fade-out animation to complete, then switch slides
-        setTimeout(() => {
-          // Remove active and fade-out classes from all slides
-          slides.forEach((img) => {
-            img.classList.remove('active', 'fade-out');
-          });
-
-          // Add active class to new slide
-          slides[index].classList.add('active');
-          console.log(`Slider ${sliderIndex + 1}: Showing slide ${index + 1}/${slides.length}`);
-        }, 1); // Match the fade-out animation duration (0.8s)
-      } else {
-        // No current active slide, just activate the new one
-        slides.forEach((img, i) => {
-          if (i === index) {
-            img.classList.add('active');
-          } else {
-            img.classList.remove('active');
-          }
-        });
-        console.log(`Slider ${sliderIndex + 1}: Showing slide ${index + 1}/${slides.length}`);
+      // Якщо є попередній активний — робимо fade-out, чекаємо transitionend, потім cleanup
+      if (prev) {
+        prev.classList.remove('active');
+        prev.classList.add('fade-out');
+        // Встановимо will-change перед анімацією (потім видалимо)
+        prev.style.willChange = 'opacity, transform';
+        const onEnd = () => {
+          prev.classList.remove('fade-out');
+          prev.style.willChange = '';
+          prev.removeEventListener('transitionend', onEnd);
+        };
+        prev.addEventListener('transitionend', onEnd, { once: true });
       }
-    }
 
-    // Add event listeners with null checks
-    if (prevBtn) {
-      prevBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        current = (current - 1 + slides.length) % slides.length;
-        showSlide(current);
-      });
-    } else {
-      console.warn(`Slider ${sliderIndex + 1}: Previous button not found`);
-    }
+      // Включаємо новий слайд
+      next.classList.add('active');
+      // для плавності: встановимо will-change і приберемо після першого transitionend
+      next.style.willChange = 'opacity, transform';
+      const onNextEnd = () => {
+        next.style.willChange = '';
+        next.removeEventListener('transitionend', onNextEnd);
+      };
+      next.addEventListener('transitionend', onNextEnd, { once: true });
 
-    if (nextBtn) {
-      nextBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        current = (current + 1) % slides.length;
-        showSlide(current);
-      });
-    } else {
-      console.warn(`Slider ${sliderIndex + 1}: Next button not found`);
-    }
+      current = index;
+    };
 
-    // Auto-play functionality (optional)
-    let autoPlayInterval = setInterval(() => {
-      current = (current + 1) % slides.length;
-      showSlide(current);
-    }, 5000); // Change slide every 5 seconds
+    // Кнопки
+    if (prevBtn) prevBtn.addEventListener('click', (e) => { e.preventDefault(); showSlide(current - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', (e) => { e.preventDefault(); showSlide(current + 1); });
 
-    // Pause auto-play on hover
-    slider.addEventListener('mouseenter', () => {
+    // Автоплей (локальний таймер на кожен слайдер)
+    let autoPlayInterval = null;
+    const startAutoplay = (interval = 5000) => {
+      if (autoPlayInterval) return;
+      autoPlayInterval = setInterval(() => showSlide(current + 1), interval);
+    };
+    const stopAutoplay = () => {
+      if (!autoPlayInterval) return;
       clearInterval(autoPlayInterval);
-    });
+      autoPlayInterval = null;
+    };
 
-    // Resume auto-play when mouse leaves
-    slider.addEventListener('mouseleave', () => {
-      autoPlayInterval = setInterval(() => {
-        current = (current + 1) % slides.length;
-        showSlide(current);
-      }, 5000);
-    });
+    // Пауза на hover / resume on leave
+    slider.addEventListener('mouseenter', stopAutoplay, { passive: true });
+    slider.addEventListener('mouseleave', () => startAutoplay(5000), { passive: true });
+
+    // Опціонально: зупиняти автоплей, якщо слайдер не видно — економить ресурси
+    if ('IntersectionObserver' in window) {
+      const visObserver = new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+          if (en.isIntersecting) startAutoplay(5000);
+          else stopAutoplay();
+        });
+      }, { threshold: 0.25 });
+      visObserver.observe(slider);
+    } else {
+      // fallback: завжди вмикаємо
+      startAutoplay(5000);
+    }
+
+    // Ініціалізація: покажемо початковий слайд (переконаємось, що є active)
+    slides.forEach((s, i) => s.classList.toggle('active', i === current));
   });
-
-  console.log('Sliders initialization complete');
 }
+
 
 // Reviews slider
 function initReviewsSlider() {
