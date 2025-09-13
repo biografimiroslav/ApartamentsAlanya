@@ -49,6 +49,56 @@ def get_prices(lang='en'):
             'apartament3': '— €' + suffix
         }
 
+def get_phone(lang='en'):
+    """Функція для отримання номера телефону (один номер для всіх мов)"""
+    try:
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT phone_number FROM phones LIMIT 1")
+        row = cursor.fetchone()
+
+        conn.close()
+
+        if row:
+            return row[0]
+        else:
+            return '+38 (012) 345-67-89'  # значення за замовчуванням
+
+    except sqlite3.Error as e:
+        print(f"Помилка бази даних: {e}")
+        return '+38 (012) 345-67-89'
+
+def get_reviews(lang='en'):
+    """Функція для отримання відгуків (спільні для всіх мов)"""
+    try:
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT review_text FROM reviews")
+        rows = cursor.fetchall()
+
+        conn.close()
+
+        if rows:
+            return [row[0] for row in rows]
+        else:
+            # значення за замовчуванням
+            return [
+                'Дуже сподобалося! Все швидко та якісно.'
+            ]
+
+    except sqlite3.Error as e:
+        print(f"Помилка бази даних: {e}")
+        return [
+            'Дуже сподобалося! Все швидко та якісно.',
+            'Чудовий сервіс, звернуся ще раз.',
+            'Все чудово! Рекомендую всім.',
+            'Сервіс на високому рівні!',
+            'Ціни приємно здивували, рекомендую!',
+            'Я не вперше гість, все відмінно!'
+        ]
+
 @app.route('/')
 def index():
     """Головна сторінка - завантажуємо HTML файл"""
@@ -71,6 +121,22 @@ def prices_api():
     from flask import request
     lang = request.args.get('lang', 'en')
     return jsonify(get_prices(lang))
+
+@app.route('/api/phone')
+def phone_api():
+    """API endpoint для отримання номера телефону"""
+    from flask import request
+    lang = request.args.get('lang', 'en')
+    phone = get_phone(lang)
+    return jsonify({'phone_number': phone})
+
+@app.route('/api/reviews')
+def reviews_api():
+    """API endpoint для отримання відгуків"""
+    from flask import request
+    lang = request.args.get('lang', 'en')
+    reviews = get_reviews(lang)
+    return jsonify({'reviews': reviews})
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

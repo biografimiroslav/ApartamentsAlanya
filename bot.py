@@ -1,18 +1,107 @@
 import sqlite3
 import telebot
 from telebot import types
+from datetime import datetime
 
 # Bot configuration
 BOT_TOKEN = '8253586903:AAFJGQehaFg1Rm7m1k7VO7vLEB57R6T0fi4'
+# Первинний власник/суперадмін (його chat_id буде додано в таблицю admins під час ініціалізації)
 ALLOWED_CHAT_ID = 5993122611
 
-# Створюємо бота
 bot = telebot.TeleBot(BOT_TOKEN)
+DB_PATH = 'database.db'
+
+# --------------------  DB helpers for admins  --------------------
+def init_db():
+    """Створює потрібні таблиці якщо їх нема та додає первинного адміна"""
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        # таблиця для цін вже є у вашому проєкті, тут додаємо таблицю адмінів
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS admins (
+                chat_id INTEGER PRIMARY KEY,
+                username TEXT,
+                added_by INTEGER,
+                added_at TEXT
+            )
+        ''')
+        # Додаємо первинного власника якщо його нема
+        cursor.execute('SELECT 1 FROM admins WHERE chat_id = ?', (ALLOWED_CHAT_ID,))
+        if cursor.fetchone() is None:
+            cursor.execute(
+                'INSERT INTO admins (chat_id, username, added_by, added_at) VALUES (?,?,?,?)',
+                (ALLOWED_CHAT_ID, None, ALLOWED_CHAT_ID, datetime.utcnow().isoformat())
+            )
+        conn.commit()
+    except sqlite3.Error as e:
+        print(f"DB init error: {e}")
+    finally:
+        conn.close()
+
+
+def is_admin(chat_id: int) -> bool:
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute('SELECT 1 FROM admins WHERE chat_id = ?', (chat_id,))
+        result = cursor.fetchone() is not None
+        return result
+    except sqlite3.Error as e:
+        print(f"is_admin db error: {e}")
+        return False
+    finally:
+        conn.close()
+
+
+def get_admins():
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute('SELECT chat_id, username, added_by, added_at FROM admins')
+        rows = cursor.fetchall()
+        return rows
+    except sqlite3.Error as e:
+        print(f"get_admins db error: {e}")
+        return []
+    finally:
+        conn.close()
+
+
+def add_admin_db(chat_id: int, username: str | None, added_by: int) -> bool:
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute('INSERT OR IGNORE INTO admins (chat_id, username, added_by, added_at) VALUES (?,?,?,?)',
+                       (chat_id, username, added_by, datetime.utcnow().isoformat()))
+        conn.commit()
+        return cursor.rowcount > 0
+    except sqlite3.Error as e:
+        print(f"add_admin db error: {e}")
+        return False
+    finally:
+        conn.close()
+
+
+def remove_admin_db(chat_id: int) -> bool:
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM admins WHERE chat_id = ?', (chat_id,))
+        conn.commit()
+        return cursor.rowcount > 0
+    except sqlite3.Error as e:
+        print(f"remove_admin db error: {e}")
+        return False
+    finally:
+        conn.close()
+
+# --------------------  Existing price helpers  --------------------
 
 def get_current_prices():
     """Отримати поточні ціни з бази даних з додаванням суфікса"""
     try:
-        conn = sqlite3.connect('database.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         cursor.execute("SELECT Apartament1, Apartament2, Apartament3 FROM prices LIMIT 1")
         row = cursor.fetchone()
@@ -20,25 +109,23 @@ def get_current_prices():
 
         if row:
             return {
-                'apartament1': row[0] + '/ніч',
-                'apartament2': row[1] + '/ніч',
-                'apartament3': row[2] + '/ніч'
+                'apartament1': str(row[0]) + '/ніч',
+                'apartament2': str(row[1]) + '/ніч',
+                'apartament3': str(row[2]) + '/ніч'
             }
-        else:
-            return None
+        return None
     except sqlite3.Error as e:
         print(f"Помилка бази даних: {e}")
         return None
 
+
 def update_price(apartment_num, new_price):
     """Оновити ціну для конкретної квартири"""
     try:
-        conn = sqlite3.connect('database.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
-
         column_name = f"Apartament{apartment_num}"
         cursor.execute(f"UPDATE prices SET {column_name} = ? WHERE id = 1", (new_price,))
-
         conn.commit()
         conn.close()
         return True
@@ -46,130 +133,108 @@ def update_price(apartment_num, new_price):
         print(f"Помилка оновлення ціни: {e}")
         return False
 
+# --------------------  Phone helpers  --------------------
+def get_phone():
+    """Отримати поточний номер телефону"""
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("SELECT phone_number FROM phones LIMIT 1")
+        row = cursor.fetchone()
+        conn.close()
+        return row[0] if row else None
+    except sqlite3.Error as e:
+        print(f"Помилка отримання телефону: {e}")
+        return None
+
+def update_phone(new_phone):
+    """Оновити номер телефону"""
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("UPDATE phones SET phone_number = ? WHERE id = 1", (new_phone,))
+        conn.commit()
+        conn.close()
+        return True
+    except sqlite3.Error as e:
+        print(f"Помилка оновлення телефону: {e}")
+        return False
+
+# --------------------  Reviews helpers  --------------------
+def get_reviews():
+    """Отримати всі відгуки"""
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, review_text FROM reviews")
+        rows = cursor.fetchall()
+        conn.close()
+        return rows
+    except sqlite3.Error as e:
+        print(f"Помилка отримання відгуків: {e}")
+        return []
+
+def add_review(review_text):
+    """Додати новий відгук"""
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO reviews (review_text) VALUES (?)", (review_text,))
+        conn.commit()
+        conn.close()
+        return True
+    except sqlite3.Error as e:
+        print(f"Помилка додавання відгуку: {e}")
+        return False
+
+def delete_review(review_id):
+    """Видалити відгук за ID"""
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM reviews WHERE id = ?", (review_id,))
+        conn.commit()
+        conn.close()
+        return cursor.rowcount > 0
+    except sqlite3.Error as e:
+        print(f"Помилка видалення відгуку: {e}")
+        return False
+
+# --------------------  Bot handlers  --------------------
 @bot.message_handler(commands=['start'])
 def start(message):
-    """Обробник команди /start"""
-    if message.chat.id != ALLOWED_CHAT_ID:
+    """Головне меню"""
+    if not is_admin(message.chat.id):
         bot.reply_to(message, "❌ Доступ заборонено!")
         return
 
     markup = types.InlineKeyboardMarkup(row_width=2)
     btn_prices = types.InlineKeyboardButton("💰 Переглянути ціни", callback_data="show_prices")
     btn_set_price = types.InlineKeyboardButton("✏️ Змінити ціну", callback_data="set_price_menu")
+    btn_phone = types.InlineKeyboardButton("📞 Змінити телефон", callback_data="set_phone")
+    btn_reviews = types.InlineKeyboardButton("💬 Керувати відгуками", callback_data="manage_reviews")
     btn_help = types.InlineKeyboardButton("❓ Допомога", callback_data="help")
-    markup.add(btn_prices, btn_set_price, btn_help)
+    markup.add(btn_prices, btn_set_price)
+    markup.add(btn_phone, btn_reviews)
+    markup.add(btn_help)
+
+    # Кнопка керування адмінами бачить тільки адмін
+    btn_manage_admins = types.InlineKeyboardButton("🔐 Керувати адмінами", callback_data="manage_admins")
+    markup.add(btn_manage_admins)
 
     bot.reply_to(message,
-        "👋 Привіт! Я бот для управління цінами на квартири в Аланії.\n\n"
+        "👋 Привіт! Я бот для управління сайтом квартир в Аланії.\n\n"
         "🏠 Оберіть дію нижче:",
         reply_markup=markup
     )
 
-@bot.message_handler(commands=['prices'])
-def show_prices(message):
-    """Показати поточні ціни"""
-    if message.chat.id != ALLOWED_CHAT_ID:
-        bot.reply_to(message, "❌ Доступ заборонено!")
-        return
-
-    prices = get_current_prices()
-    if prices:
-        response = (
-            "🏠 Поточні ціни на квартири:\n\n"
-            f"1️⃣ Квартира 1: {prices['apartament1']}\n"
-            f"2️⃣ Квартира 2: {prices['apartament2']}\n"
-            f"3️⃣ Квартира 3: {prices['apartament3']}\n\n"
-            "💡 Щоб змінити ціну, використовуйте: /set_price <номер> <ціна>"
-        )
-    else:
-        response = "❌ Не вдалося отримати ціни з бази даних"
-
-    bot.reply_to(message, response)
-
-@bot.message_handler(commands=['set_price'])
-def set_price(message):
-    """Змінити ціну квартири"""
-    if message.chat.id != ALLOWED_CHAT_ID:
-        bot.reply_to(message, "❌ Доступ заборонено!")
-        return
-
-    try:
-        # Розбираємо команду
-        parts = message.text.split()
-        if len(parts) < 3:
-            bot.reply_to(message,
-                "❌ Неправильний формат!\n\n"
-                "📝 Використання: /set_price <номер квартири> <ціна>\n"
-                "📋 Приклад: /set_price 1 90€\n\n"
-                "🏠 Доступні квартири: 1, 2, 3"
-            )
-            return
-
-        apartment_num = int(parts[1])
-        if apartment_num not in [1, 2, 3]:
-            bot.reply_to(message, "❌ Номер квартири має бути 1, 2 або 3!")
-            return
-
-        new_price = ' '.join(parts[2:])
-
-        # Оновлюємо ціну
-        if update_price(apartment_num, new_price):
-            bot.reply_to(message,
-                f"✅ Ціна успішно оновлена!\n\n"
-                f"🏠 Квартира {apartment_num}: {new_price}\n\n"
-                "🔄 Зміни будуть відображені на сайті після перезавантаження сторінки."
-            )
-
-            # Показуємо всі поточні ціни після оновлення
-            prices = get_current_prices()
-            if prices:
-                bot.reply_to(message,
-                    "📊 Оновлені ціни:\n\n"
-                    f"1️⃣ Квартира 1: {prices['apartament1']}\n"
-                    f"2️⃣ Квартира 2: {prices['apartament2']}\n"
-                    f"3️⃣ Квартира 3: {prices['apartament3']}"
-                )
-        else:
-            bot.reply_to(message, "❌ Помилка оновлення ціни. Спробуйте ще раз.")
-
-    except ValueError:
-        bot.reply_to(message, "❌ Номер квартири має бути числом (1, 2 або 3)!")
-    except Exception as e:
-        bot.reply_to(message, f"❌ Сталася помилка: {str(e)}")
-
-@bot.message_handler(commands=['help'])
-def help_command(message):
-    """Показати допомогу"""
-    if message.chat.id != ALLOWED_CHAT_ID:
-        bot.reply_to(message, "❌ Доступ заборонено!")
-        return
-
-    help_text = (
-        "🤖 Допомога по використанню бота\n\n"
-        "📋 Доступні команди:\n\n"
-        "/start - Почати роботу з ботом\n"
-        "/prices - Переглянути поточні ціни\n"
-        "/set_price <номер> <ціна> - Змінити ціну квартири\n"
-        "/help - Показати цю допомогу\n\n"
-        "📝 Формати цін:\n"
-        "• 85€\n"
-        "• 2500₴\n"
-        "• $100\n\n"
-        "💡 Приклади:\n"
-        "/set_price 1 90€\n"
-        "/set_price 2 2800₴\n"
-        "/set_price 3 $120\n\n"
-        "🔒 Бот працює тільки для авторизованих користувачів"
-    )
-    bot.reply_to(message, help_text)
-
 @bot.callback_query_handler(func=lambda call: True)
 def callback_handler(call):
-    """Обробник callback запитів від inline кнопок"""
-    if call.message.chat.id != ALLOWED_CHAT_ID:
+    if not is_admin(call.message.chat.id):
         bot.answer_callback_query(call.id, "❌ Доступ заборонено!")
         return
 
+    # Показати ціни
     if call.data == "show_prices":
         prices = get_current_prices()
         if prices:
@@ -181,128 +246,350 @@ def callback_handler(call):
                 "🏠 Поточні ціни на квартири:\n\n"
                 f"1️⃣ Квартира 1: {prices['apartament1']}\n"
                 f"2️⃣ Квартира 2: {prices['apartament2']}\n"
-                f"3️⃣ Квартира 3: {prices['apartament3']}\n\n"
-                "💡 Натисніть кнопку нижче, щоб повернутися до головного меню."
+                f"3️⃣ Квартира 3: {prices['apartament3']}"
             )
             bot.edit_message_text(chat_id=call.message.chat.id,
-                                message_id=call.message.message_id,
-                                text=response,
-                                reply_markup=markup)
+                                  message_id=call.message.message_id,
+                                  text=response,
+                                  reply_markup=markup)
         else:
             bot.answer_callback_query(call.id, "❌ Помилка отримання цін")
 
+    # Меню зміни ціни
     elif call.data == "set_price_menu":
         markup = types.InlineKeyboardMarkup(row_width=1)
-        btn_apart1 = types.InlineKeyboardButton("🏠 Квартира 1", callback_data="set_apart1")
-        btn_apart2 = types.InlineKeyboardButton("🏠 Квартира 2", callback_data="set_apart2")
-        btn_apart3 = types.InlineKeyboardButton("🏠 Квартира 3", callback_data="set_apart3")
-        btn_back = types.InlineKeyboardButton("⬅️ Назад", callback_data="back_to_main")
-        markup.add(btn_apart1, btn_apart2, btn_apart3, btn_back)
-
+        markup.add(
+            types.InlineKeyboardButton("🏠 Квартира 1", callback_data="set_apart1"),
+            types.InlineKeyboardButton("🏠 Квартира 2", callback_data="set_apart2"),
+            types.InlineKeyboardButton("🏠 Квартира 3", callback_data="set_apart3"),
+            types.InlineKeyboardButton("⬅️ Назад", callback_data="back_to_main")
+        )
         bot.edit_message_text(chat_id=call.message.chat.id,
-                            message_id=call.message.message_id,
-                            text="🏠 Оберіть квартиру для зміни ціни:",
-                            reply_markup=markup)
+                              message_id=call.message.message_id,
+                              text="🏠 Оберіть квартиру для зміни ціни:",
+                              reply_markup=markup)
 
+    # Введення нової ціни
     elif call.data.startswith("set_apart"):
         apartment_num = int(call.data[-1])
         msg = bot.send_message(call.message.chat.id,
-                             f"💰 Введіть нову ціну для квартири {apartment_num}:\n\n"
-                             "📝 Формати: 85€, 2500₴, $100")
+                               f"💰 Введіть нову ціну для квартири {apartment_num}:\n📝 Формати: 85€, 2500₴, $100")
         bot.register_next_step_handler(msg, process_price_input, apartment_num)
 
+    # Допомога
     elif call.data == "help":
         markup = types.InlineKeyboardMarkup()
-        btn_back = types.InlineKeyboardButton("⬅️ Назад", callback_data="back_to_main")
-        markup.add(btn_back)
-
+        markup.add(types.InlineKeyboardButton("⬅️ Назад", callback_data="back_to_main"))
         help_text = (
             "🤖 Допомога по використанню бота\n\n"
-            "💰 **Переглянути ціни** - показує поточні ціни всіх квартир\n\n"
-            "✏️ **Змінити ціну** - дозволяє оновити ціну для конкретної квартири\n\n"
-            "📝 **Формати цін:**\n"
-            "• 85€\n"
-            "• 2500₴\n"
-            "• $100\n\n"
+            "💰 Переглянути ціни - показує поточні ціни всіх квартир\n"
+            "✏️ Змінити ціну - дозволяє оновити ціну для конкретної квартири\n"
+            "📞 Змінити телефон - дозволяє оновити номер телефону\n"
+            "💬 Керувати відгуками - додавати, видаляти, переглядати відгуки\n"
+            "📝 Формати цін: 85€, 2500₴, $100\n"
             "🔒 Бот працює тільки для авторизованих користувачів"
         )
         bot.edit_message_text(chat_id=call.message.chat.id,
-                            message_id=call.message.message_id,
-                            text=help_text,
-                            reply_markup=markup,
-                            parse_mode="Markdown")
+                              message_id=call.message.message_id,
+                              text=help_text,
+                              reply_markup=markup)
 
+    # Меню керування адмінами
+    elif call.data == "manage_admins":
+        markup = types.InlineKeyboardMarkup(row_width=1)
+        markup.add(
+            types.InlineKeyboardButton("➕ Додати адміна", callback_data="add_admin"),
+            types.InlineKeyboardButton("➖ Видалити адміна", callback_data="remove_admin"),
+            types.InlineKeyboardButton("📋 Показати адмінів", callback_data="list_admins"),
+            types.InlineKeyboardButton("⬅️ Назад", callback_data="back_to_main")
+        )
+        bot.edit_message_text(chat_id=call.message.chat.id,
+                              message_id=call.message.message_id,
+                              text="🔐 Керування адмінами:",
+                              reply_markup=markup)
+
+    elif call.data == "list_admins":
+        rows = get_admins()
+        if not rows:
+            bot.answer_callback_query(call.id, "Немає адмінів у базі.")
+        else:
+            text = '📋 Список адмінів:\n\n'
+            for r in rows:
+                chat_id, username, added_by, added_at = r
+                text += f"• {chat_id}"
+                if username:
+                    text += f" ({username})"
+                text += f" — доданий: {added_at}\n"
+            bot.answer_callback_query(call.id)
+            bot.send_message(call.message.chat.id, text)
+
+    elif call.data == "add_admin":
+        msg = bot.send_message(call.message.chat.id, "Введіть chat_id або @username нового адміна:")
+        bot.register_next_step_handler(msg, process_add_admin, call.from_user.id)
+
+    elif call.data == "remove_admin":
+        msg = bot.send_message(call.message.chat.id, "Введіть chat_id або @username адміна, якого потрібно видалити:")
+        bot.register_next_step_handler(msg, process_remove_admin, call.from_user.id)
+
+    # Зміна телефону
+    elif call.data == "set_phone":
+        current_phone = get_phone()
+        msg = bot.send_message(call.message.chat.id, f"📞 Поточний телефон: {current_phone or 'Не встановлено'}\n\nВведіть новий номер телефону:")
+        bot.register_next_step_handler(msg, process_phone_input)
+
+    # Меню керування відгуками
+    elif call.data == "manage_reviews":
+        markup = types.InlineKeyboardMarkup(row_width=1)
+        markup.add(
+            types.InlineKeyboardButton("➕ Додати відгук", callback_data="add_review"),
+            types.InlineKeyboardButton("➖ Видалити відгук", callback_data="delete_review"),
+            types.InlineKeyboardButton("📋 Показати відгуки", callback_data="list_reviews"),
+            types.InlineKeyboardButton("⬅️ Назад", callback_data="back_to_main")
+        )
+        bot.edit_message_text(chat_id=call.message.chat.id,
+                              message_id=call.message.message_id,
+                              text="💬 Керування відгуками:",
+                              reply_markup=markup)
+
+    elif call.data == "add_review":
+        msg = bot.send_message(call.message.chat.id, "💬 Введіть текст нового відгуку:")
+        bot.register_next_step_handler(msg, process_add_review)
+
+    elif call.data == "delete_review":
+        reviews = get_reviews()
+        if not reviews:
+            bot.answer_callback_query(call.id, "Немає відгуків для видалення.")
+            return
+        markup = types.InlineKeyboardMarkup()
+        for r_id, text in reviews:
+            short_text = text[:50] + "..." if len(text) > 50 else text
+            markup.add(types.InlineKeyboardButton(f"Видалити: {short_text}", callback_data=f"del_rev_{r_id}"))
+        markup.add(types.InlineKeyboardButton("⬅️ Назад", callback_data="manage_reviews"))
+        bot.edit_message_text(chat_id=call.message.chat.id,
+                              message_id=call.message.message_id,
+                              text="💬 Оберіть відгук для видалення:",
+                              reply_markup=markup)
+
+    elif call.data == "list_reviews":
+        reviews = get_reviews()
+        if not reviews:
+            bot.answer_callback_query(call.id, "Немає відгуків.")
+            return
+        text = "💬 Список відгуків:\n\n"
+        for r_id, rev_text in reviews:
+            text += f"{r_id}. {rev_text}\n\n"
+        bot.answer_callback_query(call.id)
+        bot.send_message(call.message.chat.id, text)
+
+    elif call.data.startswith("del_rev_"):
+        r_id = int(call.data.split("_")[2])
+        if delete_review(r_id):
+            bot.answer_callback_query(call.id, "Відгук видалено.")
+            # Refresh the list
+            call.data = "delete_review"
+            callback_handler(call)
+        else:
+            bot.answer_callback_query(call.id, "Помилка видалення.")
+
+    # Повернутись в головне меню
     elif call.data == "back_to_main":
         markup = types.InlineKeyboardMarkup(row_width=2)
         btn_prices = types.InlineKeyboardButton("💰 Переглянути ціни", callback_data="show_prices")
         btn_set_price = types.InlineKeyboardButton("✏️ Змінити ціну", callback_data="set_price_menu")
+        btn_phone = types.InlineKeyboardButton("📞 Змінити телефон", callback_data="set_phone")
+        btn_reviews = types.InlineKeyboardButton("💬 Керувати відгуками", callback_data="manage_reviews")
         btn_help = types.InlineKeyboardButton("❓ Допомога", callback_data="help")
-        markup.add(btn_prices, btn_set_price, btn_help)
-
+        markup.add(btn_prices, btn_set_price)
+        markup.add(btn_phone, btn_reviews)
+        markup.add(btn_help)
+        markup.add(types.InlineKeyboardButton("🔐 Керувати адмінами", callback_data="manage_admins"))
         bot.edit_message_text(chat_id=call.message.chat.id,
-                            message_id=call.message.message_id,
-                            text="👋 Привіт! Я бот для управління цінами на квартири в Аланії.\n\n"
-                                 "🏠 Оберіть дію нижче:",
-                            reply_markup=markup)
+                              message_id=call.message.message_id,
+                              text="👋 Привіт! Я бот для управління сайтом квартир в Аланії.\n\n"
+                                   "🏠 Оберіть дію нижче:",
+                              reply_markup=markup)
 
     bot.answer_callback_query(call.id)
 
+
 def process_price_input(message, apartment_num):
     """Обробляє введену ціну від користувача"""
-    if message.chat.id != ALLOWED_CHAT_ID:
+    if not is_admin(message.chat.id):
         return
 
     new_price = message.text.strip()
-
     if update_price(apartment_num, new_price):
         markup = types.InlineKeyboardMarkup()
-        btn_back = types.InlineKeyboardButton("⬅️ Назад до меню", callback_data="back_to_main")
-        markup.add(btn_back)
+        markup.add(types.InlineKeyboardButton("⬅️ Назад до меню", callback_data="back_to_main"))
 
         bot.send_message(message.chat.id,
-                        f"✅ Ціна успішно оновлена!\n\n"
-                        f"🏠 Квартира {apartment_num}: {new_price}\n\n"
-                        "🔄 Зміни будуть відображені на сайті після перезавантаження сторінки.",
-                        reply_markup=markup)
+                         f"✅ Ціна успішно оновлена!\n\n"
+                         f"🏠 Квартира {apartment_num}: {new_price}\n🔄 Зміни будуть відображені на сайті після перезавантаження сторінки.",
+                         reply_markup=markup)
 
         # Показуємо всі поточні ціни після оновлення
         prices = get_current_prices()
         if prices:
             bot.send_message(message.chat.id,
-                           "📊 Оновлені ціни:\n\n"
-                           f"1️⃣ Квартира 1: {prices['apartament1']}\n"
-                           f"2️⃣ Квартира 2: {prices['apartament2']}\n"
-                           f"3️⃣ Квартира 3: {prices['apartament3']}")
+                             "📊 Оновлені ціни:\n\n"
+                             f"1️⃣ Квартира 1: {prices['apartament1']}\n"
+                             f"2️⃣ Квартира 2: {prices['apartament2']}\n"
+                             f"3️⃣ Квартира 3: {prices['apartament3']}")
     else:
         markup = types.InlineKeyboardMarkup()
-        btn_retry = types.InlineKeyboardButton("🔄 Спробувати ще раз", callback_data=f"set_apart{apartment_num}")
-        btn_back = types.InlineKeyboardButton("⬅️ Назад", callback_data="back_to_main")
-        markup.add(btn_retry, btn_back)
-
+        markup.add(
+            types.InlineKeyboardButton("🔄 Спробувати ще раз", callback_data=f"set_apart{apartment_num}"),
+            types.InlineKeyboardButton("⬅️ Назад", callback_data="back_to_main")
+        )
         bot.send_message(message.chat.id,
-                        "❌ Помилка оновлення ціни. Спробуйте ще раз.",
-                        reply_markup=markup)
+                         "❌ Помилка оновлення ціни. Спробуйте ще раз.",
+                         reply_markup=markup)
+
 
 @bot.message_handler(func=lambda message: True)
 def unknown_command(message):
-    """Обробник невідомих команд"""
-    if message.chat.id != ALLOWED_CHAT_ID:
+    """Відловлюємо будь-які текстові повідомлення, які не обробляються"""
+    if not is_admin(message.chat.id):
         return
 
     markup = types.InlineKeyboardMarkup()
-    btn_menu = types.InlineKeyboardButton("🏠 Головне меню", callback_data="back_to_main")
-    markup.add(btn_menu)
-
+    markup.add(types.InlineKeyboardButton("🏠 Головне меню", callback_data="back_to_main"))
     bot.reply_to(message,
-        "❓ Невідома команда!\n\n"
-        "📋 Натисніть кнопку нижче для повернення до головного меню:",
-        reply_markup=markup
-    )
+                 "❓ Використовуйте кнопки для навігації по меню бота.",
+                 reply_markup=markup)
+
+# --------------------  Handlers for add/remove admin flows  --------------------
+
+def process_add_admin(message, requested_by_id):
+    """Обробляє введення для додавання адміна"""
+    if not is_admin(message.chat.id):
+        return
+
+    text = message.text.strip()
+    target_chat_id = None
+    target_username = None
+
+    # Якщо ввели @username, спробуємо отримати chat через get_chat
+    if text.startswith('@'):
+        try:
+            chat = bot.get_chat(text)
+            target_chat_id = chat.id
+            target_username = text
+        except Exception as e:
+            bot.send_message(message.chat.id, f"Не вдалося знайти користувача за ім'ям {text}. Якщо це приватний користувач — він має спочатку натиснути /start у бота або використайте числовий chat_id.\nПомилка: {e}")
+            return
+    else:
+        # намагаємось перетворити на число
+        try:
+            target_chat_id = int(text)
+        except ValueError:
+            bot.send_message(message.chat.id, "Некоректний формат. Введіть числовий chat_id або @username.")
+            return
+
+    # Перевіримо, чи вже є такий адмін
+    if is_admin(target_chat_id):
+        bot.send_message(message.chat.id, "Цей користувач вже є адміном.")
+        return
+
+    ok = add_admin_db(target_chat_id, target_username, message.from_user.id)
+    if ok:
+        bot.send_message(message.chat.id, f"✅ Адмін ({target_chat_id}{' ' + target_username if target_username else ''}) успішно доданий.")
+    else:
+        bot.send_message(message.chat.id, "❌ Не вдалося додати адміна. Перевірте лог бота.")
+
+
+def process_remove_admin(message, requested_by_id):
+    """Обробляє введення для видалення адміна"""
+    if not is_admin(message.chat.id):
+        return
+
+    text = message.text.strip()
+    target_chat_id = None
+
+    if text.startswith('@'):
+        try:
+            chat = bot.get_chat(text)
+            target_chat_id = chat.id
+        except Exception as e:
+            bot.send_message(message.chat.id, f"Не вдалося знайти користувача за ім'ям {text}.\nПомилка: {e}")
+            return
+    else:
+        try:
+            target_chat_id = int(text)
+        except ValueError:
+            bot.send_message(message.chat.id, "Некоректний формат. Введіть числовий chat_id або @username.")
+            return
+
+    # Не дозволяємо видалити останнього адміна
+    admins = get_admins()
+    if len(admins) <= 1:
+        bot.send_message(message.chat.id, "❌ Неможливо видалити останнього адміна.")
+        return
+
+    if not is_admin(target_chat_id):
+        bot.send_message(message.chat.id, "Користувач не є адміном.")
+        return
+
+    ok = remove_admin_db(target_chat_id)
+    if ok:
+        bot.send_message(message.chat.id, f"✅ Адмін {target_chat_id} видалений.")
+    else:
+        bot.send_message(message.chat.id, "❌ Не вдалося видалити адміна. Перевірте лог бота.")
+
+
+# --------------------  Handlers for phone and reviews flows  --------------------
+
+def process_phone_input(message):
+    """Обробляє введення нового телефону"""
+    if not is_admin(message.chat.id):
+        return
+
+    new_phone = message.text.strip()
+    if update_phone(new_phone):
+        markup = types.InlineKeyboardMarkup()
+        markup.add(types.InlineKeyboardButton("⬅️ Назад до меню", callback_data="back_to_main"))
+        bot.send_message(message.chat.id,
+                         f"✅ Телефон успішно оновлений!\n\n📞 Новий телефон: {new_phone}\n🔄 Зміни будуть відображені на сайті після перезавантаження сторінки.",
+                         reply_markup=markup)
+    else:
+        markup = types.InlineKeyboardMarkup()
+        markup.add(
+            types.InlineKeyboardButton("🔄 Спробувати ще раз", callback_data="set_phone"),
+            types.InlineKeyboardButton("⬅️ Назад", callback_data="back_to_main")
+        )
+        bot.send_message(message.chat.id,
+                         "❌ Помилка оновлення телефону. Спробуйте ще раз.",
+                         reply_markup=markup)
+
+
+def process_add_review(message):
+    """Обробляє додавання нового відгуку"""
+    if not is_admin(message.chat.id):
+        return
+
+    review_text = message.text.strip()
+    if add_review(review_text):
+        markup = types.InlineKeyboardMarkup()
+        markup.add(types.InlineKeyboardButton("⬅️ Назад до меню", callback_data="back_to_main"))
+        bot.send_message(message.chat.id,
+                         f"✅ Відгук успішно додано!\n\n💬 Текст: {review_text}\n🔄 Зміни будуть відображені на сайті після перезавантаження сторінки.",
+                         reply_markup=markup)
+    else:
+        markup = types.InlineKeyboardMarkup()
+        markup.add(
+            types.InlineKeyboardButton("🔄 Спробувати ще раз", callback_data="add_review"),
+            types.InlineKeyboardButton("⬅️ Назад", callback_data="back_to_main")
+        )
+        bot.send_message(message.chat.id,
+                         "❌ Помилка додавання відгуку. Спробуйте ще раз.",
+                         reply_markup=markup)
+
 
 def main():
-    """Головна функція для запуску бота"""
+    init_db()
     print("🤖 Бот запущений! Натисніть Ctrl+C для зупинки.")
     bot.polling(none_stop=True, interval=0)
+
 
 if __name__ == '__main__':
     main()

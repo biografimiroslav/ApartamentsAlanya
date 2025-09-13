@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Аренда комфортных апартаментов в самом сердце Алании.">
+  <meta name="description" content="Арендуйте комфортабельные апартаменты в самом сердце Алании.">
   <link rel="stylesheet" href="style.css">
-  <title>Apartaments Alanya</title>
+  <title>Апартаменты Alanya</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -19,7 +19,7 @@
   <!-- ===== Анимации (встроенные, можно вынести в animations.css) ===== -->
   <style>
     /* ----------------------------
-       Общие: очередные анимации сбоку
+       Общие: простые анимации появления сбоку
        ---------------------------- */
     .animate-side {
       opacity: 0;
@@ -27,7 +27,7 @@
       will-change: transform, opacity;
     }
 
-    /* стартовые позиции (зададутся динамически через классы) */
+    /* стартовые позиции (задаются динамически через классы) */
     .animate-side.from-right { transform: translateX(50px); }
     .animate-side.from-left { transform: translateX(-50px); }
 
@@ -37,7 +37,7 @@
       transform: translateX(0);
     }
 
-    /* Дочерние элементы — тоже входят немного сбоку (настраиваются data-direction) */
+    /* Дочерние элементы — тоже входят немного с боку (настраиваются data-direction) */
     .animate-child {
       opacity: 0;
       transition: transform 480ms cubic-bezier(.2,.9,.3,1), opacity 480ms ease;
@@ -155,6 +155,23 @@
 <body>
 
     <script>
+
+        if ('IntersectionObserver' in window) {
+  const mapIO = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.src = e.target.dataset.src;
+        obs.unobserve(e.target);
+      }
+    });
+  }, {rootMargin: '200px'});
+  document.querySelectorAll('iframe[data-src]').forEach(el => mapIO.observe(el));
+} else {
+  // fallback
+  document.querySelectorAll('iframe[data-src]').forEach(el => el.src = el.dataset.src);
+}
+
+
         // Typewriter effect
 function initTypewriter() {
   const words = ["ПРИВЛЕКАТЕЛЬНЫХ", "СОВРЕМЕННЫХ", "КОМФОРТНЫХ", "СТИЛЬНЫХ", "УДОБНЫХ", "ПРОСТОРНЫХ", "ЭЛЕГАНТНЫХ"];
@@ -196,7 +213,7 @@ function initTypewriter() {
 
   <!-- ====== HEADER ====== -->
   <header class="header" id="hero" data-animate>
-    <!-- видеофон: подставьте свой файл -->
+    <!-- видео фон: подставьте свой файл -->
     <video class="background-video" autoplay muted loop playsinline>
       <source src="./img/headerBG.mp4" type="video/mp4">
       <!-- fallback: пользователю без видео покажет картинку (JS включает класс) -->
@@ -205,7 +222,7 @@ function initTypewriter() {
     <!-- затемнение -->
     <div class="overlay" aria-hidden="true"></div>
 
-    <!-- фолбек картинка (при необходимости) -->
+    <!-- фолбек картинка (по необходимости) -->
     <div class="video-fallback" aria-hidden="true"></div>
 
     <!-- Контент поверх видео -->
@@ -265,7 +282,7 @@ function initTypewriter() {
 
       <div class="headerButtons">
         <!-- обновлено: вызываем scrollToSection -->
-        <button class="btn" onclick="scrollToSection('contact-callback')">Связаться с нами</button>
+        <button class="btn" onclick="scrollToSection('quick-booking')">Связаться с нами</button>
         <button class="btn" onclick="scrollToSection('quick-booking')">Бронирование</button>
       </div>
     </div>
@@ -280,19 +297,21 @@ function initTypewriter() {
       <img class="aboutIMG" src="./img/aboutApartament.png" alt="">
       <div class="aboutDiscrubtionContent">
         <h2 class="aboutSubText">
-          Мы живём рядом и с удовольствием
-          делимся с вами всем лучшим.
+          Мы живем рядом и с удовольствием
+          делимся с вами всем самым лучшим.
         </h2>
         <ul class="aboutDiscrubtionList">
-          <p class="aboutDiscrubtion">Мы — местная семья, которая с любовью заботится о трёх современных и уютных апартаментах.</p>
+          <p class="aboutDiscrubtion">
+            Мы — семья, которая всегда готова позаботиться о вашем комфорте и предоставить современные и уютные апартаменты.
+           </p>
           <p class="aboutDiscrubtion">
             Никаких посредников и скрытых платежей — только прозрачные условия и забота о каждом госте.
           </p>
           <p class="aboutDiscrubtion">
-            Мы сопровождаем вас на каждом этапе: от первого сообщения до комфортного заселения, чтобы ваш отдых или командировка прошли без лишних хлопот.
+            Мы сопровождаем вас на каждом этапе: от первого сообщения до комфортного заселения, чтобы ваш отдых или деловая поездка прошли без лишних хлопот.
           </p>
         </ul>
-        <!-- обновлено: ведёт в секцию контакта -->
+        <!-- обновлено: ведет в секцию контакта -->
         <button class="aboutButton" onclick="scrollToSection('contact-callback')">
           Связаться с нами
         </button>
@@ -305,35 +324,42 @@ function initTypewriter() {
     <div class="apartamentSlider">
       <button class="sliderBtn prev">&#10094;</button>
       <div class="slides">
-        <img class="apartamentIMG active" src="./img/apartament.png" alt="">
-        <img class="apartamentIMG" src="./img/aboutApartament.png" alt="">
-        <img class="apartamentIMG" src="./img/apartament.png" alt="">
+        <img class="apartamentIMG active" src="./img/apartament1_1.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_2.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_3.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_4.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_5.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_6.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_7.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_8.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_9.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_10.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_11.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_12.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_13.jpg" alt="" loading="lazy">
       </div>
       <button class="sliderBtn next">&#10095;</button>
     </div>
 
     <div class="apartamentContent">
       <h2 class="apartamentText">Квартира в Serenity Royal Beach</h2>
-      <p class="apartamentSubText">62 м² • 2 комнаты • 50 метров до моря</p>
+      <p class="apartamentSubText">3 комнаты • 50 м до моря</p>
       <p class="apartamentTex">
-        Спокойные тона, много света, натуральное дерево. Отдельная спальня и
-        гостиная, эргономичная кухня, балкон с видом на город. Подойдёт для
-        командировки или длительных прогулок по центру.
+Светлые и уютные апартаменты с современным дизайном и натуральными материалами. Просторные спальни и гостиная, полностью оборудованная кухня, балкон с видом на море. Комплекс предлагает зону для барбекю, кинотеатр, СПА и тренажерный зал. Идеально подходит для комфортного отдыха или продуктивной работы.
       </p>
       <h2 class="apartamentPrice" data-apartment="1"><span>—</span> ₴/ночь</h2>
       <ul class="apartamentAdvantages">
-        <li class="apartamentAdvantagesItem">Wi‑Fi</li>
-        <li class="apartamentAdvantagesItem">Зона барбекю</li>
+        <li class="apartamentAdvantagesItem">Wi-Fi</li>
         <li class="apartamentAdvantagesItem">Кондиционер</li>
-        <li class="apartamentAdvantagesItem">Парковка рядом</li>
+        <li class="apartamentAdvantagesItem">Подземная парковка на территории</li>
         <li class="apartamentAdvantagesItem">Кинотеатр</li>
                 <li class="apartamentAdvantagesItem">СПА зона</li>
                         <li class="apartamentAdvantagesItem">Охрана</li>
-                        <li class="apartamentAdvantagesItem">Тренажёрный зал</li>
+                        <li class="apartamentAdvantagesItem">Тренажерный зал</li>        
                         <li class="apartamentAdvantagesItem">Рабочий кабинет</li>
       </ul>
-      <div class="map">MAP</div>
-      <!-- обновлено: ведёт к бронированию -->
+      <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8139.860436794304!2d32.04069893885478!3d36.53328267371921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc99c34fd67c41%3A0x459c3a65554cac9a!2sSerenity%20Royal%20Beach!5e0!3m2!1suk!2sua!4v1757622546157!5m2!1suk!2sua" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <!-- обновлено: ведет к бронированию -->
       <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Забронировать</button>
     </div>
   </section>
@@ -342,54 +368,52 @@ function initTypewriter() {
   <section class="apartament1" data-animate>
     <div class="apartamentSlider slidesPHONE">
       <div class="slides">
-        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="">
+        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="" loading="lazy">
       </div>
       <button class="sliderBtn prev">&#10094;</button>
       <button class="sliderBtn next">&#10095;</button>
     </div>
     <div class="apartamentContent1">
       <h2 class="apartamentText1">Квартира в Nordic Sky</h2>
-      <p class="apartamentSubText1">62 м² • 3 комнаты • 350 метров до моря</p>
-      <p class="apartamentTex1">Светлые и просторные апартаменты с современным интерьером и натуральными материалами. Три комнаты, включая отдельную спальню и гостиную, полностью оборудованная кухня, балкон с красивым видом. Всего 350 метров до пляжа, удобная парковка рядом. Идеально подходит для семейного отдыха или романтических путешествий.</p>
+      <p class="apartamentSubText1">3 комнаты • 350 м до моря</p>
+      <p class="apartamentTex1">Светлые и просторные апартаменты с современным интерьером и натуральными материалами. Три комнаты, включая отдельную спальню и гостиную, полностью оборудованная кухня, балкон с хорошим видом. Всего 350 метров до пляжа, удобная парковка рядом. Идеально подходит для семейного отдыха или романтического путешествия.</p>
       <h2 class="apartamentPrice1" data-apartment="2"><span>—</span> ₴/ночь</h2>
       <ul class="apartamentAdvantages1">
-        <li class="apartamentAdvantagesItem1">Wi‑Fi</li>
-        <li class="apartamentAdvantagesItem1">Зона барбекю</li>
+        <li class="apartamentAdvantagesItem1">Wi-Fi</li>
+        <li class="apartamentAdvantagesItem1">Зона для барбекю</li>
         <li class="apartamentAdvantagesItem1">Кондиционер</li>
-        <li class="apartamentAdvantagesItem1">Парковка рядом</li>
+        <li class="apartamentAdvantagesItem1">Подземная парковка на территории</li>
         <li class="apartamentAdvantagesItem1">Кинотеатр</li>
                 <li class="apartamentAdvantagesItem1">СПА зона</li>
                         <li class="apartamentAdvantagesItem1">Охрана</li>
-                        <li class="apartamentAdvantagesItem1">Тренажёрный зал</li>
+                        <li class="apartamentAdvantagesItem1">Тренажерный зал</li>        
                         <li class="apartamentAdvantagesItem1">Рабочий кабинет</li>
       </ul>
-      <a href="https://maps.app.goo.gl/3CUWNciZda2v4NtN6" target="_blank" rel="noopener noreferrer">
-        <img class="map"src="./img/image.png" alt="">
-      </a>
-      <!-- обновлено: ведёт к бронированию -->
+<iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3206.1081898644106!2d32.049319276265926!3d36.527384172326244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc9900172b4afb%3A0x8e767a22325dc1d9!2sNordic%20Sky!5e0!3m2!1suk!2sua!4v1757622619935!5m2!1suk!2sua" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <!-- обновлено: ведет к бронированию -->
       <button class="apartamentButton1" onclick="scrollToSection('quick-booking')">Забронировать</button>
     </div>
     <div class="apartamentSlider slidesDESKT">
       <div class="slides">
-        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="">
+        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="" loading="lazy">
       </div>
       <button class="sliderBtn prev">&#10094;</button>
       <button class="sliderBtn next">&#10095;</button>
@@ -402,60 +426,53 @@ function initTypewriter() {
       <button class="sliderBtn prev">&#10094;</button>
       <div class="slides">
 
-        <img class="apartamentIMG active" src="./img/apartament3_1.png" alt="">
-        <img class="apartamentIMG" src="./img/apartament3_2.png" alt="">
-        <img class="apartamentIMG" src="./img/apartament3_3.png" alt="">
-        <img class="apartamentIMG" src="./img/apartament3_4.png" alt="">
-        <img class="apartamentIMG" src="./img/apartament3_5.png" alt="">
-        <img class="apartamentIMG" src="./img/apartament3_6.png" alt="">
-                <img class="apartamentIMG" src="./img/apartament3_7.png" alt="">
+        <img class="apartamentIMG active" src="./img/apartament3_1.png" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament3_2.png" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament3_3.png" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament3_4.png" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament3_5.png" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament3_6.png" alt="" loading="lazy">
+                <img class="apartamentIMG" src="./img/apartament3_7.png" alt="" loading="lazy">
       </div>
       <button class="sliderBtn next">&#10095;</button>
     </div>
 
     <div class="apartamentContent">
       <h2 class="apartamentText">Квартира в Nordic Sky</h2>
-      <p class="apartamentSubText">62 м² • 2 комнаты • 350 метров до моря</p>
+      <p class="apartamentSubText">2 комнаты • 350 м до моря</p>
       <p class="apartamentTex">
-Светлые и уютные апартаменты с современным дизайном и натуральными материалами. Просторная спальня и гостиная, полностью оборудованная кухня, балкон с видом на море. Комплекс предлагает зону барбекю, кинотеатр, СПА и тренажёрный зал. Идеально подходит для комфортного отдыха или продуктивной работы.
+Светлые и уютные апартаменты с современным дизайном и натуральными материалами. Простая спальня и гостиная, полностью оборудованная кухня, балкон с видом на море. Комплекс предлагает зону для барбекю, кинотеатр, СПА и тренажерный зал. Идеально подходит для комфортного отдыха или продуктивной работы.
       </p>
       <h2 class="apartamentPrice" data-apartment="3"><span>—</span> ₴/ночь</h2>
       <ul class="apartamentAdvantages">
-        <li class="apartamentAdvantagesItem">Wi‑Fi</li>
-        <li class="apartamentAdvantagesItem">Зона барбекю</li>
+        <li class="apartamentAdvantagesItem">Wi-Fi</li>
+        <li class="apartamentAdvantagesItem">Зона для барбекю</li>
         <li class="apartamentAdvantagesItem">Кондиционер</li>
-        <li class="apartamentAdvantagesItem">Парковка рядом</li>
+        <li class="apartamentAdvantagesItem">Подземная парковка на территории</li>
         <li class="apartamentAdvantagesItem">Кинотеатр</li>
                 <li class="apartamentAdvantagesItem">СПА зона</li>
                         <li class="apartamentAdvantagesItem">Охрана</li>
-                        <li class="apartamentAdvantagesItem">Тренажёрный зал</li>
+                        <li class="apartamentAdvantagesItem">Тренажерный зал</li>        
                         <li class="apartamentAdvantagesItem">Рабочий кабинет</li>
       </ul>
-      <a href="https://maps.app.goo.gl/3CUWNciZda2v4NtN6" target="_blank" rel="noopener noreferrer">
-        <img class="map"src="./img/image.png" alt="">
-      </a>
-      <!-- обновлено: ведёт к бронированию -->
+<iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3206.1081898644106!2d32.049319276265926!3d36.527384172326244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc9900172b4afb%3A0x8e767a22325dc1d9!2sNordic%20Sky!5e0!3m2!1suk!2sua!4v1757622619935!5m2!1suk!2sua" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <!-- обновлено: ведет к бронированию -->
       <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Забронировать</button>
     </div>
   </section>
 
   <!-- ====== REVIEWS ====== -->
   <section class="reviews" data-animate>
-    <h2 class="reviewsText">ОТЗЫВЫ</h2>
+    <h2 class="aboutText">ОТЗЫВЫ</h2>
     <div class="reviewsContent">
       <div class="reviewsWrapper">
         <ul class="reviewsList">
-          <li class="reviewsItem">Очень понравилось! Всё быстро и качественно.</li>
-          <li class="reviewsItem">Хороший сервис, буду обращаться ещё.</li>
-          <li class="reviewsItem">Всё супер! Рекомендую всем.</li>
-          <li class="reviewsItem">Обслуживание на высоком уровне!</li>
-          <li class="reviewsItem">Цены приятно удивили, рекомендую!</li>
-          <li class="reviewsItem">Пользуюсь уже не в первый раз, всё отлично!</li>
+          <li class="reviewsItem"></li>
         </ul>
       </div>
       <div class="reviewsButtons">
         <button id="prevBtn">НАЗАД</button>
-        <button id="nextBtn">ВПЕРЁД</button>
+        <button id="nextBtn">ВПЕРЕД</button>
       </div>
     </div>
   </section>
@@ -483,7 +500,7 @@ function initTypewriter() {
           Как осуществить оплату? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq1-answer" role="region" aria-labelledby="faq1" >
-          После согласования бронирования мы предоставим вам несколько удобных способов оплаты. Также возможна оплата наличными нашему представителю при заселении. В любом случае обязательным является залог в размере 500 €, который полностью возвращается при выезде.
+          После согласования бронирования мы предоставим вам несколько удобных способов оплаты. Также возможна оплата наличными нашему представителю при заселении. В любом случае обязательным является залог в 500 €, который полностью возвращается при выезде.
         </div>
       </div>
       <div class="faq-item">
@@ -491,7 +508,7 @@ function initTypewriter() {
           Какие удобства предусмотрены в жилье и комплексе? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq2-answer" role="region" aria-labelledby="faq2" >
-          Каждые апартаменты полностью укомплектованы всем необходимым для комфортного проживания: телевизор, холодильник, утюг, посудомоечная машина, стиральная машина, полный набор посуды, кондиционеры в каждой комнате, а также тёплый пол в ванных комнатах (в квартире №1 — тёплый пол по всей площади). На территории комплекса доступен общий интернет. Для вашего отдыха предусмотрены крытый и открытый бассейны, сауна, хамам, римская баня, кинотеатр и фитнес‑зал.
+          Каждые апартаменты полностью укомплектованы всем необходимым для комфортного проживания: телевизор, холодильник, утюг, посудомоечная машина, стиральная машина, полный набор посуды, кондиционеры в каждой комнате, а также теплый пол в ванных комнатах (в квартире №1 — теплый пол по всей площади). На территории комплекса доступен общий интернет. Для вашего отдыха предусмотрены крытый и открытый бассейны, сауна, хамам, римская баня, кинотеатр и фитнес-зал.
         </div>
       </div>
       <div class="faq-item">
@@ -499,7 +516,7 @@ function initTypewriter() {
           Можно ли пользоваться инфраструктурой комплекса? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq3-answer" role="region" aria-labelledby="faq3">
-          Да, все объекты инфраструктуры на территории комплекса доступны для гостей. Правила пользования размещены на информационной доске при входе в блок B, где находятся апартаменты.
+          Да, все объекты инфраструктуры на территории комплекса доступны для жителей. Правила пользования размещены на информационной доске у входа в блок B, где находятся апартаменты.
 <br>
 <br>
 В блоке A расположены теннисный стол и PlayStation.
@@ -508,15 +525,15 @@ function initTypewriter() {
 В блоке C — сауны и зона релакса.
 <br>
 <br>
-На открытой территории комплекса — корт, зона барбекю и бассейн с горками.
+На открытой территории комплекса — корт, зона для барбекю и бассейн с горками.
         </div>
       </div>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq4-answer" id="faq4">
-          Есть ли парковка рядом с апартаментами? <span class="faq-toggle">+</span>
+          Есть ли парковка рядом с квартирами? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq4-answer" role="region" aria-labelledby="faq4">
-          Да, рядом с апартаментами есть парковка для гостей.
+          Да, рядом с квартирами есть парковка для гостей.
         </div>
       </div>
             <div class="faq-item">
@@ -524,9 +541,33 @@ function initTypewriter() {
           Что расположено поблизости, кроме моря? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq5-answer" role="region" aria-labelledby="faq5">
-          Недалеко от комплекса протекает река Дим‑Чай с живописной набережной. В шаговой доступности находятся рестораны, магазины и туристические центры. Рядом также работают рынки в понедельник и четверг. От пляжа до центра простирается современная 4‑километровая набережная, по которой удобно прогуляться пешком или доехать на автобусе.
+          Недалеко от комплекса протекает река Дым-Чай с живописной набережной. В шаговой доступности находятся рестораны, магазины и туристические точки. Рядом также работают рынки по понедельникам и четвергам. От пляжа до центра протянулась современная 4-километровая набережная, по которой удобно прогуляться пешком или доехать на автобусе.
+        </div>
+            <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq6-answer" id="faq6">
+          Как добраться до комплекса? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq6-answer" role="region" aria-labelledby="faq6">
+          Мы организуем трансфер из аэропортов Анталии и Алании. Для гостей доступны два варианта:
+
+          <br>
+            <br>
+Индивидуальный трансфер — 75–80 € за машину (из Анталии).
+            <br>
+            <br>
+
+Групповой трансфер — 15 € с человека (из Анталии).
+Стоимость трансфера из аэропорта Алании будет ниже — мы предоставим детали отдельно.
+            <br>
+            <br>
+
+Также, если вы приезжаете на собственном автомобиле или берете машину в аренду, для вашего удобства есть подземная парковка, которая включена в стоимость проживания.
         </div>
       </div>
+      <h2 class="faqTex">По дополнительным вопросам обращайтесь к владельцу апартаментов.</h2>
+      <a href="mailto:vsevolodivcenko68@gmail.com">
+          <button class="faqButton">Связаться</button>
+      </a>
     </div>
   </section>
 
@@ -535,13 +576,13 @@ function initTypewriter() {
     <div class="footer-container">
       <div class="footer-content">
         <div class="footer-section">
-          <h3>Apartaments Alanya</h3>
+          <h3>Апартаменты Alanya</h3>
           <p>Комфортные апартаменты в самом сердце побережья Алании</p>
         </div>
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2025 Apartaments Alanya. Все права защищены.</p>
+        <p>&copy; 2025 Апартаменты Alanya. Все права защищены.</p>
       </div>
     </div>
   </footer>
@@ -558,7 +599,7 @@ function initTypewriter() {
         threshold: 0.06
       };
 
-      // Базовая задержка между секциями (меньше — быстрее каскад)
+      // Базовая задержка между секциями (меньшая — быстрее каскад)
       const baseDelay = 30; // ms
 
       const io = new IntersectionObserver((entries, obs) => {
@@ -566,7 +607,7 @@ function initTypewriter() {
           if (!entry.isIntersecting) return;
           const el = entry.target;
           const idx = elements.indexOf(el);
-          // чередование: чётные индексы (0,2,4...) справа, нечётные — слева
+          // чередование: четные индексы (0,2,4...) справа, нечетные — слева
           const direction = (idx % 2 === 0) ? 'right' : 'left';
 
           // Добавляем стартовый класс для позиции
@@ -587,7 +628,7 @@ function initTypewriter() {
 
           // каскад для детей (короткие интервалы)
           children.forEach((child, cIdx) => {
-            const childDelay = delay + 60 + (cIdx * 45); // меньшие значения для более быстрой появления
+            const childDelay = delay + 60 + (cIdx * 45); // меньшие значения для более быстрой подачи
             setTimeout(() => {
               child.classList.add('visible');
             }, childDelay);
@@ -598,9 +639,10 @@ function initTypewriter() {
         });
       }, observerOptions);
 
-      // Прикрепляем observer к элементам, и сразу задаём начальные классы (чтобы не было "прыжка")
+      // Прикрепляем observer к элементам, и сразу задаем начальные классы (чтобы не было "скачка")
       elements.forEach((el, i) => {
-        // установим класс anim-side сразу (direction решим в observer при появлении)
+        // установим класс anim-side сразу (чтобы разметка не смещалась позже)
+        // direction решим в observer при появлении (но на случай FOUC — присвоим по индексу)
         const dir = (i % 2 === 0) ? 'right' : 'left';
         if (!el.classList.contains('animate-side')) {
           el.classList.add('animate-side', `from-${dir}`);
@@ -650,6 +692,7 @@ function initTypewriter() {
 
   <!-- сохраняю подключение к вашему внешнему script.js -->
   <script src="./script.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', initTypewriter);</script>
 </body>
 
 </html>

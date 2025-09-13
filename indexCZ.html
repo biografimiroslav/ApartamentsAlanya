@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Pronájem komfortních apartmánů v srdci Alanye.">
+  <meta name="description" content="Pronajměte si pohodlné apartmány v srdci Alanye.">
   <link rel="stylesheet" href="style.css">
-  <title>Apartaments Alanya</title>
+  <title>Apartmány Alanya</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -19,7 +19,7 @@
   <!-- ===== Animace (vložené, lze přesunout do animations.css) ===== -->
   <style>
     /* ----------------------------
-       Obecné: vstupy animací ze stran
+       Obecné: jednoduché animace vstupu ze stran
        ---------------------------- */
     .animate-side {
       opacity: 0;
@@ -27,7 +27,7 @@
       will-change: transform, opacity;
     }
 
-    /* startovní pozice (nastaví se dynamicky třídami) */
+    /* startovní pozice (přidávají se dynamicky třídami) */
     .animate-side.from-right { transform: translateX(50px); }
     .animate-side.from-left { transform: translateX(-50px); }
 
@@ -37,7 +37,7 @@
       transform: translateX(0);
     }
 
-    /* Dětské elementy — také vstupují z boku (nastavuje se data-direction) */
+    /* Dětské prvky — také vstupují z boku (nastavuje se data-direction) */
     .animate-child {
       opacity: 0;
       transition: transform 480ms cubic-bezier(.2,.9,.3,1), opacity 480ms ease;
@@ -65,7 +65,7 @@
       }
     }
 
-    /* Styly pro sekci rezervace */
+    /* Styly sekce rezervace */
     .quick-booking {
       padding: 40px 20px;
       display: flex;
@@ -155,9 +155,26 @@
 <body>
 
     <script>
+
+        if ('IntersectionObserver' in window) {
+  const mapIO = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.src = e.target.dataset.src;
+        obs.unobserve(e.target);
+      }
+    });
+  }, {rootMargin: '200px'});
+  document.querySelectorAll('iframe[data-src]').forEach(el => mapIO.observe(el));
+} else {
+  // fallback
+  document.querySelectorAll('iframe[data-src]').forEach(el => el.src = el.dataset.src);
+}
+
+
         // Typewriter effect
 function initTypewriter() {
-  const words = ["PŘITAŽLIVÝCH", "MODERNÍCH", "POHODLNÝCH", "STYLOVÝCH", "PRAKTICKÝCH", "PROSTORNÝCH", "ELEGANTNÍCH"];
+  const words = ["PŘITAŽLIVÝCH", "MODERNÍCH", "POHODLNÝCH", "STYLOVÝCH", "VHODNÝCH", "PROSTORNÝCH", "ELEGANTNÍCH"];
   const wordSpan = document.querySelector(".word");
 
   let wordIndex = 0;
@@ -202,7 +219,7 @@ function initTypewriter() {
       <!-- fallback: uživatelům bez videa se zobrazí obrázek (JS přidá třídu) -->
     </video>
 
-    <!-- ztmavení -->
+    <!-- překrytí -->
     <div class="overlay" aria-hidden="true"></div>
 
     <!-- fallback obrázek (pokud potřeba) -->
@@ -223,25 +240,25 @@ function initTypewriter() {
         </li>
         <li>
           <a href="./indexUA.html">
-            <img src="./img/ua.svg" alt="Ukrajinská vlajka">
+            <img src="./img/ua.svg" alt="Ukrainian flag">
             <p>UA</p>
           </a>
         </li>
         <li>
           <a href="./indexTR.html">
-          <img src="./img/tr.svg" alt="Turecká vlajka">
+          <img src="./img/tr.svg" alt="Turkish flag">
           <p>TR</p>
           </a>
         </li>
           <li>
-            <a href="">
-              <img src="./img/cz.svg" alt="Česká vlajka">
+            <a href="./indexCZ.html">
+              <img src="./img/cz.svg" alt="Czech flag">
               <p>CZ</p>
             </a>
         </li>
           <li>
             <a href="./indexRU.html">
-              <img src="./img/ru.svg" alt="Ruská vlajka">
+              <img src="./img/ru.svg" alt="Russian flag">
               <p>RU</p>
             </a>
         </li>
@@ -250,22 +267,22 @@ function initTypewriter() {
     <div class="header-content" data-animate>
 
       <ul class="location" aria-hidden="false">
-        <li><img src="./img/location.svg" alt="Poloha"></li>
+        <li><img src="./img/location.svg" alt="Lokalita"></li>
         <li>
           <p>Alanya</p>
         </li>
       </ul>
 
       <h1 class="headerMainText">
-        VYBERTE JEDEN ZE TŘÍ NAŠICH <br>
+        VYBERTE SI JEDEN ZE TŘÍ NAŠICH <br>
         <span class="word" aria-live="polite"></span> APARTMÁNŮ
       </h1>
 
-      <h2 class="headerSubText">Apartmány v samotném srdci pobřeží Alanye</h2>
+      <h2 class="headerSubText">Apartmány v samém srdci pobřeží Alanye</h2>
 
       <div class="headerButtons">
-        <!-- aktualizováno: volání scrollToSection -->
-        <button class="btn" onclick="scrollToSection('contact-callback')">Kontaktujte nás</button>
+        <!-- aktualizováno: volá scrollToSection -->
+        <button class="btn" onclick="scrollToSection('quick-booking')">Kontaktujte nás</button>
         <button class="btn" onclick="scrollToSection('quick-booking')">Rezervace</button>
       </div>
     </div>
@@ -280,19 +297,21 @@ function initTypewriter() {
       <img class="aboutIMG" src="./img/aboutApartament.png" alt="">
       <div class="aboutDiscrubtionContent">
         <h2 class="aboutSubText">
-          Bydlíme blízko a s radostí
+          Žijeme v blízkosti a rádi
           s vámi sdílíme to nejlepší.
         </h2>
         <ul class="aboutDiscrubtionList">
-          <p class="aboutDiscrubtion">Jsme místní rodina, která se s láskou stará o tři moderní a útulné apartmány.</p>
           <p class="aboutDiscrubtion">
-            Žádní zprostředkovatelé a žádné skryté poplatky — jen transparentní podmínky a péče o každého hosta.
+            Jsme rodina, která se vždy ráda postará o váš komfort a nabízí moderní a útulné apartmány.
+           </p>
+          <p class="aboutDiscrubtion">
+            Žádní zprostředkovatelé ani skryté poplatky — jen transparentní podmínky a péče o každého hosta.
           </p>
           <p class="aboutDiscrubtion">
-            Provázíme vás na každém kroku: od první zprávy po pohodlné ubytování, aby vaše dovolená nebo služební cesta proběhla bez starostí.
+            Doprovázíme vás v každém kroku: od první zprávy až po pohodlné ubytování, aby vaše dovolená nebo služební cesta proběhla bez starostí.
           </p>
         </ul>
-        <!-- aktualizováno: vede do kontaktní sekce -->
+        <!-- aktualizováno: vede na kontaktní sekci -->
         <button class="aboutButton" onclick="scrollToSection('contact-callback')">
           Kontaktujte nás
         </button>
@@ -305,35 +324,42 @@ function initTypewriter() {
     <div class="apartamentSlider">
       <button class="sliderBtn prev">&#10094;</button>
       <div class="slides">
-        <img class="apartamentIMG active" src="./img/apartament.png" alt="">
-        <img class="apartamentIMG" src="./img/aboutApartament.png" alt="">
-        <img class="apartamentIMG" src="./img/apartament.png" alt="">
+        <img class="apartamentIMG active" src="./img/apartament1_1.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_2.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_3.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_4.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_5.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_6.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_7.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_8.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_9.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_10.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_11.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_12.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament1_13.jpg" alt="" loading="lazy">
       </div>
       <button class="sliderBtn next">&#10095;</button>
     </div>
 
     <div class="apartamentContent">
-      <h2 class="apartamentText">Apartmán v Serenity Royal Beach</h2>
-      <p class="apartamentSubText">62 m² • 2 pokoje • 50 metrů od moře</p>
+      <h2 class="apartamentText">Byt v Serenity Royal Beach</h2>
+      <p class="apartamentSubText">3 pokoje • 50 m k moři</p>
       <p class="apartamentTex">
-        Klidné tóny, hodně světla, přírodní dřevo. Samostatná ložnice a
-        obývací pokoj, ergonomická kuchyň, balkon s výhledem na město. Vhodné pro
-        služební cestu nebo dlouhé procházky centrem.
+Světlé a útulné apartmány s moderním designem a přírodními materiály. Prostorné ložnice a obývací pokoj, plně vybavená kuchyň, balkon s výhledem na moře. Komplex nabízí prostor pro grilování, kino, SPA a posilovnu. Ideální pro pohodlnou dovolenou nebo produktivní práci.
       </p>
       <h2 class="apartamentPrice" data-apartment="1"><span>—</span> ₴/noc</h2>
       <ul class="apartamentAdvantages">
-        <li class="apartamentAdvantagesItem">Wi‑Fi</li>
-        <li class="apartamentAdvantagesItem">Grilovací zóna</li>
+        <li class="apartamentAdvantagesItem">Wi-Fi</li>
         <li class="apartamentAdvantagesItem">Klimatizace</li>
-        <li class="apartamentAdvantagesItem">Parkování v blízkosti</li>
+        <li class="apartamentAdvantagesItem">Podzemní parkování v areálu</li>
         <li class="apartamentAdvantagesItem">Kino</li>
                 <li class="apartamentAdvantagesItem">SPA zóna</li>
                         <li class="apartamentAdvantagesItem">Ostraha</li>
-                        <li class="apartamentAdvantagesItem">Posilovna</li>
+                        <li class="apartamentAdvantagesItem">Fitness</li>        
                         <li class="apartamentAdvantagesItem">Pracovna</li>
       </ul>
-      <div class="map">MAP</div>
-      <!-- aktualizováno: vede k rezervaci -->
+      <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8139.860436794304!2d32.04069893885478!3d36.53328267371921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc99c34fd67c41%3A0x459c3a65554cac9a!2sSerenity%20Royal%20Beach!5e0!3m2!1suk!2sua!4v1757622546157!5m2!1suk!2sua" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <!-- aktualizováno: vede na rezervaci -->
       <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Rezervovat</button>
     </div>
   </section>
@@ -342,54 +368,52 @@ function initTypewriter() {
   <section class="apartament1" data-animate>
     <div class="apartamentSlider slidesPHONE">
       <div class="slides">
-        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="">
+        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="" loading="lazy">
       </div>
       <button class="sliderBtn prev">&#10094;</button>
       <button class="sliderBtn next">&#10095;</button>
     </div>
     <div class="apartamentContent1">
-      <h2 class="apartamentText1">Apartmán v Nordic Sky</h2>
-      <p class="apartamentSubText1">62 m² • 3 pokoje • 350 metrů od moře</p>
-      <p class="apartamentTex1">Světle a prostorné apartmány s moderním interiérem a přírodními materiály. Tři pokoje včetně samostatné ložnice a obývacího pokoje, plně vybavená kuchyň, balkon s hezkým výhledem. Pouze 350 metrů k pláži, pohodlné parkování v blízkosti. Ideální pro rodinnou dovolenou nebo romantický výlet.</p>
+      <h2 class="apartamentText1">Byt v Nordic Sky</h2>
+      <p class="apartamentSubText1">3 pokoje • 350 m k moři</p>
+      <p class="apartamentTex1">Světlé a prostorné apartmány s moderním interiérem a přírodními materiály. Tři pokoje včetně samostatné ložnice a obývacího pokoje, plně vybavená kuchyň, balkon s pěkným výhledem. Pouze 350 metrů k pláži, pohodlné parkování v blízkosti. Ideální pro rodinnou dovolenou nebo romantický výlet.</p>
       <h2 class="apartamentPrice1" data-apartment="2"><span>—</span> ₴/noc</h2>
       <ul class="apartamentAdvantages1">
-        <li class="apartamentAdvantagesItem1">Wi‑Fi</li>
-        <li class="apartamentAdvantagesItem1">Grilovací zóna</li>
+        <li class="apartamentAdvantagesItem1">Wi-Fi</li>
+        <li class="apartamentAdvantagesItem1">Prostor pro grilování</li>
         <li class="apartamentAdvantagesItem1">Klimatizace</li>
-        <li class="apartamentAdvantagesItem1">Parkování v blízkosti</li>
+        <li class="apartamentAdvantagesItem1">Podzemní parkování v areálu</li>
         <li class="apartamentAdvantagesItem1">Kino</li>
                 <li class="apartamentAdvantagesItem1">SPA zóna</li>
                         <li class="apartamentAdvantagesItem1">Ostraha</li>
-                        <li class="apartamentAdvantagesItem1">Posilovna</li>
+                        <li class="apartamentAdvantagesItem1">Fitness</li>        
                         <li class="apartamentAdvantagesItem1">Pracovna</li>
       </ul>
-      <a href="https://maps.app.goo.gl/3CUWNciZda2v4NtN6" target="_blank" rel="noopener noreferrer">
-        <img class="map"src="./img/image.png" alt="">
-      </a>
-      <!-- aktualizováno: vede k rezervaci -->
+<iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3206.1081898644106!2d32.049319276265926!3d36.527384172326244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc9900172b4afb%3A0x8e767a22325dc1d9!2sNordic%20Sky!5e0!3m2!1suk!2sua!4v1757622619935!5m2!1suk!2sua" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <!-- aktualizováno: vede na rezervaci -->
       <button class="apartamentButton1" onclick="scrollToSection('quick-booking')">Rezervovat</button>
     </div>
     <div class="apartamentSlider slidesDESKT">
       <div class="slides">
-        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="">
-        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="">
+        <img class="apartamentIMG active" src="./img/apartament2_2.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_3.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_4.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_5.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_6.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_7.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_8.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_9.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_10.jpg" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament2_11.jpg" alt="" loading="lazy">
       </div>
       <button class="sliderBtn prev">&#10094;</button>
       <button class="sliderBtn next">&#10095;</button>
@@ -402,55 +426,48 @@ function initTypewriter() {
       <button class="sliderBtn prev">&#10094;</button>
       <div class="slides">
 
-        <img class="apartamentIMG active" src="./img/apartament3_1.png" alt="">
-        <img class="apartamentIMG" src="./img/apartament3_2.png" alt="">
-        <img class="apartamentIMG" src="./img/apartament3_3.png" alt="">
-        <img class="apartamentIMG" src="./img/apartament3_4.png" alt="">
-        <img class="apartamentIMG" src="./img/apartament3_5.png" alt="">
-        <img class="apartamentIMG" src="./img/apartament3_6.png" alt="">
-                <img class="apartamentIMG" src="./img/apartament3_7.png" alt="">
+        <img class="apartamentIMG active" src="./img/apartament3_1.png" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament3_2.png" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament3_3.png" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament3_4.png" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament3_5.png" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament3_6.png" alt="" loading="lazy">
+                <img class="apartamentIMG" src="./img/apartament3_7.png" alt="" loading="lazy">
       </div>
       <button class="sliderBtn next">&#10095;</button>
     </div>
 
     <div class="apartamentContent">
-      <h2 class="apartamentText">Apartmán v Nordic Sky</h2>
-      <p class="apartamentSubText">62 m² • 2 pokoje • 350 metrů od moře</p>
+      <h2 class="apartamentText">Byt v Nordic Sky</h2>
+      <p class="apartamentSubText">2 pokoje • 350 m k moři</p>
       <p class="apartamentTex">
-Světelné a útulné apartmány s moderním designem a přírodními materiály. Prostorná ložnice a obývací pokoj, plně vybavená kuchyň, balkon s výhledem na moře. Komplekt nabízí grilovací zónu, kino, SPA a posilovnu. Ideální pro pohodlnou dovolenou nebo produktivní práci.
+Světlé a útulné apartmány s moderním designem a přírodními materiály. Prostorná ložnice a obývací pokoj, plně vybavená kuchyň, balkon s výhledem na moře. Komplex nabízí prostor pro grilování, kino, SPA a posilovnu. Ideální pro pohodlnou dovolenou nebo produktivní práci.
       </p>
       <h2 class="apartamentPrice" data-apartment="3"><span>—</span> ₴/noc</h2>
       <ul class="apartamentAdvantages">
-        <li class="apartamentAdvantagesItem">Wi‑Fi</li>
-        <li class="apartamentAdvantagesItem">Grilovací zóna</li>
+        <li class="apartamentAdvantagesItem">Wi-Fi</li>
+        <li class="apartamentAdvantagesItem">Prostor pro grilování</li>
         <li class="apartamentAdvantagesItem">Klimatizace</li>
-        <li class="apartamentAdvantagesItem">Parkování v blízkosti</li>
+        <li class="apartamentAdvantagesItem">Podzemní parkování v areálu</li>
         <li class="apartamentAdvantagesItem">Kino</li>
                 <li class="apartamentAdvantagesItem">SPA zóna</li>
                         <li class="apartamentAdvantagesItem">Ostraha</li>
-                        <li class="apartamentAdvantagesItem">Posilovna</li>
+                        <li class="apartamentAdvantagesItem">Fitness</li>        
                         <li class="apartamentAdvantagesItem">Pracovna</li>
       </ul>
-      <a href="https://maps.app.goo.gl/3CUWNciZda2v4NtN6" target="_blank" rel="noopener noreferrer">
-        <img class="map"src="./img/image.png" alt="">
-      </a>
-      <!-- aktualizováno: vede k rezervaci -->
+<iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3206.1081898644106!2d32.049319276265926!3d36.527384172326244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc9900172b4afb%3A0x8e767a22325dc1d9!2sNordic%20Sky!5e0!3m2!1suk!2sua!4v1757622619935!5m2!1suk!2sua" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <!-- aktualizováno: vede na rezervaci -->
       <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Rezervovat</button>
     </div>
   </section>
 
   <!-- ====== REVIEWS ====== -->
   <section class="reviews" data-animate>
-    <h2 class="reviewsText">REFERENCE</h2>
+    <h2 class="aboutText">RECENZE</h2>
     <div class="reviewsContent">
       <div class="reviewsWrapper">
         <ul class="reviewsList">
-          <li class="reviewsItem">Moc se nám líbilo! Všechno rychlé a kvalitní.</li>
-          <li class="reviewsItem">Dobrá služba, opět se ozvu.</li>
-          <li class="reviewsItem">Vše super! Doporučuji všem.</li>
-          <li class="reviewsItem">Služby na vysoké úrovni!</li>
-          <li class="reviewsItem">Ceny příjemně překvapily, doporučuji!</li>
-          <li class="reviewsItem">Neprvní použití, vše skvělé!</li>
+          <li class="reviewsItem"></li>
         </ul>
       </div>
       <div class="reviewsButtons">
@@ -466,9 +483,9 @@ Světelné a útulné apartmány s moderním designem a přírodními materiály
       <h2 id="qb-title">REZERVACE</h2>
 
       <div class="booking-contact">
-        <p class="booking-text">Pro rezervaci apartmánu nás kontaktujte telefonicky:</p>
+        <p class="booking-text">Pro rezervaci bytu nás kontaktujte telefonicky:</p>
         <a href="tel:+380123456789" class="booking-phone">+38 (012) 345-67-89</a>
-        <p class="booking-note">Pomůžeme vám vybrat nejlepší možnost a zodpovíme všechny dotazy</p>
+        <p class="booking-note">Pomůžeme vám vybrat nejlepší možnost a odpovíme na všechny dotazy</p>
       </div>
 
     </div>
@@ -480,26 +497,26 @@ Světelné a útulné apartmány s moderním designem a přírodními materiály
       <h2 id="faq-title" class="faq-title">Často kladené dotazy</h2>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq1-answer" id="faq1">
-          Jak provést platbu? <span class="faq-toggle">+</span>
+          Jak mohu zaplatit? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq1-answer" role="region" aria-labelledby="faq1" >
-          Po potvrzení rezervace vám poskytneme několik pohodlných možností platby. Možná je také platba v hotovosti našemu zástupci při ubytování. V každém případě je požadován vratný depozit 500 €, který je při odjezdu plně navrácen.
+          Po potvrzení rezervace vám poskytneme několik pohodlných platebních metod. Možná je také platba v hotovosti našemu zástupci při příjezdu. V každém případě je požadována vratná záloha 500 €, která je plně vrácena při odjezdu.
         </div>
       </div>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq2-answer" id="faq2">
-          Jaké vybavení je k dispozici v apartmánu a v komplexu? <span class="faq-toggle">+</span>
+          Jaké vybavení je v apartmánu a komplexu? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq2-answer" role="region" aria-labelledby="faq2" >
-          Každý apartmán je plně vybaven vším potřebným pro pohodlné bydlení: televize, lednice, žehlička, myčka, pračka, kompletní souprava nádobí, klimatizace v každém pokoji a podlahové vytápění v koupelnách (v apartmánu č.1 — podlahové vytápění po celé ploše). Na území komplexu je dostupný společný internet. Pro váš odpočinek jsou připraveny krytý a venkovní bazén, sauna, hammam, římské lázně, kino a fitness.
+          Každý apartmán je plně vybaven pro pohodlný pobyt: TV, lednice, žehlička, myčka, pračka, kompletní jídelní sada, klimatizace v každém pokoji a podlahové topení v koupelnách (v apartmánu č.1 podlahové topení v celé ploše). Na území komplexu je k dispozici sdílené připojení k internetu. Pro váš odpočinek jsou k dispozici krytý a venkovní bazén, sauna, hammam, římské lázně, kino a fitness.
         </div>
       </div>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq3-answer" id="faq3">
-          Lze využívat infrastrukturu komplexu? <span class="faq-toggle">+</span>
+          Mohou hosté využívat infrastrukturu komplexu? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq3-answer" role="region" aria-labelledby="faq3">
-          Ano, všechny objekty infrastruktury v areálu komplexu jsou k dispozici obyvatelům. Pravidla užívání jsou umístěna na informační tabuli u vstupu do bloku B, kde se nacházejí apartmány.
+          Ano, všechny objekty infrastruktury v komplexu jsou k dispozici obyvatelům. Pravidla užívání jsou umístěna na informační tabuli u vchodu do bloku B, kde se apartmány nacházejí.
 <br>
 <br>
 V bloku A se nachází stolní tenis a PlayStation.
@@ -508,15 +525,15 @@ V bloku A se nachází stolní tenis a PlayStation.
 V bloku C jsou sauny a relaxační zóna.
 <br>
 <br>
-Na otevřeném prostranství komplexu je kurt, grilovací zóna a bazén s tobogány.
+Na otevřeném prostranství je kurt, prostor pro grilování a bazén se skluzavkami.
         </div>
       </div>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq4-answer" id="faq4">
-          Je poblíž apartmánů parkování? <span class="faq-toggle">+</span>
+          Je u apartmánů parkoviště? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq4-answer" role="region" aria-labelledby="faq4">
-          Ano, poblíž apartmánů je parkoviště pro hosty.
+          Ano, v blízkosti apartmánů je parkoviště pro hosty.
         </div>
       </div>
             <div class="faq-item">
@@ -524,9 +541,33 @@ Na otevřeném prostranství komplexu je kurt, grilovací zóna a bazén s tobog
           Co je v okolí kromě moře? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq5-answer" role="region" aria-labelledby="faq5">
-          Nedaleko komplexu protéká řeka Dim-Çay s malebnou promenádou. V docházkové vzdálenosti jsou restaurace, obchody a turistická centra. V blízkosti také fungují trhy v pondělí a čtvrtek. Od pláže do centra vede moderní 4 km dlouhá promenáda, po které je příjemné se projít pěšky nebo jet autobusem.
+          Nedaleko komplexu protéká řeka Dim-Çay s malebnou promenádou. V pěší dostupnosti jsou restaurace, obchody a turistické body. Trhy fungují v pondělí a ve čtvrtek. Od pláže vede moderní 4 km promenáda do centra, ideální pro procházky nebo jízdu autobusem.
+        </div>
+            <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq6-answer" id="faq6">
+          Jak se dostat do komplexu? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq6-answer" role="region" aria-labelledby="faq6">
+          Organizujeme transfery z letišť Antalya a Alanya. Hostům jsou k dispozici dvě možnosti:
+
+          <br>
+            <br>
+Soukromý transfer — 75–80 € za auto (z Antalye).
+            <br>
+            <br>
+
+Skupinový transfer — 15 € za osobu (z Antalye).
+Cena transferu z letiště Alanya bude nižší — poskytneme podrobnosti samostatně.
+            <br>
+            <br>
+
+Pokud přijedete vlastním autem nebo si pronajmete auto, k dispozici je podzemní parkoviště, které je zahrnuto v ceně ubytování.
         </div>
       </div>
+      <h2 class="faqTex">Pro další dotazy kontaktujte prosím majitele apartmánů.</h2>
+      <a href="mailto:vsevolodivcenko68@gmail.com">
+          <button class="faqButton">Kontakt</button>
+      </a>
     </div>
   </section>
 
@@ -535,18 +576,18 @@ Na otevřeném prostranství komplexu je kurt, grilovací zóna a bazén s tobog
     <div class="footer-container">
       <div class="footer-content">
         <div class="footer-section">
-          <h3>Apartaments Alanya</h3>
-          <p>Komfortní apartmány v samotném srdci pobřeží Alanye</p>
+          <h3>Apartmány Alanya</h3>
+          <p>Pohodlné apartmány v samém srdci pobřeží Alanye</p>
         </div>
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2025 Apartaments Alanya. Všechna práva vyhrazena.</p>
+        <p>&copy; 2025 Apartmány Alanya. Všechna práva vyhrazena.</p>
       </div>
     </div>
   </footer>
 
-  <!-- ====== Animace JS (IntersectionObserver + střídaní pravo/levý + kratší zpoždění) ====== -->
+  <!-- ====== Animace JS (IntersectionObserver + střídání levo/pravo + rychlejší kaskáda) ====== -->
   <script>
     (function () {
       const elements = Array.from(document.querySelectorAll('[data-animate]'));
@@ -558,7 +599,7 @@ Na otevřeném prostranství komplexu je kurt, grilovací zóna a bazén s tobog
         threshold: 0.06
       };
 
-      // Základní zpoždění mezi sekcemi (menší => rychlejší kaskáda)
+      // Základní zpoždění mezi sekcemi (menší -> rychlejší kaskáda)
       const baseDelay = 30; // ms
 
       const io = new IntersectionObserver((entries, obs) => {
@@ -569,34 +610,36 @@ Na otevřeném prostranství komplexu je kurt, grilovací zóna a bazén s tobog
           // střídání: sudé indexy (0,2,4...) zprava, liché zleva
           const direction = (idx % 2 === 0) ? 'right' : 'left';
 
-          // Přidáme startovní třídu pro pozici
+          // přidáme startovní třídu pro pozici
           el.classList.add('animate-side', `from-${direction}`);
 
-          // Přidáme data-direction pro dětské elementy pro synchronizaci směru
+          // přidáme data-direction pro dětské prvky, aby se synchronizoval směr
           const children = el.querySelectorAll('h1,h2,h3,p,img,button,li,select,input,textarea,.slides,.apartamentContent > * , .qb-container > * , .contact-card > *');
           children.forEach(child => {
             child.classList.add('animate-child');
             child.setAttribute('data-direction', direction);
           });
 
-          // viditelnost sekce s malým zpožděním podle indexu
+          // ukázání sekce s malým zpožděním podle indexu
           const delay = idx * baseDelay;
           setTimeout(() => {
             el.classList.add('visible');
           }, delay);
 
-          // kaskáda pro děti (kratší intervaly)
+          // kaskáda pro děti
           children.forEach((child, cIdx) => {
-            const childDelay = delay + 60 + (cIdx * 45);
+            const childDelay = delay + 60 + (cIdx * 45); // menší hodnoty pro rychlejší vstup
             setTimeout(() => {
               child.classList.add('visible');
             }, childDelay);
           });
 
+          // přestaneme pozorovat po zobrazení
           obs.unobserve(el);
         });
       }, observerOptions);
 
+      // připojíme observer k elementům a hned nastavíme počáteční třídy (aby nedošlo k FOUC)
       elements.forEach((el, i) => {
         const dir = (i % 2 === 0) ? 'right' : 'left';
         if (!el.classList.contains('animate-side')) {
@@ -605,6 +648,7 @@ Na otevřeném prostranství komplexu je kurt, grilovací zóna a bazén s tobog
         io.observe(el);
       });
 
+      // případ, kdy jsou elementy už viditelné při načtení
       window.addEventListener('load', () => {
         elements.forEach((el, idx) => {
           const rect = el.getBoundingClientRect();
@@ -627,7 +671,7 @@ Na otevřeném prostranství komplexu je kurt, grilovací zóna a bazén s tobog
     })();
   </script>
 
-  <!-- Jednoduchý pomocný skript pro plynulé skrolování do sekcí -->
+  <!-- Jednoduchá pomoc pro plynulé rolování -->
   <script>
     function scrollToSection(id) {
       try {
@@ -635,7 +679,7 @@ Na otevřeném prostranství komplexu je kurt, grilovací zóna a bazén s tobog
         if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
-          // pokud sekce není nalezena — fallback změnou location (funguje jako #anchor)
+          // fallback přes změnu location (funguje jako #anchor)
           location.href = '#' + id;
         }
       } catch (e) {
@@ -644,8 +688,9 @@ Na otevřeném prostranství komplexu je kurt, grilovací zóna a bazén s tobog
     }
   </script>
 
-  <!-- Zachováváme připojení k vašemu externímu script.js -->
+  <!-- připojení externího script.js (ponechte svůj script.js) -->
   <script src="./script.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', initTypewriter);</script>
 </body>
 
 </html>

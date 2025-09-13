@@ -626,9 +626,8 @@ video.background-video {
 
 .reviewsText {
   text-align: center;
-  font-size: 28px;
+  font-size: 18px;
   font-weight: 700;
-  color: #e6f0ff;
 }
 
 .reviewsWrapper {
@@ -1238,7 +1237,7 @@ textarea:focus {
   }
 
   .reviewsText {
-    font-size: 32px;
+    font-size: 18px;
   }
 
   .quick-booking h2 {
@@ -1401,6 +1400,31 @@ textarea:focus {
   padding: 30px 40px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   border: 2px solid #bee3f8;
+}
+
+.faqButton {
+      color: #ffffff;
+    text-align: center;
+    font-family: Inter;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border-radius: 8px;
+    border: 2px solid #ffffff;
+    background: transparent;
+    padding: 15px 30px;
+    width: 100%;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin: 20px auto 0;
+    display: block;
+}
+
+.faqButton:hover {
+    background: #ffffff;
+    color: #2b6cb0;
+    transform: translateY(-2px);
 }
 
 .faq-title {
