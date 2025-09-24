@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Rent comfortable apartments in the heart of Alanya.">
   <link rel="stylesheet" href="style.css">
-  <title>Apartaments Alanya</title>
+  <title>Apartments Alanya</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -16,10 +16,10 @@
   <link rel="stylesheet" href="./animations.css">
 
 
-  <!-- ===== Animations (inline; can be moved to animations.css) ===== -->
+  <!-- ===== Animations (inline, can be moved to animations.css) ===== -->
   <style>
     /* ----------------------------
-       General: side entrance animations
+       General: simple side entrance animations
        ---------------------------- */
     .animate-side {
       opacity: 0;
@@ -27,7 +27,7 @@
       will-change: transform, opacity;
     }
 
-    /* starting positions (set dynamically via classes) */
+    /* start positions (added dynamically via classes) */
     .animate-side.from-right { transform: translateX(50px); }
     .animate-side.from-left { transform: translateX(-50px); }
 
@@ -37,7 +37,7 @@
       transform: translateX(0);
     }
 
-    /* Child elements also slide a bit from the side (configured via data-direction) */
+    /* Child elements — also enter slightly from the side (configured by data-direction) */
     .animate-child {
       opacity: 0;
       transition: transform 480ms cubic-bezier(.2,.9,.3,1), opacity 480ms ease;
@@ -52,7 +52,7 @@
       transform: translateX(0);
     }
 
-    /* faster/slower modifiers if needed */
+    /* faster/slower modifiers */
     .animate-fast { transition-duration: 480ms !important; }
     .animate-slow { transition-duration: 900ms !important; }
 
@@ -65,19 +65,21 @@
       }
     }
 
-    /* Styles for quick-booking section */
+    /* Booking section styles */
     .quick-booking {
       padding: 40px 20px;
       display: flex;
       justify-content: center;
       border-radius: 10px;
       margin: 40px 20px;
+
     }
 
     .qb-container {
       width: 100%;
       max-width: 800px;
       text-align: center;
+
     }
 
     .qb-container h2 {
@@ -124,7 +126,7 @@
       line-height: 1.5;
     }
 
-    /* Responsive for booking section */
+    /* Responsive booking section */
     @media (max-width: 768px) {
       .quick-booking {
         margin: 20px 10px;
@@ -152,11 +154,27 @@
 
 <body>
 
-  <script>
-    // Typewriter effect
+    <script>
+
+        if ('IntersectionObserver' in window) {
+  const mapIO = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.src = e.target.dataset.src;
+        obs.unobserve(e.target);
+      }
+    });
+  }, {rootMargin: '200px'});
+  document.querySelectorAll('iframe[data-src]').forEach(el => mapIO.observe(el));
+} else {
+  // fallback
+  document.querySelectorAll('iframe[data-src]').forEach(el => el.src = el.dataset.src);
+}
+
+
+        // Typewriter effect
 function initTypewriter() {
   const words = ["ATTRACTIVE", "MODERN", "COMFORTABLE", "STYLISH", "CONVENIENT", "SPACIOUS", "ELEGANT"];
-
   const wordSpan = document.querySelector(".word");
 
   let wordIndex = 0;
@@ -191,14 +209,14 @@ function initTypewriter() {
 
   type();
 }
-  </script>
+    </script>
 
   <!-- ====== HEADER ====== -->
   <header class="header" id="hero" data-animate>
     <!-- video background: replace with your file -->
     <video class="background-video" autoplay muted loop playsinline>
       <source src="./img/headerBG.mp4" type="video/mp4">
-      <!-- fallback: users without video will see an image (JS adds class) -->
+      <!-- fallback: users without video will see the image (JS sets class) -->
     </video>
 
     <!-- overlay -->
@@ -207,7 +225,7 @@ function initTypewriter() {
     <!-- fallback image (if needed) -->
     <div class="video-fallback" aria-hidden="true"></div>
 
-    <!-- Content over the video -->
+    <!-- Content above the video -->
     <div class="headerLang">
       <div class="selectedLang">
         <img src="./img/gb.svg" alt="Flag">
@@ -256,7 +274,7 @@ function initTypewriter() {
       </ul>
 
       <h1 class="headerMainText">
-        CHOOSE ONE OF OUR <br>
+        CHOOSE ONE OF OUR THREE <br>
         <span class="word" aria-live="polite"></span> APARTMENTS
       </h1>
 
@@ -264,7 +282,7 @@ function initTypewriter() {
 
       <div class="headerButtons">
         <!-- updated: calls scrollToSection -->
-        <button class="btn" onclick="scrollToSection('contact-callback')">Contact us</button>
+        <button class="btn" onclick="scrollToSection('quick-booking')">Contact us</button>
         <button class="btn" onclick="scrollToSection('quick-booking')">Booking</button>
       </div>
     </div>
@@ -279,15 +297,18 @@ function initTypewriter() {
       <img class="aboutIMG" src="./img/aboutApartament.png" alt="">
       <div class="aboutDiscrubtionContent">
         <h2 class="aboutSubText">
-          We live nearby and are happy to share the best with you.
+          We live nearby and are happy
+          to share the very best with you.
         </h2>
         <ul class="aboutDiscrubtionList">
-          <p class="aboutDiscrubtion">We are a local family who lovingly maintains three modern and cozy apartments.</p>
           <p class="aboutDiscrubtion">
-            No intermediaries or hidden fees — only transparent terms and care for every guest.
+            We are a family who are always ready to take care of your comfort and provide modern and cozy apartments.
+           </p>
+          <p class="aboutDiscrubtion">
+            No middlemen or hidden fees — only transparent terms and care for every guest.
           </p>
           <p class="aboutDiscrubtion">
-            We support you at every step: from the first message to comfortable check-in, so your vacation or business trip goes without unnecessary hassle.
+            We support you at every stage: from the first message to comfortable check-in so your holiday or business trip goes smoothly.
           </p>
         </ul>
         <!-- updated: leads to contact section -->
@@ -322,20 +343,20 @@ function initTypewriter() {
 
     <div class="apartamentContent">
       <h2 class="apartamentText">Apartment in Serenity Royal Beach</h2>
-      <p class="apartamentSubText">62 m² • 2 rooms • 50 meters to the sea</p>
+      <p class="apartamentSubText">3rd floor • 3 rooms • 50 m to the sea</p>
       <p class="apartamentTex">
-Bright and cozy apartments with modern design and natural materials. A spacious bedroom and living room, a fully equipped kitchen, and a balcony with a sea view. The complex offers a barbecue area, cinema, spa, and gym. Perfect for a comfortable holiday or productive work.      </p>
+Bright and cozy apartments with modern design and natural materials. Spacious bedrooms and a living room, fully equipped kitchen, balcony with sea view. The complex offers a barbecue area, cinema, SPA and gym. Perfect for a comfortable holiday or productive work.
+      </p>
       <h2 class="apartamentPrice" data-apartment="1"><span>—</span> ₴/night</h2>
       <ul class="apartamentAdvantages">
         <li class="apartamentAdvantagesItem">Wi-Fi</li>
-        <li class="apartamentAdvantagesItem">BBQ area</li>
         <li class="apartamentAdvantagesItem">Air conditioning</li>
-        <li class="apartamentAdvantagesItem">Parking nearby</li>
+        <li class="apartamentAdvantagesItem">Underground parking on site</li>
         <li class="apartamentAdvantagesItem">Cinema</li>
-        <li class="apartamentAdvantagesItem">SPA area</li>
-        <li class="apartamentAdvantagesItem">Security</li>
-        <li class="apartamentAdvantagesItem">Gym</li>
-        <li class="apartamentAdvantagesItem">Workspace</li>
+                <li class="apartamentAdvantagesItem">SPA area</li>
+                        <li class="apartamentAdvantagesItem">Security</li>
+                        <li class="apartamentAdvantagesItem">Gym</li>        
+                        <li class="apartamentAdvantagesItem">Work room</li>
       </ul>
       <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8139.860436794304!2d32.04069893885478!3d36.53328267371921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc99c34fd67c41%3A0x459c3a65554cac9a!2sSerenity%20Royal%20Beach!5e0!3m2!1suk!2sua!4v1757622546157!5m2!1suk!2sua" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       <!-- updated: leads to booking -->
@@ -363,19 +384,19 @@ Bright and cozy apartments with modern design and natural materials. A spacious 
     </div>
     <div class="apartamentContent1">
       <h2 class="apartamentText1">Apartment in Nordic Sky</h2>
-      <p class="apartamentSubText1">62 m² • 3 rooms • 350 meters to the sea</p>
-      <p class="apartamentTex1">Bright and spacious apartments with a modern interior and natural materials. Three rooms including a separate bedroom and living room, fully equipped kitchen, balcony with a beautiful view. Only 350 meters to the beach, convenient parking nearby. Perfect for family vacations or romantic trips.</p>
+      <p class="apartamentSubText1">3rd floor • 3 rooms • 350 m to the sea</p>
+      <p class="apartamentTex1">Bright and spacious apartments with a modern interior and natural materials. Three rooms including a separate bedroom and living room, fully equipped kitchen, balcony with a good view. Only 350 meters to the beach, convenient parking nearby. Perfect for family vacations or romantic trips.</p>
       <h2 class="apartamentPrice1" data-apartment="2"><span>—</span> ₴/night</h2>
       <ul class="apartamentAdvantages1">
         <li class="apartamentAdvantagesItem1">Wi-Fi</li>
-        <li class="apartamentAdvantagesItem1">BBQ area</li>
+        <li class="apartamentAdvantagesItem1">Barbecue area</li>
         <li class="apartamentAdvantagesItem1">Air conditioning</li>
-        <li class="apartamentAdvantagesItem1">Parking nearby</li>
+        <li class="apartamentAdvantagesItem1">Underground parking on site</li>
         <li class="apartamentAdvantagesItem1">Cinema</li>
-        <li class="apartamentAdvantagesItem1">SPA area</li>
-        <li class="apartamentAdvantagesItem1">Security</li>
-        <li class="apartamentAdvantagesItem1">Gym</li>
-        <li class="apartamentAdvantagesItem1">Workspace</li>
+                <li class="apartamentAdvantagesItem1">SPA area</li>
+                        <li class="apartamentAdvantagesItem1">Security</li>
+                        <li class="apartamentAdvantagesItem1">Gym</li>        
+                        <li class="apartamentAdvantagesItem1">Work room</li>
       </ul>
 <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3206.1081898644106!2d32.049319276265926!3d36.527384172326244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc9900172b4afb%3A0x8e767a22325dc1d9!2sNordic%20Sky!5e0!3m2!1suk!2sua!4v1757622619935!5m2!1suk!2sua" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       <!-- updated: leads to booking -->
@@ -411,31 +432,30 @@ Bright and cozy apartments with modern design and natural materials. A spacious 
         <img class="apartamentIMG" src="./img/apartament3_4.png" alt="" loading="lazy">
         <img class="apartamentIMG" src="./img/apartament3_5.png" alt="" loading="lazy">
         <img class="apartamentIMG" src="./img/apartament3_6.png" alt="" loading="lazy">
-        <img class="apartamentIMG" src="./img/apartament3_7.png" alt="" loading="lazy">
+                <img class="apartamentIMG" src="./img/apartament3_7.png" alt="" loading="lazy">
       </div>
       <button class="sliderBtn next">&#10095;</button>
     </div>
 
     <div class="apartamentContent">
       <h2 class="apartamentText">Apartment in Nordic Sky</h2>
-      <p class="apartamentSubText">62 m² • 2 rooms • 350 meters to the sea</p>
+      <p class="apartamentSubText">3rd floor • 2 rooms • 350 m to the sea</p>
       <p class="apartamentTex">
-        Bright and cozy apartments with a modern design and natural materials. Spacious bedroom and living room, fully equipped kitchen, balcony with sea view. The complex offers a BBQ area, cinema, SPA and gym. Perfect for a comfortable vacation or productive work.
+Bright and cozy apartments with modern design and natural materials. Spacious bedroom and living room, fully equipped kitchen, balcony with sea view. The complex offers a barbecue area, cinema, SPA and gym. Perfect for a comfortable holiday or productive work.
       </p>
       <h2 class="apartamentPrice" data-apartment="3"><span>—</span> ₴/night</h2>
       <ul class="apartamentAdvantages">
         <li class="apartamentAdvantagesItem">Wi-Fi</li>
-        <li class="apartamentAdvantagesItem">BBQ area</li>
+        <li class="apartamentAdvantagesItem">Barbecue area</li>
         <li class="apartamentAdvantagesItem">Air conditioning</li>
-        <li class="apartamentAdvantagesItem">Parking nearby</li>
+        <li class="apartamentAdvantagesItem">Underground parking on site</li>
         <li class="apartamentAdvantagesItem">Cinema</li>
-        <li class="apartamentAdvantagesItem">SPA area</li>
-        <li class="apartamentAdvantagesItem">Security</li>
-        <li class="apartamentAdvantagesItem">Gym</li>
-        <li class="apartamentAdvantagesItem">Workspace</li>
+                <li class="apartamentAdvantagesItem">SPA area</li>
+                        <li class="apartamentAdvantagesItem">Security</li>
+                        <li class="apartamentAdvantagesItem">Gym</li>        
+                        <li class="apartamentAdvantagesItem">Work room</li>
       </ul>
 <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3206.1081898644106!2d32.049319276265926!3d36.527384172326244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc9900172b4afb%3A0x8e767a22325dc1d9!2sNordic%20Sky!5e0!3m2!1suk!2sua!4v1757622619935!5m2!1suk!2sua" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-
       <!-- updated: leads to booking -->
       <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Book now</button>
     </div>
@@ -443,21 +463,17 @@ Bright and cozy apartments with modern design and natural materials. A spacious 
 
   <!-- ====== REVIEWS ====== -->
   <section class="reviews" data-animate>
-    <h2 class="reviewsText">REVIEWS</h2>
+    <h2 class="aboutText">REVIEWS</h2>
     <div class="reviewsContent">
       <div class="reviewsWrapper">
         <ul class="reviewsList">
-          <li class="reviewsItem">Really liked it! Everything fast and high quality.</li>
-          <li class="reviewsItem">Great service, I'll contact again.</li>
-          <li class="reviewsItem">Everything is great! I recommend to everyone.</li>
-          <li class="reviewsItem">Service at a high level!</li>
-          <li class="reviewsItem">Prices pleasantly surprised, recommend!</li>
-          <li class="reviewsItem">I'm not a first-time guest, everything is excellent!</li>
+          <li class="reviewsItem"></li>
         </ul>
       </div>
       <div class="reviewsButtons">
         <button id="prevBtn">BACK</button>
         <button id="nextBtn">NEXT</button>
+        <button id="openModal" style="flex-direction: column;">WRITE A REVIEW</button> <!-- EN -->
       </div>
     </div>
   </section>
@@ -468,7 +484,7 @@ Bright and cozy apartments with modern design and natural materials. A spacious 
       <h2 id="qb-title">BOOKING</h2>
 
       <div class="booking-contact">
-        <p class="booking-text">To book an apartment, contact us by phone:</p>
+        <p class="booking-text">To book an apartment please contact us by phone:</p>
         <a href="tel:+380123456789" class="booking-phone">+38 (012) 345-67-89</a>
         <p class="booking-note">We will help you choose the best option and answer all your questions</p>
       </div>
@@ -482,35 +498,35 @@ Bright and cozy apartments with modern design and natural materials. A spacious 
       <h2 id="faq-title" class="faq-title">Frequently Asked Questions</h2>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq1-answer" id="faq1">
-          How to make a payment? <span class="faq-toggle">+</span>
+          How can I pay? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq1-answer" role="region" aria-labelledby="faq1" >
-          After confirming the booking we will provide you with several convenient payment methods. Cash payment to our representative upon check-in is also possible. In any case a refundable deposit of €500 is required, which will be fully returned upon departure.
+          After confirming the booking we will provide you with several convenient payment methods. Cash payment to our representative on arrival is also possible. A refundable security deposit of 500 € is required in any case.
         </div>
       </div>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq2-answer" id="faq2">
-          What amenities are provided in the apartment and the complex? <span class="faq-toggle">+</span>
+          What amenities are included in the apartment and complex? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq2-answer" role="region" aria-labelledby="faq2" >
-          Each apartment is fully equipped with everything necessary for comfortable living: TV, refrigerator, iron, dishwasher, washing machine, a full set of dishes, air conditioners in every room, and underfloor heating in the bathrooms (apartment #1 — underfloor heating throughout). Shared internet is available across the complex. For your leisure there are indoor and outdoor pools, sauna, hammam, Roman bath, cinema, and fitness center.
+          Each apartment is fully equipped with everything needed for a comfortable stay: TV, fridge, iron, dishwasher, washing machine, full set of dishes, air conditioners in every room, and underfloor heating in bathrooms (in apartment #1 — underfloor heating across the whole area). Shared internet is available on the complex grounds. For your leisure there are indoor and outdoor pools, sauna, hammam, Roman bath, cinema and a fitness room.
         </div>
       </div>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq3-answer" id="faq3">
-          Can I use the complex infrastructure? <span class="faq-toggle">+</span>
+          Can guests use the complex infrastructure? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq3-answer" role="region" aria-labelledby="faq3">
-          Yes, all infrastructure objects within the complex are available to residents. Rules are posted on the information board at the entrance to block B, where the apartments are located.
+          Yes, all infrastructure facilities are available to residents. Rules of use are posted on the information board at the entrance to block B where the apartments are located.
 <br>
 <br>
 Block A houses a table tennis and PlayStation.
 <br>
 <br>
-Block C — saunas and relaxation area.
+Block C contains saunas and a relaxation area.
 <br>
 <br>
-On the open territory of the complex — a court, BBQ zone and a pool with slides.
+On the open territory — a court, barbecue area and a pool with slides.
         </div>
       </div>
       <div class="faq-item">
@@ -518,37 +534,156 @@ On the open territory of the complex — a court, BBQ zone and a pool with slide
           Is there parking near the apartments? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq4-answer" role="region" aria-labelledby="faq4">
-          Yes, parking is available near the apartments.
+          Yes, guest parking is available near the apartments.
         </div>
       </div>
             <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq5-answer" id="faq5">
-          What is nearby, besides the sea? <span class="faq-toggle">+</span>
+          What is located nearby besides the sea? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq5-answer" role="region" aria-labelledby="faq5">
-          Nearby the complex flows the Dim River with a picturesque promenade. Restaurants, shops and tourist hubs are within walking distance. Local markets operate on Mondays and Thursdays. From the beach to the center there is a modern 4-km promenade, perfect for a walk or accessible by bus.
+          The Dim-Çay river with a scenic promenade flows not far from the complex. Restaurants, shops and tourist spots are within walking distance. Local markets operate on Mondays and Thursdays. A modern 4-km promenade stretches from the beach to the center and is great for walking or taking the bus.
         </div>
+            <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq6-answer" id="faq6">
+          How to get to the complex? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq6-answer" role="region" aria-labelledby="faq6">
+          We organize transfers from Antalya and Alanya airports. Guests can choose between two options:
+
+          <br>
+            <br>
+Private transfer — 75–80 € per car (from Antalya).
+            <br>
+            <br>
+
+Group transfer — 15 € per person (from Antalya).
+Transfer price from Alanya airport will be lower — we will provide details separately.
+            <br>
+            <br>
+
+If you arrive with your own car or rent one, there is an underground parking included in the price of accommodation.
+        </div>
+        <div class="faq-item">
+  <button class="faq-question" aria-expanded="false" aria-controls="faq7-answer" id="faq7">
+    Can I rent an apartment for a long term? <span class="faq-toggle">+</span>
+  </button>
+  <div class="faq-answer" id="faq7-answer" role="region" aria-labelledby="faq7">
+    Yes, our apartments are available for rental starting from 2 months. Payment is based on actual utility consumption (water, electricity) and is made to a Turkish bank account. The rental agreement is notarized.<br><br>
+    For long-term rentals, a deposit equal to one month’s rent is required and will be refunded after the contract ends.<br><br>
+    Annual prices:
+    <br>
+    Н1 – 1700 € <br>
+    Н2 – 1100 € <br>
+    Н3 – 850 € <br>
+    <br>
+    Prices may vary depending on the season. For updated pricing, please contact us.
+  </div>
+</div>
+
       </div>
+      <h2 class="faqTex">For additional questions, please contact the apartment owner.</h2>
+      <a href="mailto:vsevolodivcenko68@gmail.com">
+          <button class="faqButton">Contact</button>
+      </a>
     </div>
   </section>
+
+
+  <div id="modal" class="modal">
+  <div class="modal-content">
+    <span id="closeModal" style="color: #2b6cb0;" class="close">&times;</span>
+    <h2 style="color: #2b6cb0;">Leave your review</h2>
+    <textarea placeholder="Your review"></textarea>
+
+    <button style="
+      color: #2b6cb0;
+      font-family: Inter;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 5px;
+      border: 2px solid #2b6cb0;
+      background: #ffffff;
+      padding: 10px 20px;
+      transition: all 0.3s ease;
+    " id="submit">Submit</button>
+  </div>
+</div>
+
+
+  <script>
+    const openBtn = document.getElementById('openModal');
+const modal = document.getElementById('modal');
+const closeBtn = document.getElementById('closeModal');
+const submitBtn = document.getElementById('submit');
+
+openBtn.addEventListener('click', () => {
+  modal.style.display = 'flex';
+});
+
+closeBtn.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+window.addEventListener('click', (e) => {
+  if (e.target === modal) {
+    modal.style.display = 'none';
+  }
+});
+
+submitBtn.addEventListener('click', () => {
+  const reviewText = document.querySelector('#modal textarea').value;
+  if (reviewText.trim() === '') {
+    alert('Please enter a review');
+    return;
+  }
+  fetch('/api/add_review', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ review_text: reviewText })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.message) {
+      alert('Thank you for your review!');
+      modal.style.display = 'none';
+      document.querySelector('#modal textarea').value = '';
+    } else {
+      alert('Error: ' + data.error);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Error submitting review');
+  });
+});
+
+</script>
 
   <!-- ====== FOOTER ====== -->
   <footer class="footer" data-animate>
     <div class="footer-container">
       <div class="footer-content">
         <div class="footer-section">
-          <h3>Apartaments Alanya</h3>
+          <h3>Alanya Apartments</h3>
           <p>Comfortable apartments in the very heart of Alanya's coastline</p>
         </div>
       </div>
 
+
+
       <div class="footer-bottom">
-        <p>&copy; 2025 Apartaments Alanya. All rights reserved.</p>
+        <p>&copy; 2025 Alanya Apartments. All rights reserved.</p>
+                <p><a style="color: #E6F0FF; text-decoration: underline;" href="https://www.instagram.com/site_developments">
+          Created by Site Developments
+        </a></p>
       </div>
     </div>
   </footer>
 
-  <!-- ====== Animation JS (IntersectionObserver + left/right alternation + tight delays) ====== -->
+  <!-- ====== Animation JS (IntersectionObserver + alternate left/right + faster cascade) ====== -->
   <script>
     (function () {
       const elements = Array.from(document.querySelectorAll('[data-animate]'));
@@ -560,7 +695,7 @@ On the open territory of the complex — a court, BBQ zone and a pool with slide
         threshold: 0.06
       };
 
-      // Base delay between sections (smaller = faster cascade)
+      // Base delay between sections (smaller -> faster cascade)
       const baseDelay = 30; // ms
 
       const io = new IntersectionObserver((entries, obs) => {
@@ -568,41 +703,38 @@ On the open territory of the complex — a court, BBQ zone and a pool with slide
           if (!entry.isIntersecting) return;
           const el = entry.target;
           const idx = elements.indexOf(el);
-          // alternate: even indices (0,2,4...) from right, odd — from left
+          // alternate: even indexes (0,2,4...) from right, odd — from left
           const direction = (idx % 2 === 0) ? 'right' : 'left';
 
           // add starting class for position
           el.classList.add('animate-side', `from-${direction}`);
 
-          // add data-direction for child elements to synchronize direction
+          // add data-direction for children to sync entrance
           const children = el.querySelectorAll('h1,h2,h3,p,img,button,li,select,input,textarea,.slides,.apartamentContent > * , .qb-container > * , .contact-card > *');
           children.forEach(child => {
             child.classList.add('animate-child');
             child.setAttribute('data-direction', direction);
           });
 
-          // show section with small delay depending on index
+          // show section with a small delay depending on index
           const delay = idx * baseDelay;
           setTimeout(() => {
             el.classList.add('visible');
           }, delay);
 
-          // cascade for children (shorter intervals)
+          // cascade children
           children.forEach((child, cIdx) => {
-            const childDelay = delay + 60 + (cIdx * 45); // smaller values for faster appearance
+            const childDelay = delay + 60 + (cIdx * 45);
             setTimeout(() => {
               child.classList.add('visible');
             }, childDelay);
           });
 
-          // stop observing after show
           obs.unobserve(el);
         });
       }, observerOptions);
 
-      // attach observer to elements, and set initial classes immediately (to avoid jump)
       elements.forEach((el, i) => {
-        // set animate-side immediately (to avoid FOUC)
         const dir = (i % 2 === 0) ? 'right' : 'left';
         if (!el.classList.contains('animate-side')) {
           el.classList.add('animate-side', `from-${dir}`);
@@ -610,7 +742,6 @@ On the open territory of the complex — a court, BBQ zone and a pool with slide
         io.observe(el);
       });
 
-      // handle elements already in view on load
       window.addEventListener('load', () => {
         elements.forEach((el, idx) => {
           const rect = el.getBoundingClientRect();
@@ -633,7 +764,7 @@ On the open territory of the complex — a court, BBQ zone and a pool with slide
     })();
   </script>
 
-  <!-- Simple smooth scroll helper -->
+  <!-- Smooth scroll helper -->
   <script>
     function scrollToSection(id) {
       try {
@@ -641,7 +772,6 @@ On the open territory of the complex — a court, BBQ zone and a pool with slide
         if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
-          // if section not found — fallback to location hash
           location.href = '#' + id;
         }
       } catch (e) {
@@ -650,8 +780,9 @@ On the open territory of the complex — a court, BBQ zone and a pool with slide
     }
   </script>
 
-  <!-- keep external script connection -->
+  <!-- external script connection (keep your script.js) -->
   <script src="./script.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', initTypewriter);</script>
 </body>
 
 </html>

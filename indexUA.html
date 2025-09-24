@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Rent comfortable apartments in the heart of Alanya.">
   <link rel="stylesheet" href="style.css">
-  <title>Apartaments Alanya</title>
+  <title>Alanya Apartaments</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -23,13 +23,18 @@
        ---------------------------- */
     .animate-side {
       opacity: 0;
-      transition: transform 400ms cubic-bezier(.2,.9,.3,1), opacity 600ms ease;
+      transition: transform 400ms cubic-bezier(.2, .9, .3, 1), opacity 600ms ease;
       will-change: transform, opacity;
     }
 
     /* стартові позиції (зададуться динамічно через класи) */
-    .animate-side.from-right { transform: translateX(50px); }
-    .animate-side.from-left { transform: translateX(-50px); }
+    .animate-side.from-right {
+      transform: translateX(50px);
+    }
+
+    .animate-side.from-left {
+      transform: translateX(-50px);
+    }
 
     /* visible */
     .animate-side.visible {
@@ -40,12 +45,17 @@
     /* Дочірні елементи — теж входять трохи зі сторони (налаштовуються data-direction) */
     .animate-child {
       opacity: 0;
-      transition: transform 480ms cubic-bezier(.2,.9,.3,1), opacity 480ms ease;
+      transition: transform 480ms cubic-bezier(.2, .9, .3, 1), opacity 480ms ease;
       will-change: transform, opacity;
     }
 
-    .animate-child[data-direction="right"] { transform: translateX(30px); }
-    .animate-child[data-direction="left"] { transform: translateX(-30px); }
+    .animate-child[data-direction="right"] {
+      transform: translateX(30px);
+    }
+
+    .animate-child[data-direction="left"] {
+      transform: translateX(-30px);
+    }
 
     .animate-child.visible {
       opacity: 1;
@@ -53,12 +63,19 @@
     }
 
     /* швидші/повільні модифікатори за потреби */
-    .animate-fast { transition-duration: 480ms !important; }
-    .animate-slow { transition-duration: 900ms !important; }
+    .animate-fast {
+      transition-duration: 480ms !important;
+    }
+
+    .animate-slow {
+      transition-duration: 900ms !important;
+    }
 
     /* reduced motion */
     @media (prefers-reduced-motion: reduce) {
-      .animate-side, .animate-child {
+
+      .animate-side,
+      .animate-child {
         transition: none !important;
         transform: none !important;
         opacity: 1 !important;
@@ -79,7 +96,7 @@
       width: 100%;
       max-width: 800px;
       text-align: center;
-      
+
     }
 
     .qb-container h2 {
@@ -154,62 +171,62 @@
 
 <body>
 
-    <script>
+  <script>
 
-        if ('IntersectionObserver' in window) {
-  const mapIO = new IntersectionObserver((entries, obs) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.src = e.target.dataset.src;
-        obs.unobserve(e.target);
-      }
-    });
-  }, {rootMargin: '200px'});
-  document.querySelectorAll('iframe[data-src]').forEach(el => mapIO.observe(el));
-} else {
-  // fallback
-  document.querySelectorAll('iframe[data-src]').forEach(el => el.src = el.dataset.src);
-}
-
-
-        // Typewriter effect
-function initTypewriter() {
-  const words = ["ПРИВАБЛИВИХ", "СУЧАСНИХ", "КОМФОРТНИХ", "СТИЛЬНИХ", "ЗРУЧНИХ", "ПРОСТОРИХ", "ЕЛЕГАНТНИХ"];
-  const wordSpan = document.querySelector(".word");
-
-  let wordIndex = 0;
-  let charIndex = 0;
-  let deleting = false;
-  let delay = 100;
-
-  function type() {
-    const currentWord = words[wordIndex];
-
-    if (!deleting) {
-      wordSpan.textContent = currentWord.slice(0, charIndex + 1);
-      charIndex++;
-
-      if (charIndex === currentWord.length) {
-        deleting = true;
-        setTimeout(type, 1000);
-        return;
-      }
+    if ('IntersectionObserver' in window) {
+      const mapIO = new IntersectionObserver((entries, obs) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.src = e.target.dataset.src;
+            obs.unobserve(e.target);
+          }
+        });
+      }, { rootMargin: '200px' });
+      document.querySelectorAll('iframe[data-src]').forEach(el => mapIO.observe(el));
     } else {
-      wordSpan.textContent = currentWord.slice(0, charIndex - 1);
-      charIndex--;
-
-      if (charIndex === 0) {
-        deleting = false;
-        wordIndex = (wordIndex + 1) % words.length;
-      }
+      // fallback
+      document.querySelectorAll('iframe[data-src]').forEach(el => el.src = el.dataset.src);
     }
 
-    setTimeout(type, deleting ? 50 : delay);
-  }
 
-  type();
-}
-    </script>
+    // Typewriter effect
+    function initTypewriter() {
+      const words = ["ПРИВАБЛИВИХ", "СУЧАСНИХ", "КОМФОРТНИХ", "СТИЛЬНИХ", "ЗРУЧНИХ", "ПРОСТОРИХ", "ЕЛЕГАНТНИХ"];
+      const wordSpan = document.querySelector(".word");
+
+      let wordIndex = 0;
+      let charIndex = 0;
+      let deleting = false;
+      let delay = 100;
+
+      function type() {
+        const currentWord = words[wordIndex];
+
+        if (!deleting) {
+          wordSpan.textContent = currentWord.slice(0, charIndex + 1);
+          charIndex++;
+
+          if (charIndex === currentWord.length) {
+            deleting = true;
+            setTimeout(type, 1000);
+            return;
+          }
+        } else {
+          wordSpan.textContent = currentWord.slice(0, charIndex - 1);
+          charIndex--;
+
+          if (charIndex === 0) {
+            deleting = false;
+            wordIndex = (wordIndex + 1) % words.length;
+          }
+        }
+
+        setTimeout(type, deleting ? 50 : delay);
+      }
+
+      type();
+    }
+  </script>
 
   <!-- ====== HEADER ====== -->
   <header class="header" id="hero" data-animate>
@@ -246,21 +263,21 @@ function initTypewriter() {
         </li>
         <li>
           <a href="./indexTR.html">
-          <img src="./img/tr.svg" alt="Turkish flag">
-          <p>TR</p>
+            <img src="./img/tr.svg" alt="Turkish flag">
+            <p>TR</p>
           </a>
         </li>
-          <li>
-            <a href="./indexCZ.html">
-              <img src="./img/cz.svg" alt="Turkish flag">
-              <p>CZ</p>
-            </a>
+        <li>
+          <a href="./indexCZ.html">
+            <img src="./img/cz.svg" alt="Turkish flag">
+            <p>CZ</p>
+          </a>
         </li>
-          <li>
-            <a href="./indexRU.html">
-              <img src="./img/ru.svg" alt="Turkish flag">
-              <p>RU</p>
-            </a>
+        <li>
+          <a href="./indexRU.html">
+            <img src="./img/ru.svg" alt="Turkish flag">
+            <p>RU</p>
+          </a>
         </li>
       </ul>
     </div>
@@ -301,16 +318,19 @@ function initTypewriter() {
           ділимося з вами всім найкращим.
         </h2>
         <ul class="aboutDiscrubtionList">
-          <p class="aboutDiscrubtion">Ми — місцева сім'я, яка з любов'ю доглядає три сучасні та затишні квартири. </p>
+          <p class="aboutDiscrubtion">
+            Ми — сім'я, яка завжди готова подбати про ваш комфорт і надати сучасні та затишні квартири.
+          </p>
           <p class="aboutDiscrubtion">
             Жодних посередників чи прихованих платежів — лише прозорі умови та турбота про кожного гостя.
           </p>
           <p class="aboutDiscrubtion">
-            Ми супроводжуємо вас на кожному етапі: від першого повідомлення до комфортного заселення, щоб ваш відпочинок чи відрядження пройшли без зайвих клопотів.
+            Ми супроводжуємо вас на кожному етапі: від першого повідомлення до комфортного заселення, щоб ваш відпочинок
+            чи відрядження пройшли без зайвих клопотів.
           </p>
         </ul>
         <!-- оновлено: веде до секції контакту -->
-        <button class="aboutButton" onclick="scrollToSection('contact-callback')">
+        <button class="aboutButton" onclick="scrollToSection('quick-booking')">
           Зв'язатися з нами
         </button>
       </div>
@@ -341,23 +361,26 @@ function initTypewriter() {
 
     <div class="apartamentContent">
       <h2 class="apartamentText">Квартира у Serenity Royal Beach</h2>
-      <p class="apartamentSubText">62 м² • 2 кімнати • 50 метрів до моря</p>
+      <p class="apartamentSubText">3 поверх • 3 кімнати • 50 метрів до моря</p>
       <p class="apartamentTex">
-Світлі та затишні апартаменти з сучасним дизайном та натуральними матеріалами. Простора спальня та вітальня, повністю обладнана кухня, балкон із видом на море. Комплекс пропонує зону барбекю, кінотеатр, СПА та тренажерний зал. Ідеально підходить для комфортного відпочинку або продуктивної роботи.
+        Світлі та затишні апартаменти з сучасним дизайном та натуральними матеріалами. Просторі спальні та вітальня,
+        повністю обладнана кухня, балкон із видом на море. Комплекс пропонує зону барбекю, кінотеатр, СПА та тренажерний
+        зал. Ідеально підходить для комфортного відпочинку або продуктивної роботи.
       </p>
       <h2 class="apartamentPrice" data-apartment="1"><span>—</span> ₴/ніч</h2>
       <ul class="apartamentAdvantages">
         <li class="apartamentAdvantagesItem">Wi-Fi</li>
-        <li class="apartamentAdvantagesItem">Зона барбекю</li>
         <li class="apartamentAdvantagesItem">Кондиціонер</li>
-        <li class="apartamentAdvantagesItem">Паркінг поруч</li>
+        <li class="apartamentAdvantagesItem">Підземний паркінг на території</li>
         <li class="apartamentAdvantagesItem">Кінотеатр</li>
-                <li class="apartamentAdvantagesItem">СПА зона</li>
-                        <li class="apartamentAdvantagesItem">Охорона</li>
-                        <li class="apartamentAdvantagesItem">Тренажерний зал</li>        
-                        <li class="apartamentAdvantagesItem">Робочій кабінет</li>
+        <li class="apartamentAdvantagesItem">СПА зона</li>
+        <li class="apartamentAdvantagesItem">Охорона</li>
+        <li class="apartamentAdvantagesItem">Тренажерний зал</li>
+        <li class="apartamentAdvantagesItem">Робочій кабінет</li>
       </ul>
-      <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8139.860436794304!2d32.04069893885478!3d36.53328267371921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc99c34fd67c41%3A0x459c3a65554cac9a!2sSerenity%20Royal%20Beach!5e0!3m2!1suk!2sua!4v1757622546157!5m2!1suk!2sua" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <iframe class="map"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8139.860436794304!2d32.04069893885478!3d36.53328267371921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc99c34fd67c41%3A0x459c3a65554cac9a!2sSerenity%20Royal%20Beach!5e0!3m2!1suk!2sua!4v1757622546157!5m2!1suk!2sua"
+        style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       <!-- оновлено: веде до бронювання -->
       <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Забронювати</button>
     </div>
@@ -383,21 +406,25 @@ function initTypewriter() {
     </div>
     <div class="apartamentContent1">
       <h2 class="apartamentText1">Квартира у Nordic Sky</h2>
-      <p class="apartamentSubText1">62 м² • 3 кімнати • 350 метрів до моря</p>
-      <p class="apartamentTex1">Світлі та просторі апартаменти з сучасним інтер'єром і натуральними матеріалами. Три кімнати, включаючи окрему спальню та вітальню, повністю обладнана кухня, балкон із гарним видом. Лише 350 метрів до пляжу, зручний паркінг поруч. Ідеально підходить для сімейного відпочинку або романтичних подорожей.</p>
+      <p class="apartamentSubText1">3 поверх • 3 кімнати • 350 метрів до моря</p>
+      <p class="apartamentTex1">Світлі та просторі апартаменти з сучасним інтер'єром і натуральними матеріалами. Три
+        кімнати, включаючи окрему спальню та вітальню, повністю обладнана кухня, балкон із гарним видом. Лише 350 метрів
+        до пляжу, зручний паркінг поруч. Ідеально підходить для сімейного відпочинку або романтичних подорожей.</p>
       <h2 class="apartamentPrice1" data-apartment="2"><span>—</span> ₴/ніч</h2>
       <ul class="apartamentAdvantages1">
         <li class="apartamentAdvantagesItem1">Wi-Fi</li>
         <li class="apartamentAdvantagesItem1">Зона барбекю</li>
         <li class="apartamentAdvantagesItem1">Кондиціонер</li>
-        <li class="apartamentAdvantagesItem1">Паркінг поруч</li>
+        <li class="apartamentAdvantagesItem1">Підземний паркінг на території</li>
         <li class="apartamentAdvantagesItem1">Кінотеатр</li>
-                <li class="apartamentAdvantagesItem1">СПА зона</li>
-                        <li class="apartamentAdvantagesItem1">Охорона</li>
-                        <li class="apartamentAdvantagesItem1">Тренажерний зал</li>        
-                        <li class="apartamentAdvantagesItem1">Робочій кабінет</li>
+        <li class="apartamentAdvantagesItem1">СПА зона</li>
+        <li class="apartamentAdvantagesItem1">Охорона</li>
+        <li class="apartamentAdvantagesItem1">Тренажерний зал</li>
+        <li class="apartamentAdvantagesItem1">Робочій кабінет</li>
       </ul>
-<iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3206.1081898644106!2d32.049319276265926!3d36.527384172326244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc9900172b4afb%3A0x8e767a22325dc1d9!2sNordic%20Sky!5e0!3m2!1suk!2sua!4v1757622619935!5m2!1suk!2sua" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <iframe class="map"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3206.1081898644106!2d32.049319276265926!3d36.527384172326244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc9900172b4afb%3A0x8e767a22325dc1d9!2sNordic%20Sky!5e0!3m2!1suk!2sua!4v1757622619935!5m2!1suk!2sua"
+        style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       <!-- оновлено: веде до бронювання -->
       <button class="apartamentButton1" onclick="scrollToSection('quick-booking')">Забронювати</button>
     </div>
@@ -431,30 +458,34 @@ function initTypewriter() {
         <img class="apartamentIMG" src="./img/apartament3_4.png" alt="" loading="lazy">
         <img class="apartamentIMG" src="./img/apartament3_5.png" alt="" loading="lazy">
         <img class="apartamentIMG" src="./img/apartament3_6.png" alt="" loading="lazy">
-                <img class="apartamentIMG" src="./img/apartament3_7.png" alt="" loading="lazy">
+        <img class="apartamentIMG" src="./img/apartament3_7.png" alt="" loading="lazy">
       </div>
       <button class="sliderBtn next">&#10095;</button>
     </div>
 
     <div class="apartamentContent">
       <h2 class="apartamentText">Квартира у Nordic Sky</h2>
-      <p class="apartamentSubText">62 м² • 2 кімнати • 350 метрів до моря</p>
+      <p class="apartamentSubText">3 поверх • 2 кімнати • 350 метрів до моря</p>
       <p class="apartamentTex">
-Світлі та затишні апартаменти з сучасним дизайном і натуральними матеріалами. Простора спальня та вітальня, повністю обладнана кухня, балкон із видом на море. Комплекс пропонує зону барбекю, кінотеатр, СПА та тренажерний зал. Ідеально підходить для комфортного відпочинку або продуктивної роботи.
+        Світлі та затишні апартаменти з сучасним дизайном і натуральними матеріалами. Простора спальня та вітальня,
+        повністю обладнана кухня, балкон із видом на море. Комплекс пропонує зону барбекю, кінотеатр, СПА та тренажерний
+        зал. Ідеально підходить для комфортного відпочинку або продуктивної роботи.
       </p>
       <h2 class="apartamentPrice" data-apartment="3"><span>—</span> ₴/ніч</h2>
       <ul class="apartamentAdvantages">
         <li class="apartamentAdvantagesItem">Wi-Fi</li>
         <li class="apartamentAdvantagesItem">Зона барбекю</li>
         <li class="apartamentAdvantagesItem">Кондиціонер</li>
-        <li class="apartamentAdvantagesItem">Паркінг поруч</li>
+        <li class="apartamentAdvantagesItem">Підземний паркінг на території</li>
         <li class="apartamentAdvantagesItem">Кінотеатр</li>
-                <li class="apartamentAdvantagesItem">СПА зона</li>
-                        <li class="apartamentAdvantagesItem">Охорона</li>
-                        <li class="apartamentAdvantagesItem">Тренажерний зал</li>        
-                        <li class="apartamentAdvantagesItem">Робочій кабінет</li>
+        <li class="apartamentAdvantagesItem">СПА зона</li>
+        <li class="apartamentAdvantagesItem">Охорона</li>
+        <li class="apartamentAdvantagesItem">Тренажерний зал</li>
+        <li class="apartamentAdvantagesItem">Робочій кабінет</li>
       </ul>
-<iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3206.1081898644106!2d32.049319276265926!3d36.527384172326244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc9900172b4afb%3A0x8e767a22325dc1d9!2sNordic%20Sky!5e0!3m2!1suk!2sua!4v1757622619935!5m2!1suk!2sua" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <iframe class="map"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3206.1081898644106!2d32.049319276265926!3d36.527384172326244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc9900172b4afb%3A0x8e767a22325dc1d9!2sNordic%20Sky!5e0!3m2!1suk!2sua!4v1757622619935!5m2!1suk!2sua"
+        style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       <!-- оновлено: веде до бронювання -->
       <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Забронювати</button>
     </div>
@@ -462,38 +493,43 @@ function initTypewriter() {
 
   <!-- ====== REVIEWS ====== -->
   <section class="reviews" data-animate>
-    <h2 class="reviewsText">ВІДГУКИ</h2>
+    <h2 class="aboutText">ВІДГУКИ</h2>
     <div class="reviewsContent">
       <div class="reviewsWrapper">
         <ul class="reviewsList">
-          <li class="reviewsItem">Дуже сподобалось! Все швидко і якісно.</li>
-          <li class="reviewsItem">Гарний сервіс, буду звертатись ще.</li>
-          <li class="reviewsItem">Все супер! Рекомендую всім.</li>
-          <li class="reviewsItem">Обслуговування на високому рівні!</li>
-          <li class="reviewsItem">Ціни приємно здивували, рекомендую!</li>
-          <li class="reviewsItem">Користуюсь вже не вперше, все чудово!</li>
+          <li class="reviewsItem"></li>
         </ul>
       </div>
       <div class="reviewsButtons">
         <button id="prevBtn">НАЗАД</button>
         <button id="nextBtn">ВПЕРЕД</button>
+        <button style="flex-direction: column;" id="openModal">НАПИСАТИ ВІДГУК</button> <!-- EN -->
       </div>
     </div>
   </section>
+
+
 
   <!-- ====== CONTACT FOR BOOKING ====== -->
-  <section id="quick-booking" class="quick-booking" aria-labelledby="qb-title" data-animate>
-    <div class="qb-container">
-      <h2 id="qb-title">БРОНЮВАННЯ</h2>
+<section id="quick-booking" class="quick-booking" aria-labelledby="qb-title" data-animate>
+  <div class="qb-container">
+    <h2 id="qb-title">БРОНЮВАННЯ</h2>
 
-      <div class="booking-contact">
-        <p class="booking-text">Для бронювання квартири зв'яжіться з нами за телефоном:</p>
-        <a href="tel:+380123456789" class="booking-phone">+38 (012) 345-67-89</a>
-        <p class="booking-note">Ми допоможемо вам обрати найкращий варіант та відповімо на всі питання</p>
+    <div class="booking-contact">
+      <p class="booking-text">Для бронювання квартири зв'яжіться з нами за телефоном:</p>
+      <a href="#" class="booking-phone" id="phoneLink">+38 (012) 345-67-89</a>
+
+      <div class="messenger-buttons" style="margin-top: 15px; display: flex; gap: 10px;">
+        <a href="#" target="_blank" id="whatsappBtn" style="text-decoration: none;">WhatsApp</a>
+        <a href="#" target="_blank" id="telegramBtn" style="text-decoration: none;">Telegram</a>
+        <a href="#" target="_blank" id="viberBtn" style="text-decoration: none;">Viber</a>
       </div>
 
+      <p class="booking-note">Ми допоможемо вам обрати найкращий варіант та відповімо на всі питання</p>
     </div>
-  </section>
+  </div>
+</section>
+
 
   <!-- ====== FAQ ====== -->
   <section id="faq" class="faq" aria-labelledby="faq-title" data-animate>
@@ -503,16 +539,22 @@ function initTypewriter() {
         <button class="faq-question" aria-expanded="false" aria-controls="faq1-answer" id="faq1">
           Як здійснити оплату? <span class="faq-toggle">+</span>
         </button>
-        <div class="faq-answer" id="faq1-answer" role="region" aria-labelledby="faq1" >
-          Після узгодження бронювання ми надамо вам кілька зручних способів оплати. Також можлива оплата готівкою нашому представнику під час заселення. У будь-якому випадку обов’язковою є заставна сума 500 €, яка повністю повертається при виїзді.
+        <div class="faq-answer" id="faq1-answer" role="region" aria-labelledby="faq1">
+          Після узгодження бронювання ми надамо вам кілька зручних способів оплати. Також можлива оплата готівкою нашому
+          представнику під час заселення. У будь-якому випадку обов’язковою є заставна сума 500 €, яка повністю
+          повертається при виїзді.
         </div>
       </div>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq2-answer" id="faq2">
           Які зручності передбачені в житлі та комплексі? <span class="faq-toggle">+</span>
         </button>
-        <div class="faq-answer" id="faq2-answer" role="region" aria-labelledby="faq2" >
-          Кожні апартаменти повністю укомплектовані всім необхідним для комфортного проживання: телевізор, холодильник, праска, посудомийна машина, пральна машина, повний набір посуду, кондиціонери в кожній кімнаті, а також тепла підлога у ванних кімнатах (у квартирі №1 — тепла підлога по всій площі). На території комплексу доступний загальний інтернет. Для вашого відпочинку передбачено внутрішній та відкритий басейни, сауна, хамам, римська лазня, кінотеатр та фітнес-зал.
+        <div class="faq-answer" id="faq2-answer" role="region" aria-labelledby="faq2">
+          Кожні апартаменти повністю укомплектовані всім необхідним для комфортного проживання: телевізор, холодильник,
+          праска, посудомийна машина, пральна машина, повний набір посуду, кондиціонери в кожній кімнаті, а також тепла
+          підлога у ванних кімнатах (у квартирі №1 — тепла підлога по всій площі). На території комплексу доступний
+          загальний інтернет. Для вашого відпочинку передбачено внутрішній та відкритий басейни, сауна, хамам, римська
+          лазня, кінотеатр та фітнес-зал.
         </div>
       </div>
       <div class="faq-item">
@@ -520,16 +562,17 @@ function initTypewriter() {
           Чи можна користуватись інфраструктурою комплексу? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq3-answer" role="region" aria-labelledby="faq3">
-          Так, усі об’єкти інфраструктури на території комплексу доступні для мешканців. Правила користування розміщені на інформаційній дошці при вході в блок B, де знаходяться квартири.
-<br>
-<br>
-У блоці A розташовані тенісний стіл та PlayStation.
-<br>
-<br>
-У блоці C — сауни та зона релаксу.
-<br>
-<br>
-На відкритій території комплексу — корт, зона барбекю та басейн із гірками.
+          Так, усі об’єкти інфраструктури на території комплексу доступні для мешканців. Правила користування розміщені
+          на інформаційній дошці при вході в блок B, де знаходяться квартири.
+          <br>
+          <br>
+          У блоці A розташовані тенісний стіл та PlayStation.
+          <br>
+          <br>
+          У блоці C — сауни та зона релаксу.
+          <br>
+          <br>
+          На відкритій території комплексу — корт, зона барбекю та басейн із гірками.
         </div>
       </div>
       <div class="faq-item">
@@ -540,33 +583,155 @@ function initTypewriter() {
           Так, поруч з квартирами є паркінг для гостей.
         </div>
       </div>
-            <div class="faq-item">
+      <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq5-answer" id="faq5">
           Що розташоване поблизу, окрім моря? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq5-answer" role="region" aria-labelledby="faq5">
-          Неподалік комплексу протікає річка Дим-Чай з мальовничою набережною. У кроковій доступності знаходяться ресторани, магазини та туристичні осередки. Поруч також працюють ринки у понеділок та четвер. Від пляжу до центру простягається сучасна 4-кілометрова набережна, якою зручно прогулятись пішки або доїхати автобусом.
+          Неподалік комплексу протікає річка Дим-Чай з мальовничою набережною. У кроковій доступності знаходяться
+          ресторани, магазини та туристичні осередки. Поруч також працюють ринки у понеділок та четвер. Від пляжу до
+          центру простягається сучасна 4-кілометрова набережна, якою зручно прогулятись пішки або доїхати автобусом.
         </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq6-answer" id="faq6">
+            Як дістатися до комплексу? <span class="faq-toggle">+</span>
+          </button>
+          <div class="faq-answer" id="faq6-answer" role="region" aria-labelledby="faq6">
+            Ми організовуємо трансфер з аеропортів Анталії та Аланії. Для гостей доступні два варіанти:
+
+            <br>
+            <br>
+            Індивідуальний трансфер — 75–80 € за машину (з Анталії).
+            <br>
+            <br>
+
+            Груповий трансфер — 15 € з людини (з Анталії).
+            Вартість трансферу з аеропорту Аланії буде нижчою — ми надамо деталі окремо.
+            <br>
+            <br>
+
+            Також, якщо ви приїжджаєте власним авто чи берете автомобіль в оренду, для вашої зручності є підземний
+            паркінг, який входить у вартість проживання.
+          </div>
+        </div>
+
+
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq7-answer" id="faq7">
+            Чи можна орендувати квартиру на тривалий термін? <span class="faq-toggle">+</span>
+          </button>
+          <div class="faq-answer" id="faq7-answer" role="region" aria-labelledby="faq7">
+            Так, наші квартири доступні для оренди від 2 місяця. Оплата здійснюється за фактом споживання комунальних
+            послуг (вода, електрика) і проводиться на рахунок турецького банку. Укладання договору здійснюється
+            нотаріально.<br><br>
+            При оренді на довготривалий термін сплачується депозит у розмірі місячної оплати, який повертається після
+            закінчення договору.<br><br>
+            Ціни на рік:
+            <br>
+            Н1 – 1700 € <br>
+            Н2 – 1100 € <br>
+            Н3 – 850 € <br>
+            <br>
+            Ціни можуть змінюватися залежно від сезону. Для уточнення актуальної вартості будь ласка, зв’яжіться з нами.
+          </div>
+        </div>
+        <h2 class="faqTex">За додатковими питаннями звертайтесь до власника апартаментів.</h2>
+        <a href="mailto:vsevolodivcenko68@gmail.com">
+          <button class="faqButton">Зв'язатися</button>
+        </a>
       </div>
-    </div>
   </section>
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span id="closeModal" style="color: #2b6cb0;" class="close">&times;</span>
+      <h2 style="color: #2b6cb0;">Залиште свій відгук</h2>
+      <textarea placeholder="Ваш відгук"></textarea>
+
+      <button style="
+        color: #2b6cb0;
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 5px;
+  border: 2px solid #2b6cb0;
+  background: #ffffff;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+      
+      " id="submit">Відправити</button>
+    </div>
+  </div>
 
   <!-- ====== FOOTER ====== -->
   <footer class="footer" data-animate>
     <div class="footer-container">
       <div class="footer-content">
         <div class="footer-section">
-          <h3>Apartaments Alanya</h3>
+          <h3>Alanya Apartments</h3>
           <p>Комфортні квартири в самому серці узбережжя Аланії</p>
         </div>
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2025 Apartaments Alanya. Усі права захищені.</p>
+        <p>&copy; 2025 Alanya Apartments. Усі права захищені.</p>
+        <p><a style="color: #E6F0FF; text-decoration: underline;" href="https://www.instagram.com/site_developments">
+            Created by Site Developments
+          </a></p>
       </div>
     </div>
   </footer>
 
+  <script>
+    const openBtn = document.getElementById('openModal');
+    const modal = document.getElementById('modal');
+    const closeBtn = document.getElementById('closeModal');
+    const submitBtn = document.getElementById('submit');
+
+    openBtn.addEventListener('click', () => {
+      modal.style.display = 'flex';
+    });
+
+    closeBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+    submitBtn.addEventListener('click', () => {
+      const reviewText = document.querySelector('#modal textarea').value;
+      if (reviewText.trim() === '') {
+        alert('Будь ласка, введіть відгук');
+        return;
+      }
+      fetch('/api/add_review', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ review_text: reviewText })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message) {
+            alert('Дякуємо за відгук!');
+            modal.style.display = 'none';
+            document.querySelector('#modal textarea').value = '';
+          } else {
+            alert('Помилка: ' + data.error);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Помилка при надсиланні відгуку');
+        });
+    });
+
+  </script>
   <!-- ====== Анімаційний JS (IntersectionObserver + чергування ліво/право + менші затримки) ====== -->
   <script>
     (function () {

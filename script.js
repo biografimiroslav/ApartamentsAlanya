@@ -23,7 +23,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Load prices from database
   loadPricesFromDatabase();
+
+  // Load phone number from database
+  loadPhoneFromDatabase();
+
+  // Load reviews from database
+  loadReviewsFromDatabase();
 });
+
+// Base URL for API calls - relative to current domain
+const API_BASE_URL = '';
 
 // Animation functions
 function initAnimations() {
@@ -220,7 +229,7 @@ function getCurrentLanguage() {
 // Function to load prices from database
 function loadPricesFromDatabase() {
   const lang = getCurrentLanguage();
-  fetch('/api/prices?lang=' + lang)
+  fetch(API_BASE_URL + '/api/prices?lang=' + lang)
     .then(response => response.json())
     .then(data => {
       // Update apartment prices on the page
@@ -229,6 +238,36 @@ function loadPricesFromDatabase() {
     .catch(error => {
       console.error('Error loading prices:', error);
       // Prices will remain as default values if API fails
+    });
+}
+
+// Function to load phone number from database
+function loadPhoneFromDatabase() {
+  const lang = getCurrentLanguage();
+  fetch(API_BASE_URL + '/api/phone?lang=' + lang)
+    .then(response => response.json())
+    .then(data => {
+      // Update phone number on the page
+      updatePhoneNumber(data.phone_number);
+    })
+    .catch(error => {
+      console.error('Error loading phone:', error);
+      // Phone will remain as default value if API fails
+    });
+}
+
+// Function to load reviews from database
+function loadReviewsFromDatabase() {
+  const lang = getCurrentLanguage();
+  fetch(API_BASE_URL + '/api/reviews?lang=' + lang)
+    .then(response => response.json())
+    .then(data => {
+      // Update reviews on the page
+      updateReviews(data.reviews);
+    })
+    .catch(error => {
+      console.error('Error loading reviews:', error);
+      // Reviews will remain as default values if API fails
     });
 }
 
@@ -264,9 +303,6 @@ function updateApartmentPrices(prices) {
         // Extract numeric price for data-price attribute
         const price2 = prices.apartament2.replace(/[^\d]/g, '');
         option.setAttribute('data-price', price2);
-      } else if (option.value === 'apartment3') {
-        option.text = `Квартира 3 — ${prices.apartament3}`;
-        // Extract numeric price for data-price attribute
         const price3 = prices.apartament3.replace(/[^\d]/g, '');
         option.setAttribute('data-price', price3);
       }
@@ -319,6 +355,39 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// Function to update phone number in HTML
+function updatePhoneNumber(phoneNumber) {
+  // Update phone number in quick booking
+  const phoneElements = document.querySelectorAll('.booking-phone');
+  phoneElements.forEach(element => {
+    element.textContent = phoneNumber;
+    element.href = 'tel:' + phoneNumber.replace(/\s+/g, '');
+  });
+}
+
+// Function to update reviews in HTML
+function updateReviews(reviews) {
+  // Update reviews in the reviews section
+  const reviewsContainer = document.querySelector('.reviewsList');
+  if (reviewsContainer && reviews.length > 0) {
+    // Clear existing reviews
+    reviewsContainer.innerHTML = '';
+
+    // Add new reviews
+    reviews.forEach(review => {
+      const reviewItem = document.createElement('div');
+      reviewItem.className = 'reviewsItem';
+      reviewItem.innerHTML = `
+        <p class="reviewsText">${review}</p>
+      `;
+      reviewsContainer.appendChild(reviewItem);
+    });
+
+    // Reinitialize reviews slider after updating content
+    initReviewsSlider();
+  }
+}
 
 // FAQ toggle functionality with smooth animations
 document.addEventListener('DOMContentLoaded', () => {

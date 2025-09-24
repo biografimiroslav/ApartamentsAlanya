@@ -1,8 +1,12 @@
 import sqlite3
 from flask import Flask, jsonify, send_from_directory
 import os
+from flask_cors import CORS  # додати цей рядок
+
 
 app = Flask(__name__)
+CORS(app)  # дозволяє JS робити запити з іншого порту
+
 
 def get_prices(lang='en'):
     """Функція для отримання цін з бази даних SQLite з додаванням суфікса залежно від мови"""
@@ -49,6 +53,56 @@ def get_prices(lang='en'):
             'apartament3': '— €' + suffix
         }
 
+def get_phone(lang='en'):
+    """Функція для отримання номера телефону (один номер для всіх мов)"""
+    try:
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT phone_number FROM phones LIMIT 1")
+        row = cursor.fetchone()
+
+        conn.close()
+
+        if row:
+            return row[0]
+        else:
+            return '+38 (012) 345-67-89'  # значення за замовчуванням
+
+    except sqlite3.Error as e:
+        print(f"Помилка бази даних: {e}")
+        return '+38 (012) 345-67-89'
+
+def get_reviews(lang='en'):
+    """Функція для отримання відгуків (спільні для всіх мов)"""
+    try:
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT review_text FROM reviews")
+        rows = cursor.fetchall()
+
+        conn.close()
+
+        if rows:
+            return [row[0] for row in rows]
+        else:
+            # значення за замовчуванням
+            return [
+                'Дуже сподобалося! Все швидко та якісно.'
+            ]
+
+    except sqlite3.Error as e:
+        print(f"Помилка бази даних: {e}")
+        return [
+            'Дуже сподобалося! Все швидко та якісно.',
+            'Чудовий сервіс, звернуся ще раз.',
+            'Все чудово! Рекомендую всім.',
+            'Сервіс на високому рівні!',
+            'Ціни приємно здивували, рекомендую!',
+            'Я не вперше гість, все відмінно!'
+        ]
+
 @app.route('/')
 def index():
     """Головна сторінка - завантажуємо HTML файл"""
@@ -72,5 +126,47 @@ def prices_api():
     lang = request.args.get('lang', 'en')
     return jsonify(get_prices(lang))
 
+@app.route('/api/phone')
+def phone_api():
+    """API endpoint для отримання номера телефону"""
+    from flask import request
+    lang = request.args.get('lang', 'en')
+    phone = get_phone(lang)
+    return jsonify({'phone_number': phone})
+
+@app.route('/api/reviews')
+def reviews_api():
+    """API endpoint для отримання відгуків"""
+    from flask import request
+    lang = request.args.get('lang', 'en')
+    reviews = get_reviews(lang)
+    return jsonify({'reviews': reviews})
+
+@app.route('/api/add_review', methods=['POST'])
+def add_review_api():
+    """API endpoint для додавання нового відгуку"""
+    from flask import request
+    data = request.get_json()
+    review_text = data.get('review_text') if data else None
+
+    if not review_text:
+        return jsonify({'error': 'Review text is required'}), 400
+
+    # Імпорт функцій з bot.py
+    from bot import add_review, bot, get_admins
+
+    if add_review(review_text):
+        # Надіслати сповіщення всім адмінам
+        admins = get_admins()
+        for admin in admins:
+            try:
+                bot.send_message(admin[0], f"🆕 Новий відгук: {review_text}")
+            except Exception as e:
+                print(f"Помилка надсилання сповіщення: {e}")
+
+        return jsonify({'message': 'Відгук успішно додано'}), 200
+    else:
+        return jsonify({'error': 'Помилка додавання відгуку'}), 500
+
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=8000)

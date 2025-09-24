@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Alanya'nın kalbinde konforlu daire kiralama.">
+  <meta name="description" content="Alanya'nın kalbinde konforlu daireler kiralayın.">
   <link rel="stylesheet" href="style.css">
-  <title>Apartaments Alanya</title>
+  <title>Alanya Apartaments</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -16,10 +16,10 @@
   <link rel="stylesheet" href="./animations.css">
 
 
-  <!-- ===== Animasyonlar (gömülü, animations.css'e taşıyabilirsiniz) ===== -->
+  <!-- ===== Animasyonlar (satır içi, istenirse animations.css'e taşınabilir) ===== -->
   <style>
     /* ----------------------------
-       Genel: kenardan giren animasyonlar
+       Genel: basit yandan giriş animasyonları
        ---------------------------- */
     .animate-side {
       opacity: 0;
@@ -27,7 +27,7 @@
       will-change: transform, opacity;
     }
 
-    /* başlangıç pozisyonları (dinamik sınıflarla verilecek) */
+    /* başlangıç pozisyonları (sınıflarla dinamik atanır) */
     .animate-side.from-right { transform: translateX(50px); }
     .animate-side.from-left { transform: translateX(-50px); }
 
@@ -37,7 +37,7 @@
       transform: translateX(0);
     }
 
-    /* Çocuk öğeler de biraz yandan girer (data-direction ile ayarlanır) */
+    /* Alt öğeler de biraz yandan girer (data-direction ile ayarlanır) */
     .animate-child {
       opacity: 0;
       transition: transform 480ms cubic-bezier(.2,.9,.3,1), opacity 480ms ease;
@@ -126,7 +126,7 @@
       line-height: 1.5;
     }
 
-    /* Mobil uyumluluk */
+    /* Mobil için rezervasyon bölümü */
     @media (max-width: 768px) {
       .quick-booking {
         margin: 20px 10px;
@@ -155,6 +155,23 @@
 <body>
 
     <script>
+
+        if ('IntersectionObserver' in window) {
+  const mapIO = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.src = e.target.dataset.src;
+        obs.unobserve(e.target);
+      }
+    });
+  }, {rootMargin: '200px'});
+  document.querySelectorAll('iframe[data-src]').forEach(el => mapIO.observe(el));
+} else {
+  // fallback
+  document.querySelectorAll('iframe[data-src]').forEach(el => el.src = el.dataset.src);
+}
+
+
         // Typewriter effect
 function initTypewriter() {
   const words = ["ÇEKİCİ", "MODERN", "KONFORLU", "ŞIK", "KULLANIŞLI", "FERAH", "ZARİF"];
@@ -199,13 +216,13 @@ function initTypewriter() {
     <!-- video arkaplan: kendi dosyanızı koyun -->
     <video class="background-video" autoplay muted loop playsinline>
       <source src="./img/headerBG.mp4" type="video/mp4">
-      <!-- fallback: video olmayan kullanıcılara resim gösterilecek (JS sınıf ekler) -->
+      <!-- fallback: video olmayan kullanıcılara resim gösterilir (JS sınıf ekler) -->
     </video>
 
     <!-- karartma -->
     <div class="overlay" aria-hidden="true"></div>
 
-    <!-- fallback resim (gerekirse) -->
+    <!-- fallback resim (gerektiğinde) -->
     <div class="video-fallback" aria-hidden="true"></div>
 
     <!-- Video üstündeki içerik -->
@@ -223,25 +240,25 @@ function initTypewriter() {
         </li>
         <li>
           <a href="./indexUA.html">
-            <img src="./img/ua.svg" alt="Ukrayna bayrağı">
+            <img src="./img/ua.svg" alt="Ukrainian flag">
             <p>UA</p>
           </a>
         </li>
         <li>
-          <a href="">
-          <img src="./img/tr.svg" alt="Türkiye bayrağı">
+          <a href="./indexTR.html">
+          <img src="./img/tr.svg" alt="Turkish flag">
           <p>TR</p>
           </a>
         </li>
           <li>
             <a href="./indexCZ.html">
-              <img src="./img/cz.svg" alt="Çekya bayrağı">
+              <img src="./img/cz.svg" alt="Czech flag">
               <p>CZ</p>
             </a>
         </li>
           <li>
             <a href="./indexRU.html">
-              <img src="./img/ru.svg" alt="Rusya bayrağı">
+              <img src="./img/ru.svg" alt="Russian flag">
               <p>RU</p>
             </a>
         </li>
@@ -261,10 +278,10 @@ function initTypewriter() {
         <span class="word" aria-live="polite"></span> SEÇİN
       </h1>
 
-      <h2 class="headerSubText">Alanya kıyısının tam kalbinde daireler</h2>
+      <h2 class="headerSubText">Alanya sahilinin tam kalbinde daireler</h2>
 
       <div class="headerButtons">
-        <!-- güncellendi: scrollToSection çağrısı -->
+        <!-- güncellendi: scrollToSection çağrılır -->
         <button class="btn" onclick="scrollToSection('quick-booking')">Bizimle iletişime geçin</button>
         <button class="btn" onclick="scrollToSection('quick-booking')">Rezervasyon</button>
       </div>
@@ -280,16 +297,18 @@ function initTypewriter() {
       <img class="aboutIMG" src="./img/aboutApartament.png" alt="">
       <div class="aboutDiscrubtionContent">
         <h2 class="aboutSubText">
-          Biz yakın yaşıyoruz ve sizlerle
-          en iyilerini paylaşmaktan memnuniyet duyarız.
+          Biz yakınlarda yaşıyoruz ve size
+          en iyisini sunmaktan mutluluk duyuyoruz.
         </h2>
         <ul class="aboutDiscrubtionList">
-          <p class="aboutDiscrubtion">Biz — üç modern ve konforlu daireye sevgiyle bakan yerel bir aileyiz.</p>
           <p class="aboutDiscrubtion">
-            Aracı yok, gizli ücret yok — sadece şeffaf koşullar ve her misafir için özen.
+            Biz — konforunuza her zaman özen gösteren bir aileyiz ve modern, rahat daireler sunuyoruz.
+           </p>
+          <p class="aboutDiscrubtion">
+            Aracılar veya gizli ücretler yok — sadece şeffaf koşullar ve her misafir için özen.
           </p>
           <p class="aboutDiscrubtion">
-            İlk mesajdan konforlu girişinize kadar her adımda yanınızdayız; tatiliniz veya iş seyahatiniz sorunsuz geçsin diye.
+            İlk mesajdan rahat check-in'e kadar her aşamada size yardımcı oluyoruz, böylece tatiliniz veya iş seyahatiniz sorunsuz geçer.
           </p>
         </ul>
         <!-- güncellendi: iletişim bölümüne gider -->
@@ -323,26 +342,25 @@ function initTypewriter() {
     </div>
 
     <div class="apartamentContent">
-      <h2 class="apartamentText">Serenity Royal Beach'te Daire</h2>
-      <p class="apartamentSubText">62 m² • 2 oda • Denize 50 metre</p>
+      <h2 class="apartamentText">Serenity Royal Beach'de Daire</h2>
+      <p class="apartamentSubText">3 kat • 3 oda • Denize 50 m</p>
       <p class="apartamentTex">
-Aydınlık ve konforlu daireler, modern tasarım ve doğal malzemelerle. Geniş yatak odası ve oturma odası, tam donanımlı mutfak, deniz manzaralı balkon. Site; barbekü alanı, sinema, SPA ve spor salonu sunmaktadır. Rahat bir tatil veya verimli çalışma için idealdir.
+Modern tasarım ve doğal malzemelerle aydınlık ve rahat daireler. Geniş yatak odaları ve oturma odası, tam donanımlı mutfak, deniz manzaralı balkon. Komplekste barbekü alanı, sinema, SPA ve spor salonu bulunmaktadır. Rahat bir tatil veya verimli çalışma için idealdir.
       </p>
-      <h2 class="apartamentPrice" data-apartment="1"><span>—</span> ₺/gece</h2>
+      <h2 class="apartamentPrice" data-apartment="1"><span>—</span> ₴/gece</h2>
       <ul class="apartamentAdvantages">
-        <li class="apartamentAdvantagesItem">Wi‑Fi</li>
-        <li class="apartamentAdvantagesItem">Barbekü alanı</li>
+        <li class="apartamentAdvantagesItem">Wi-Fi</li>
         <li class="apartamentAdvantagesItem">Klima</li>
-        <li class="apartamentAdvantagesItem">Park yeri yakınında</li>
+        <li class="apartamentAdvantagesItem">Tesis içinde kapalı otopark</li>
         <li class="apartamentAdvantagesItem">Sinema</li>
                 <li class="apartamentAdvantagesItem">SPA alanı</li>
                         <li class="apartamentAdvantagesItem">Güvenlik</li>
-                        <li class="apartamentAdvantagesItem">Spor salonu</li>
+                        <li class="apartamentAdvantagesItem">Spor salonu</li>        
                         <li class="apartamentAdvantagesItem">Çalışma odası</li>
       </ul>
       <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8139.860436794304!2d32.04069893885478!3d36.53328267371921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc99c34fd67c41%3A0x459c3a65554cac9a!2sSerenity%20Royal%20Beach!5e0!3m2!1suk!2sua!4v1757622546157!5m2!1suk!2sua" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       <!-- güncellendi: rezervasyona gider -->
-      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Rezerve Et</button>
+      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Rezervasyon</button>
     </div>
   </section>
 
@@ -366,24 +384,23 @@ Aydınlık ve konforlu daireler, modern tasarım ve doğal malzemelerle. Geniş 
     </div>
     <div class="apartamentContent1">
       <h2 class="apartamentText1">Nordic Sky'da Daire</h2>
-      <p class="apartamentSubText1">62 m² • 3 oda • Denize 350 metre</p>
-      <p class="apartamentTex1">Aydınlık ve ferah daireler, modern iç mekan ve doğal malzemelerle. Ayrı yatak odası ve oturma odası dahil üç oda, tam donanımlı mutfak, güzel manzaralı balkon. Plaja sadece 350 metre, yakınında uygun park yeri. Aile tatili veya romantik geziler için ideal.</p>
-      <h2 class="apartamentPrice1" data-apartment="2"><span>—</span> ₺/gece</h2>
+      <p class="apartamentSubText1">3 kat • 3 oda • Denize 350 m</p>
+      <p class="apartamentTex1">Modern iç tasarıma ve doğal malzemelere sahip aydınlık ve geniş daireler. Ayrı yatak odası ve oturma odası dahil üç oda, tam donanımlı mutfak, güzel manzaralı balkon. Plaja sadece 350 metre, yakınında uygun otopark. Aile tatilleri veya romantik geziler için idealdir.</p>
+      <h2 class="apartamentPrice1" data-apartment="2"><span>—</span> ₴/gece</h2>
       <ul class="apartamentAdvantages1">
-        <li class="apartamentAdvantagesItem1">Wi‑Fi</li>
+        <li class="apartamentAdvantagesItem1">Wi-Fi</li>
         <li class="apartamentAdvantagesItem1">Barbekü alanı</li>
         <li class="apartamentAdvantagesItem1">Klima</li>
-        <li class="apartamentAdvantagesItem1">Park yeri yakınında</li>
+        <li class="apartamentAdvantagesItem1">Tesis içinde kapalı otopark</li>
         <li class="apartamentAdvantagesItem1">Sinema</li>
                 <li class="apartamentAdvantagesItem1">SPA alanı</li>
                         <li class="apartamentAdvantagesItem1">Güvenlik</li>
-                        <li class="apartamentAdvantagesItem1">Spor salonu</li>
+                        <li class="apartamentAdvantagesItem1">Spor salonu</li>        
                         <li class="apartamentAdvantagesItem1">Çalışma odası</li>
       </ul>
 <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3206.1081898644106!2d32.049319276265926!3d36.527384172326244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc9900172b4afb%3A0x8e767a22325dc1d9!2sNordic%20Sky!5e0!3m2!1suk!2sua!4v1757622619935!5m2!1suk!2sua" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-
       <!-- güncellendi: rezervasyona gider -->
-      <button class="apartamentButton1" onclick="scrollToSection('quick-booking')">Rezerve Et</button>
+      <button class="apartamentButton1" onclick="scrollToSection('quick-booking')">Rezervasyon</button>
     </div>
     <div class="apartamentSlider slidesDESKT">
       <div class="slides">
@@ -422,46 +439,41 @@ Aydınlık ve konforlu daireler, modern tasarım ve doğal malzemelerle. Geniş 
 
     <div class="apartamentContent">
       <h2 class="apartamentText">Nordic Sky'da Daire</h2>
-      <p class="apartamentSubText">62 m² • 2 oda • Denize 350 metre</p>
+      <p class="apartamentSubText">3 kat • 2 oda • Denize 350 m</p>
       <p class="apartamentTex">
-Aydınlık ve konforlu daireler, modern tasarım ve doğal malzemelerle. Geniş yatak odası ve oturma odası, tam donanımlı mutfak, deniz manzaralı balkon. Kompleks barbekü alanı, sinema, SPA ve spor salonu sunar. Rahat bir tatil veya verimli bir çalışma için ideal.
+Modern tasarım ve doğal malzemelerle aydınlık ve rahat daireler. Geniş yatak odası ve oturma odası, tam donanımlı mutfak, deniz manzaralı balkon. Komplekste barbekü alanı, sinema, SPA ve spor salonu bulunmaktadır. Rahat bir tatil veya verimli çalışma için idealdir.
       </p>
-      <h2 class="apartamentPrice" data-apartment="3"><span>—</span> ₺/gece</h2>
+      <h2 class="apartamentPrice" data-apartment="3"><span>—</span> ₴/gece</h2>
       <ul class="apartamentAdvantages">
-        <li class="apartamentAdvantagesItem">Wi‑Fi</li>
+        <li class="apartamentAdvantagesItem">Wi-Fi</li>
         <li class="apartamentAdvantagesItem">Barbekü alanı</li>
         <li class="apartamentAdvantagesItem">Klima</li>
-        <li class="apartamentAdvantagesItem">Park yeri yakınında</li>
+        <li class="apartamentAdvantagesItem">Tesis içinde kapalı otopark</li>
         <li class="apartamentAdvantagesItem">Sinema</li>
                 <li class="apartamentAdvantagesItem">SPA alanı</li>
                         <li class="apartamentAdvantagesItem">Güvenlik</li>
-                        <li class="apartamentAdvantagesItem">Spor salonu</li>
+                        <li class="apartamentAdvantagesItem">Spor salonu</li>        
                         <li class="apartamentAdvantagesItem">Çalışma odası</li>
       </ul>
 <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3206.1081898644106!2d32.049319276265926!3d36.527384172326244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dc9900172b4afb%3A0x8e767a22325dc1d9!2sNordic%20Sky!5e0!3m2!1suk!2sua!4v1757622619935!5m2!1suk!2sua" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-
       <!-- güncellendi: rezervasyona gider -->
-      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Rezerve Et</button>
+      <button class="apartamentButton" onclick="scrollToSection('quick-booking')">Rezervasyon</button>
     </div>
   </section>
 
   <!-- ====== REVIEWS ====== -->
   <section class="reviews" data-animate>
-    <h2 class="reviewsText">YORUMLAR</h2>
+    <h2 class="aboutText">YORUMLAR</h2>
     <div class="reviewsContent">
       <div class="reviewsWrapper">
         <ul class="reviewsList">
-          <li class="reviewsItem">Çok beğendik! Her şey hızlı ve kaliteliydi.</li>
-          <li class="reviewsItem">Güzel hizmet, tekrar başvuracağım.</li>
-          <li class="reviewsItem">Her şey harika! Herkese tavsiye ederim.</li>
-          <li class="reviewsItem">Hizmet yüksek seviyede!</li>
-          <li class="reviewsItem">Fiyatlar hoş bir sürpriz oldu, tavsiye ederim!</li>
-          <li class="reviewsItem">İlk defa değil, her şey mükemmel!</li>
+          <li class="reviewsItem"></li>
         </ul>
       </div>
       <div class="reviewsButtons">
         <button id="prevBtn">GERİ</button>
-        <button id="nextBtn">İLERİ</button>
+        <button id="nextBtn">SONRAKİ</button>
+        <button id="openModal" style="flex-direction: column;">YORUM YAZ</button>
       </div>
     </div>
   </section>
@@ -472,9 +484,9 @@ Aydınlık ve konforlu daireler, modern tasarım ve doğal malzemelerle. Geniş 
       <h2 id="qb-title">REZERVASYON</h2>
 
       <div class="booking-contact">
-        <p class="booking-text">Daire rezervasyonu için bizimle telefonla iletişime geçin:</p>
+        <p class="booking-text">Daireyi rezerve etmek için lütfen bizimle telefonla iletişime geçin:</p>
         <a href="tel:+380123456789" class="booking-phone">+38 (012) 345-67-89</a>
-        <p class="booking-note">Size en uygun seçeneği bulmanıza yardımcı oluruz ve tüm sorularınızı yanıtlarız</p>
+        <p class="booking-note">Size en uygun seçeneği seçmenizde yardımcı oluruz ve tüm sorularınızı yanıtlarız</p>
       </div>
 
     </div>
@@ -486,43 +498,43 @@ Aydınlık ve konforlu daireler, modern tasarım ve doğal malzemelerle. Geniş 
       <h2 id="faq-title" class="faq-title">Sıkça Sorulan Sorular</h2>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq1-answer" id="faq1">
-          Ödeme nasıl yapılır? <span class="faq-toggle">+</span>
+          Ödemeyi nasıl yapabilirim? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq1-answer" role="region" aria-labelledby="faq1" >
-          Rezervasyon onaylandıktan sonra size birkaç uygun ödeme yöntemi sunacağız. Ayrıca giriş sırasında temsilcimize nakit ödeme yapma imkânı da vardır. Her durumda 500 € depozito gereklidir; çıkışta tamamı iade edilir.
+          Rezervasyon onaylandıktan sonra size birkaç uygun ödeme yöntemi sunacağız. Varışta temsilcimize nakit ödeme de mümkündür. Her durumda 500 € tutarında iade edilebilir depozito gerekmektedir.
         </div>
       </div>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq2-answer" id="faq2">
-          Konut ve kompleks içinde hangi olanaklar vardır? <span class="faq-toggle">+</span>
+          Dairede ve kompleksde hangi imkanlar var? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq2-answer" role="region" aria-labelledby="faq2" >
-          Her daire konforlu yaşam için gereken her şeyle donatılmıştır: televizyon, buzdolabı, ütü, bulaşık makinesi, çamaşır makinesi, tam yemek takımı, her odada klima ve banyolarda yerden ısıtma (Daire No.1'de tüm alanda yerden ısıtma). Kompleks genelinde internet mevcuttur. Kapalı ve açık havuzlar, sauna, hamam, Roma banyosu, sinema ve spor salonu dinlenmeniz için hazır.
+          Her daire konforlu bir konaklama için gerekli tüm ekipmanlarla donatılmıştır: TV, buzdolabı, ütü, bulaşık makinesi, çamaşır makinesi, tam yemek takımı, her odada klima ve banyolarda yerden ısıtma (1 numaralı dairede tüm alanda yerden ısıtma). Kompleks alanında ortak internet mevcuttur. Dinlenmeniz için kapalı ve açık yüzme havuzları, sauna, hamam, Roma hamamı, sinema ve spor salonu bulunmaktadır.
         </div>
       </div>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq3-answer" id="faq3">
-          Kompleksin altyapısını kullanabilir miyim? <span class="faq-toggle">+</span>
+          Kompleks altyapısını kullanabilir miyim? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq3-answer" role="region" aria-labelledby="faq3">
-          Evet, kompleks içindeki tüm altyapı misafirler için kullanılabilir. Kullanım kuralları, dairelerin bulunduğu B blok girişindeki bilgilendirme panosunda yer almaktadır.
+          Evet, kompleks içerisindeki tüm tesisler sakinlerin kullanımına açıktır. Kullanım kuralları dairelerin bulunduğu B bloğu girişindeki bilgi panosunda yer almaktadır.
 <br>
 <br>
 A blokta masa tenisi ve PlayStation bulunmaktadır.
 <br>
 <br>
-C blokta saunalar ve dinlenme alanı vardır.
+C blokta saunalar ve dinlenme alanı bulunur.
 <br>
 <br>
-Açık alanda kort, barbekü alanı ve su kaydıraklı havuz bulunmaktadır.
+Açık alanda kort, barbekü alanı ve kaydıraklı havuz vardır.
         </div>
       </div>
       <div class="faq-item">
         <button class="faq-question" aria-expanded="false" aria-controls="faq4-answer" id="faq4">
-          Dairelerin yakınında park yeri var mı? <span class="faq-toggle">+</span>
+          Dairelerin yanında otopark var mı? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq4-answer" role="region" aria-labelledby="faq4">
-          Evet, dairelerin yakınında misafirler için park yeri bulunmaktadır.
+          Evet, dairelerin yakınında misafirler için otopark bulunmaktadır.
         </div>
       </div>
             <div class="faq-item">
@@ -530,29 +542,147 @@ Açık alanda kort, barbekü alanı ve su kaydıraklı havuz bulunmaktadır.
           Deniz dışında yakın çevrede neler var? <span class="faq-toggle">+</span>
         </button>
         <div class="faq-answer" id="faq5-answer" role="region" aria-labelledby="faq5">
-          Kompleksin yakınından Dim-Çay nehri akar ve güzel bir yürüyüş yoluna sahiptir. Yürüyüş mesafesinde restoranlar, mağazalar ve turistik merkezler vardır. Pazartesi ve Perşembe günleri yakın pazarlar açıktır. Plajdan merkeze kadar uzanan modern 4 km'lik bir sahil yolu bulunmakta; yürüyerek veya otobüsle kolayca gidilebilir.
+          Kompleksin yakınından manzaralı bir yürüyüş yolu olan Dim-Çay nehri akar. Yürüme mesafesinde restoranlar, dükkanlar ve turistik noktalar bulunmaktadır. Pazaryerleri pazartesi ve perşembe günleri açıktır. Plajdan merkeze uzanan modern 4 km'lik bir sahil yolu yürüyüş veya otobüs ile ulaşım için uygundur.
         </div>
+            <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq6-answer" id="faq6">
+          Komplekse nasıl ulaşılır? <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-answer" id="faq6-answer" role="region" aria-labelledby="faq6">
+          Antalya ve Alanya havaalanlarından transfer organize ediyoruz. Misafirler için iki seçenek mevcuttur:
+
+          <br>
+            <br>
+Bireysel transfer — 75–80 € araç başı (Antalya'dan).
+            <br>
+            <br>
+
+Grup transferi — 15 € kişi başı (Antalya'dan).
+Alanya havaalanından transfer fiyatı daha düşük olacaktır — detayları ayrıca ileteceğiz.
+            <br>
+            <br>
+
+Kendi aracınızla geliyorsanız veya araç kiralarsanız, konaklama ücretine dahil yer altı otoparkı mevcuttur.
+        </div>
+        <div class="faq-item">
+  <button class="faq-question" aria-expanded="false" aria-controls="faq7-answer" id="faq7">
+    Uzun süreli daire kiralanabilir mi? <span class="faq-toggle">+</span>
+  </button>
+  <div class="faq-answer" id="faq7-answer" role="region" aria-labelledby="faq7">
+    Evet, dairelerimiz en az 2 aylık sürelerle kiralanabilir. Ödemeler, fiili su ve elektrik tüketimine göre yapılır ve Türk bankası hesabına yatırılır. Sözleşme noter huzurunda yapılmaktadır.<br><br>
+    Uzun süreli kiralamalarda bir aylık kira bedeli tutarında depozito ödenir ve sözleşme bitiminde iade edilir.<br><br>
+    Yıllık fiyatlar:
+    <br>
+    Н1 – 1700 € <br>
+    Н2 – 1100 € <br>
+    Н3 – 850 € <br>
+    <br>
+    Fiyatlar sezona göre değişiklik gösterebilir. Güncel fiyat bilgisi için lütfen bizimle iletişime geçin.
+  </div>
+</div>
+
       </div>
+      <h2 class="faqTex">Ek sorular için lütfen daire sahibine başvurun.</h2>
+      <a href="mailto:vsevolodivcenko68@gmail.com">
+          <button class="faqButton">İletişim</button>
+      </a>
     </div>
   </section>
+
+
+  <div id="modal" class="modal">
+  <div class="modal-content">
+    <span id="closeModal" style="color: #2b6cb0;" class="close">&times;</span>
+    <h2 style="color: #2b6cb0;">Yorumunuzu bırakın</h2>
+    <textarea placeholder="Yorumunuz"></textarea>
+
+    <button style="
+      color: #2b6cb0;
+      font-family: Inter;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 5px;
+      border: 2px solid #2b6cb0;
+      background: #ffffff;
+      padding: 10px 20px;
+      transition: all 0.3s ease;
+    " id="submit">Gönder</button>
+  </div>
+</div>
+
+
+  <script>
+    const openBtn = document.getElementById('openModal');
+const modal = document.getElementById('modal');
+const closeBtn = document.getElementById('closeModal');
+const submitBtn = document.getElementById('submit');
+
+openBtn.addEventListener('click', () => {
+  modal.style.display = 'flex';
+});
+
+closeBtn.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+window.addEventListener('click', (e) => {
+  if (e.target === modal) {
+    modal.style.display = 'none';
+  }
+});
+
+submitBtn.addEventListener('click', () => {
+  const reviewText = document.querySelector('#modal textarea').value;
+  if (reviewText.trim() === '') {
+    alert('Lütfen bir yorum girin');
+    return;
+  }
+  fetch('/api/add_review', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ review_text: reviewText })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.message) {
+      alert('Yorumunuz için teşekkür ederiz!');
+      modal.style.display = 'none';
+      document.querySelector('#modal textarea').value = '';
+    } else {
+      alert('Hata: ' + data.error);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Yorum gönderilirken hata oluştu');
+  });
+});
+
+</script>
+
 
   <!-- ====== FOOTER ====== -->
   <footer class="footer" data-animate>
     <div class="footer-container">
       <div class="footer-content">
         <div class="footer-section">
-          <h3>Apartaments Alanya</h3>
-          <p>Alanya kıyısının tam kalbinde konforlu daireler</p>
+          <h3>Alanya Apartments</h3>
+          <p>Alanya sahilinin tam kalbinde konforlu daireler</p>
         </div>
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2025 Apartaments Alanya. Tüm hakları saklıdır.</p>
+        <p>&copy; 2025 Alanya Apartments. Tüm hakları saklıdır.</p>
+                <p><a style="color: #E6F0FF; text-decoration: underline;" href="https://www.instagram.com/site_developments">
+          Created by Site Developments
+        </a></p>
       </div>
     </div>
   </footer>
 
-  <!-- ====== Animasyon JS (IntersectionObserver + sağ/sol dönüşümlü + kısa gecikmeler) ====== -->
+  <!-- ====== Animasyon JS (IntersectionObserver + sol/sağ dönüşümlü + hızlı kademelenme) ====== -->
   <script>
     (function () {
       const elements = Array.from(document.querySelectorAll('[data-animate]'));
@@ -564,7 +694,7 @@ Açık alanda kort, barbekü alanı ve su kaydıraklı havuz bulunmaktadır.
         threshold: 0.06
       };
 
-      // Bölümler arası temel gecikme (küçük => daha hızlı kademeleme)
+      // Bölümler arası temel gecikme (küçük -> daha hızlı kademelenme)
       const baseDelay = 30; // ms
 
       const io = new IntersectionObserver((entries, obs) => {
@@ -572,26 +702,26 @@ Açık alanda kort, barbekü alanı ve su kaydıraklı havuz bulunmaktadır.
           if (!entry.isIntersecting) return;
           const el = entry.target;
           const idx = elements.indexOf(el);
-          // dönüşüm: çift indeksler (0,2,4...) sağdan, tekler soldan
+          // dönüşümlü: çift indeksler (0,2,4...) sağdan, tekler soldan
           const direction = (idx % 2 === 0) ? 'right' : 'left';
 
-          // başlangıç sınıfını ekle
+          // pozisyon için başlangıç sınıfı ekle
           el.classList.add('animate-side', `from-${direction}`);
 
-          // çocuklara data-direction ekle
+          // çocuk öğelere data-direction ekle
           const children = el.querySelectorAll('h1,h2,h3,p,img,button,li,select,input,textarea,.slides,.apartamentContent > * , .qb-container > * , .contact-card > *');
           children.forEach(child => {
             child.classList.add('animate-child');
             child.setAttribute('data-direction', direction);
           });
 
-          // görünürlük gecikmesi
+          // küçük gecikme ile bölümü göster
           const delay = idx * baseDelay;
           setTimeout(() => {
             el.classList.add('visible');
           }, delay);
 
-          // çocukların kademeli görünürlüğü
+          // çocuklar için kademeli görünürlük
           children.forEach((child, cIdx) => {
             const childDelay = delay + 60 + (cIdx * 45);
             setTimeout(() => {
@@ -633,7 +763,7 @@ Açık alanda kort, barbekü alanı ve su kaydıraklı havuz bulunmaktadır.
     })();
   </script>
 
-  <!-- Bölümlere yumuşak kaydırma için basit yardımcı fonksiyon -->
+  <!-- Yumuşak kaydırma yardımcı fonksiyon -->
   <script>
     function scrollToSection(id) {
       try {
@@ -649,8 +779,9 @@ Açık alanda kort, barbekü alanı ve su kaydıraklı havuz bulunmaktadır.
     }
   </script>
 
-  <!-- dış script.js bağlantısı korunuyor -->
+  <!-- harici script bağlantısı (script.js'inizi koruyun) -->
   <script src="./script.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', initTypewriter);</script>
 </body>
 
 </html>

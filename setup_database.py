@@ -48,6 +48,22 @@ def setup_database(db_path: str = DB_PATH, initial_admin: int = INITIAL_ADMIN_CH
                                    (a1 or '85€', a2 or '70€', a3 or '120€'))
                     print('Додано рядок id=1 у таблицю prices на основі існуючого запису.')
 
+        # Таблиця phones для номера телефону (один номер для всіх мов)
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS phones (
+                id INTEGER PRIMARY KEY,
+                phone_number TEXT NOT NULL
+            )
+        ''')
+
+        # Таблиця reviews для відгуків (спільні для всіх мов)
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS reviews (
+                id INTEGER PRIMARY KEY,
+                review_text TEXT NOT NULL
+            )
+        ''')
+
         # Таблиця admins
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS admins (
@@ -57,6 +73,47 @@ def setup_database(db_path: str = DB_PATH, initial_admin: int = INITIAL_ADMIN_CH
                 added_at TEXT
             )
         ''')
+
+        # Додаємо тестовий номер телефону (один для всіх мов)
+        cursor.execute('INSERT OR IGNORE INTO phones (id, phone_number) VALUES (1, ?)', ('+38 (012) 345-67-89',))
+        print('Додано тестовий номер телефону.')
+
+        # Додаємо тестові відгуки (спільні для всіх мов)
+        reviews_data = [
+            'Really liked it! Everything fast and high quality.',
+            'Great service, I\'ll contact again.',
+            'Everything is great! I recommend to everyone.',
+            'Service at a high level!',
+            'Prices pleasantly surprised, recommend!',
+            'I\'m not a first-time guest, everything is excellent!',
+            'Дуже сподобалося! Все швидко та якісно.',
+            'Чудовий сервіс, звернуся ще раз.',
+            'Все чудово! Рекомендую всім.',
+            'Сервіс на високому рівні!',
+            'Ціни приємно здивували, рекомендую!',
+            'Я не вперше гість, все відмінно!',
+            'Velmi se mi líbilo! Vše rychle a kvalitně.',
+            'Skvělá služba, ozvu se znovu.',
+            'Vše je skvělé! Doporučuji všem.',
+            'Služba na vysoké úrovni!',
+            'Ceny příjemně překvapily, doporučuji!',
+            'Nejsem poprvé host, vše je výborné!',
+            'Çok beğendim! Her şey hızlı ve kaliteli.',
+            'Harika servis, tekrar başvuracağım.',
+            'Her şey harika! Herkese tavsiye ederim.',
+            'Hizmet yüksek seviyede!',
+            'Fiyatlar hoş bir şekilde şaşırttı, tavsiye ederim!',
+            'İlk kez misafir değilim, her şey mükemmel!',
+            'Очень понравилось! Всё быстро и качественно.',
+            'Отличный сервис, свяжусь ещё раз.',
+            'Всё отлично! Рекомендую всем.',
+            'Сервис на высоком уровне!',
+            'Цены приятно удивили, рекомендую!',
+            'Я не в первый раз гость, всё отлично!'
+        ]
+        for review in reviews_data:
+            cursor.execute('INSERT OR IGNORE INTO reviews (review_text) VALUES (?)', (review,))
+        print('Додано тестові відгуки.')
 
         # Додаємо початкового адміна якщо його немає
         cursor.execute('SELECT 1 FROM admins WHERE chat_id = ?', (initial_admin,))
